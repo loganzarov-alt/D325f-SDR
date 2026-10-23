@@ -18,6 +18,7 @@ This license does not grant rights over proprietary vendor firmware or libraries
 | Project-specific app changes, helper code and original vector icon | GPL-3.0-or-later | Logan Zarov project; recovered native code identified in `docs/PROVENANCE.md` |
 | pffft / FFTPACK | permissive FFTPACK terms; full text in `LICENSES/PFFFT-FFTPACK.txt` | Julien Pommier; Paul Swarztrauber; UCAR/NCAR |
 | Maven runtime dependencies | component-specific terms, exact versions and notices inventoried | `docs/runtime-dependencies.json`, `LICENSES/runtime-notices/` |
+| NDK C++/compiler runtime portions linked into native code | LLVM Apache-2.0 WITH LLVM-exception; legacy MIT/NCSA and other notices preserved in `LICENSES/Android-NDK-LLVM-NOTICE.txt` | Exact NOTICE shipped with NDK 27.2.12479018; full toolchain notice retained, including components not necessarily linked |
 | Gradle wrapper/build tooling | Apache-2.0 and tool-specific terms; tooling is not app code | Gradle wrapper, Android SDK/NDK, Kotlin/AGP |
 | `tools/prepWAV.py` | GPLv2 notice retained; standalone utility, not linked into the APK | Dennis Mantz, 2015 |
 | Qualcomm/LG firmware and system QMI libraries | proprietary/system components; not distributed here | supplied by the prepared phone |

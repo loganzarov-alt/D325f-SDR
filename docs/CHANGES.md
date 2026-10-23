@@ -8,6 +8,7 @@
 - Explicit numeric mapping for file sample formats, including legacy recordings.
 - No debug/logging controls or BT/performance status-query buttons in the release UI.
 - Local manual, offline license texts/notices, source-selection unit tests and CI.
+- Include the NDK LLVM runtime notice for statically linked C++ runtime portions.
 - Native helper processing source is unchanged from the working reconstructed
   baseline. DSP code differs only by its dated modification notice. New APK hardware validation is still required.
 
