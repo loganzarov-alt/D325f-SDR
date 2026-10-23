@@ -1,0 +1,13 @@
+{
+  "build_kind": "C/ASM from source, no base ELF",
+  "ndk_version": "27.2.12479018",
+  "assets_sha256": {
+    "btcw-guard": "448b1840d15e604e79ec69e18a354f24d2d549b0d5e3d5c70d1a5912c4a48f13",
+    "lg_factory": "25746316bf3ec68808ef6e90b7db5b1df46af3fc3b34a936b462493f44d30ed4",
+    "lg_online": "71c4ae614dc8b730f93bedd58ae8abcb6def758f81310a318cbc0ae987297992",
+    "lg_stream": "07bf1df32b2f9b16b9530b22765aee3f3bbc0315779a7f5205da3f5ab541dc1d",
+    "sdr-focus": "c5a462b10a30c580a14b67332f2b40078d870e3b03a1f90a1d644177d0aaf747"
+  },
+  "reference_stream_sha256": "02ba7e628d8809d3439cebeb3b1bd618d432dcd2564f73be6b8d52b16c5a90cc",
+  "byte_identical_to_reference": false
+}

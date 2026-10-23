@@ -1,0 +1,176 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.13/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :app
+w: file:///workspace/scratch/dbf9029dc61b/rfdecoder-source/app/build.gradle.kts:46:9: 'jvmTarget: String' is deprecated. Please migrate to the compilerOptions DSL. More details are here: https://kotl.in/u1r8ln
+
+> Configure project :nativedsp
+WARNING: [CXX5202] This app only has 32-bit [armeabi-v7a] native libraries. Beginning August 1, 2019 Google Play store requires that all apps that include native libraries must provide 64-bit versions. For more information, visit https://g.co/64-bit-requirement
+[CXX5202] This app only has 32-bit [armeabi-v7a] native libraries. Beginning August 1, 2019 Google Play store requires that all apps that include native libraries must provide 64-bit versions. For more information, visit https://g.co/64-bit-requirement
+WARNING: [CXX5202] This app only has 32-bit [armeabi-v7a] native libraries. Beginning August 1, 2019 Google Play store requires that all apps that include native libraries must provide 64-bit versions. For more information, visit https://g.co/64-bit-requirement
+[CXX5202] This app only has 32-bit [armeabi-v7a] native libraries. Beginning August 1, 2019 Google Play store requires that all apps that include native libraries must provide 64-bit versions. For more information, visit https://g.co/64-bit-requirement
+Checking the license for package Android SDK Platform-Tools in /workspace/scratch/dbf9029dc61b/tools/android-sdk/licenses
+License for package Android SDK Platform-Tools accepted.
+Preparing "Install Android SDK Platform-Tools v.37.0.1".
+"Install Android SDK Platform-Tools v.37.0.1" ready.
+Installing Android SDK Platform-Tools in /workspace/scratch/dbf9029dc61b/tools/android-sdk/platform-tools
+"Install Android SDK Platform-Tools v.37.0.1" complete.
+"Install Android SDK Platform-Tools v.37.0.1" finished.
+
+> Task :app:buildNativeHelpers
+{
+  "build_kind": "C/ASM from source, no base ELF",
+  "ndk_version": "27.2.12479018",
+  "assets_sha256": {
+    "btcw-guard": "448b1840d15e604e79ec69e18a354f24d2d549b0d5e3d5c70d1a5912c4a48f13",
+    "lg_factory": "25746316bf3ec68808ef6e90b7db5b1df46af3fc3b34a936b462493f44d30ed4",
+    "lg_online": "71c4ae614dc8b730f93bedd58ae8abcb6def758f81310a318cbc0ae987297992",
+    "lg_stream": "07bf1df32b2f9b16b9530b22765aee3f3bbc0315779a7f5205da3f5ab541dc1d",
+    "sdr-focus": "c5a462b10a30c580a14b67332f2b40078d870e3b03a1f90a1d644177d0aaf747"
+  },
+  "reference_stream_sha256": "02ba7e628d8809d3439cebeb3b1bd618d432dcd2564f73be6b8d52b16c5a90cc",
+  "byte_identical_to_reference": false
+}
+
+> Task :app:preBuild
+> Task :app:preReleaseBuild
+> Task :app:mergeReleaseJniLibFolders
+> Task :nativedsp:preBuild UP-TO-DATE
+> Task :nativedsp:preReleaseBuild UP-TO-DATE
+> Task :nativedsp:configureCMakeRelWithDebInfo[armeabi-v7a]
+> Task :nativedsp:buildCMakeRelWithDebInfo[armeabi-v7a]
+> Task :nativedsp:mergeReleaseJniLibFolders
+> Task :nativedsp:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :nativedsp:generateReleaseResValues
+> Task :nativedsp:generateReleaseResources
+> Task :nativedsp:mergeReleaseNativeLibs
+> Task :nativedsp:packageReleaseResources
+> Task :nativedsp:copyReleaseJniLibsProjectOnly
+> Task :nativedsp:parseReleaseLocalResources
+> Task :app:mergeReleaseNativeLibs
+> Task :nativedsp:javaPreCompileRelease
+> Task :nativedsp:generateReleaseRFile
+
+> Task :app:stripReleaseDebugSymbols
+Unable to strip the following libraries, packaging them as they are: libandroidx.graphics.path.so, libdatastore_shared_counter.so, libnativedsp.so. Run with --info option to learn more.
+
+> Task :app:extractReleaseNativeSymbolTables
+> Task :app:checkReleaseDuplicateClasses
+> Task :app:mergeReleaseNativeDebugMetadata NO-SOURCE
+> Task :app:buildKotlinToolingMetadata
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:generateReleaseBuildConfig
+> Task :app:generateReleaseResValues
+> Task :nativedsp:writeReleaseAarMetadata
+> Task :app:mapReleaseSourceSetPaths
+> Task :app:generateReleaseResources
+> Task :app:checkReleaseAarMetadata
+> Task :app:packageReleaseResources
+> Task :app:createReleaseCompatibleScreenManifests
+> Task :app:extractDeepLinksRelease
+> Task :nativedsp:extractDeepLinksRelease
+> Task :app:parseReleaseLocalResources
+> Task :nativedsp:compileReleaseLibraryResources
+> Task :nativedsp:processReleaseManifest
+> Task :app:javaPreCompileRelease
+> Task :app:mergeReleaseResources
+
+> Task :app:processReleaseMainManifest
+package="com.mantz_it.rfanalyzer" found in source AndroidManifest.xml: /workspace/scratch/dbf9029dc61b/rfdecoder-source/app/src/main/AndroidManifest.xml.
+Setting the namespace via the package attribute in the source AndroidManifest.xml is no longer supported, and the value is ignored.
+Recommendation: remove package="com.mantz_it.rfanalyzer" from the source AndroidManifest.xml: /workspace/scratch/dbf9029dc61b/rfdecoder-source/app/src/main/AndroidManifest.xml.
+
+> Task :app:processReleaseManifest
+> Task :app:processReleaseManifestForPackage
+> Task :app:mergeReleaseStartupProfile
+> Task :nativedsp:prepareReleaseArtProfile
+> Task :app:mergeReleaseArtProfile
+> Task :app:mergeReleaseShaders
+> Task :app:compileReleaseShaders NO-SOURCE
+> Task :app:generateReleaseAssets UP-TO-DATE
+> Task :nativedsp:mergeReleaseShaders
+> Task :nativedsp:compileReleaseShaders NO-SOURCE
+> Task :nativedsp:generateReleaseAssets UP-TO-DATE
+> Task :nativedsp:mergeReleaseAssets
+> Task :app:mergeReleaseAssets
+> Task :app:compressReleaseAssets
+> Task :app:extractReleaseVersionControlInfo
+> Task :app:extractProguardFiles
+> Task :nativedsp:extractProguardFiles
+> Task :nativedsp:prepareLintJarForPublish
+> Task :nativedsp:stripReleaseDebugSymbols
+> Task :nativedsp:copyReleaseJniLibsProjectAndLocalJars
+> Task :nativedsp:extractDeepLinksForAarRelease
+> Task :nativedsp:writeReleaseLintModelMetadata
+> Task :app:processReleaseResources
+> Task :app:collectReleaseDependencies
+> Task :app:sdkReleaseDependencyData
+> Task :app:validateSigningRelease
+> Task :app:writeReleaseAppMetadata
+> Task :app:writeReleaseSigningConfigVersions
+> Task :app:optimizeReleaseResources
+> Task :app:desugarReleaseFileDependencies
+> Task :nativedsp:compileReleaseKotlin
+> Task :nativedsp:compileReleaseJavaWithJavac NO-SOURCE
+> Task :nativedsp:bundleLibRuntimeToDirRelease
+> Task :nativedsp:bundleLibRuntimeToJarRelease
+> Task :nativedsp:bundleLibCompileToJarRelease
+> Task :nativedsp:processReleaseJavaRes
+> Task :nativedsp:createFullJarRelease
+> Task :nativedsp:generateReleaseLintModel
+> Task :nativedsp:extractReleaseAnnotations
+> Task :nativedsp:mergeReleaseGeneratedProguardFiles
+> Task :nativedsp:mergeReleaseConsumerProguardFiles
+> Task :nativedsp:mergeReleaseJavaResource
+> Task :nativedsp:syncReleaseLibJars
+> Task :nativedsp:bundleReleaseLocalLintAar
+> Task :nativedsp:generateReleaseLintVitalModel
+> Task :app:mergeExtDexRelease
+> Task :nativedsp:lintVitalAnalyzeRelease
+> Task :app:kspReleaseKotlin
+> Task :app:compileReleaseKotlin
+w: file:///workspace/scratch/dbf9029dc61b/rfdecoder-source/app/src/main/java/com/mantz_it/rfanalyzer/database/AppStateRepository.kt:298:15 Unchecked cast of 'Preferences.Key<out Comparable<*> & Serializable>' to 'Preferences.Key<T (of class Setting<T>)>'.
+w: file:///workspace/scratch/dbf9029dc61b/rfdecoder-source/app/src/main/java/com/mantz_it/rfanalyzer/database/AppStateRepository.kt:306:55 Unchecked cast of 'Preferences.Key<T (of class Setting<T>)>' to 'Preferences.Key<Int>'.
+w: file:///workspace/scratch/dbf9029dc61b/rfdecoder-source/app/src/main/java/com/mantz_it/rfanalyzer/database/AppStateRepository.kt:310:29 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type 'Array<(out) CapturedType(out Enum<*> & T & Any)!>?'.
+w: file:///workspace/scratch/dbf9029dc61b/rfdecoder-source/app/src/main/java/com/mantz_it/rfanalyzer/database/AppStateRepository.kt:310:75 Only safe (?.) or non-null asserted (!!.) calls are allowed on a nullable receiver of type 'Array<(out) CapturedType(out Enum<*> & T & Any)!>?'.
+w: file:///workspace/scratch/dbf9029dc61b/rfdecoder-source/app/src/main/java/com/mantz_it/rfanalyzer/database/AppStateRepository.kt:313:57 Unchecked cast of 'Preferences.Key<T (of class Setting<T>)>' to 'Preferences.Key<String>'.
+w: file:///workspace/scratch/dbf9029dc61b/rfdecoder-source/app/src/main/java/com/mantz_it/rfanalyzer/database/AppStateRepository.kt:315:34 Unchecked cast of 'List<Any?>' to 'T (of class Setting<T>)'.
+w: file:///workspace/scratch/dbf9029dc61b/rfdecoder-source/app/src/main/java/com/mantz_it/rfanalyzer/database/AppStateRepository.kt:327:22 This declaration is in a preview state and can be changed in a backwards-incompatible manner with a best-effort migration. Its usage should be marked with '@kotlinx.coroutines.FlowPreview' or '@OptIn(kotlinx.coroutines.FlowPreview::class)' if you accept the drawback of relying on preview API
+w: file:///workspace/scratch/dbf9029dc61b/rfdecoder-source/app/src/main/java/com/mantz_it/rfanalyzer/database/AppStateRepository.kt:332:57 Unchecked cast of 'Preferences.Key<T (of class Setting<T>)>' to 'Preferences.Key<Int>'.
+w: file:///workspace/scratch/dbf9029dc61b/rfdecoder-source/app/src/main/java/com/mantz_it/rfanalyzer/database/AppStateRepository.kt:333:57 Unchecked cast of 'Preferences.Key<T (of class Setting<T>)>' to 'Preferences.Key<String>'.
+w: file:///workspace/scratch/dbf9029dc61b/rfdecoder-source/app/src/main/java/com/mantz_it/rfanalyzer/ui/MainActivity.kt:603:75 'var systemUiVisibility: Int' is deprecated. Deprecated in Java.
+w: file:///workspace/scratch/dbf9029dc61b/rfdecoder-source/app/src/main/java/com/mantz_it/rfanalyzer/ui/MainActivity.kt:604:26 'var systemUiVisibility: Int' is deprecated. Deprecated in Java.
+w: file:///workspace/scratch/dbf9029dc61b/rfdecoder-source/app/src/main/java/com/mantz_it/rfanalyzer/ui/MainActivity.kt:604:65 'static field SYSTEM_UI_FLAG_IMMERSIVE_STICKY: Int' is deprecated. Deprecated in Java.
+w: file:///workspace/scratch/dbf9029dc61b/rfdecoder-source/app/src/main/java/com/mantz_it/rfanalyzer/ui/MainActivity.kt:605:31 'static field SYSTEM_UI_FLAG_FULLSCREEN: Int' is deprecated. Deprecated in Java.
+w: file:///workspace/scratch/dbf9029dc61b/rfdecoder-source/app/src/main/java/com/mantz_it/rfanalyzer/ui/MainActivity.kt:605:78 'static field SYSTEM_UI_FLAG_HIDE_NAVIGATION: Int' is deprecated. Deprecated in Java.
+w: file:///workspace/scratch/dbf9029dc61b/rfdecoder-source/app/src/main/java/com/mantz_it/rfanalyzer/ui/MainActivity.kt:610:50 'var systemUiVisibility: Int' is deprecated. Deprecated in Java.
+w: file:///workspace/scratch/dbf9029dc61b/rfdecoder-source/app/src/main/java/com/mantz_it/rfanalyzer/ui/composable/CustomSideDrawerOverlay.kt:211:36 'val Icons.Filled.MenuBook: ImageVector' is deprecated. Use the AutoMirrored version at Icons.AutoMirrored.Filled.MenuBook.
+w: file:///workspace/scratch/dbf9029dc61b/rfdecoder-source/app/src/main/java/com/mantz_it/rfanalyzer/ui/screens/AboutScreen.kt:81:13 'fun ClickableText(text: AnnotatedString, modifier: Modifier = ..., style: TextStyle = ..., softWrap: Boolean = ..., overflow: TextOverflow = ..., maxLines: Int = ..., onTextLayout: (TextLayoutResult) -> Unit = ..., onClick: (Int) -> Unit): Unit' is deprecated. Use Text or BasicText and pass an AnnotatedString that contains a LinkAnnotation.
+
+> Task :app:compileReleaseJavaWithJavac
+warning: The following options were not recognized by any processor: '[dagger.fastInit, dagger.hilt.android.internal.disableAndroidSuperclassValidation, dagger.hilt.android.internal.projectType, dagger.hilt.internal.useAggregatingRootProcessor]'
+Note: /workspace/scratch/dbf9029dc61b/rfdecoder-source/app/src/main/java/com/mantz_it/rfanalyzer/source/BtCwController.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+1 warning
+
+> Task :app:hiltAggregateDepsRelease
+> Task :app:hiltJavaCompileRelease
+> Task :app:generateReleaseLintVitalReportModel
+> Task :app:transformReleaseClassesWithAsm
+> Task :app:dexBuilderRelease
+> Task :app:mergeReleaseGlobalSynthetics
+> Task :app:processReleaseJavaRes
+> Task :app:mergeReleaseJavaResource
+> Task :app:mergeDexRelease
+> Task :app:compileReleaseArtProfile
+> Task :app:lintVitalAnalyzeRelease
+> Task :app:lintVitalReportRelease
+> Task :app:lintVitalRelease
+> Task :app:packageRelease
+> Task :app:createReleaseApkListingFileRedirect
+> Task :app:assembleRelease
+
+[Incubating] Problems report is available at: file:///workspace/scratch/dbf9029dc61b/rfdecoder-source/build/reports/problems/problems-report.html
+
+BUILD SUCCESSFUL in 3m 41s
+94 actionable tasks: 94 executed

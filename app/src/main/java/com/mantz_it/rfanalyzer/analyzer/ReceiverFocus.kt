@@ -1,0 +1,14 @@
+package com.mantz_it.rfanalyzer.analyzer
+
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+
+/** Session-only state: freezing never persists across an application restart. */
+object ReceiverFocus {
+    @Volatile var audioActive = false
+    private val frozenState = MutableStateFlow(false)
+    val frozen = frozenState.asStateFlow()
+    val paused: Boolean get() = frozenState.value
+    fun resume() { frozenState.value = false }
+    fun toggle() { frozenState.value = !frozenState.value }
+}

@@ -1,0 +1,1 @@
+PASS: two failures trigger recovery, duplicate errors count once, first IQ resets failures, unconfirmed mode blocks start

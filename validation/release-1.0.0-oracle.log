@@ -1,0 +1,5 @@
+PASS decode: 2500 binary/C cases
+PASS HDLC: 800 binary/C frames incl. CRC, escaping and DIAG errors
+PASS consume: 300 binary/C cases incl. wrap, full, guard and bad geometry
+PASS radio: 672 binary/C cases incl. both modes and injected reply failures
+PASS total 4272 differential cases; hardware accesses: 0

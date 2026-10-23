@@ -1,0 +1,232 @@
+--- base/smem-app-stream.c
++++ smem-app-stream.c
+@@ -4,14 +4,19 @@
+ #undef run
+ #undef _start
+ 
+-/* LG D325 v11 modem-patch client. stdin: 20-byte LFC1 records; stdout: CI8. */
++/* RECONSTRUCTED C, 2026-10-23. NOT the missing original source text.
++ * Based on preserved v11 C and the RXFIX3 ELF SHA-256
++ * 02ba7e628d8809d3439cebeb3b1bd618d432dcd2564f73be6b8d52b16c5a90cc.
++ * Current LFC2 ABI and control flow were transcribed from ARM disassembly.
++ * No claim of byte-identical recompilation or untested hardware equivalence.
++ */
+ #define SMEM_BASE       0x0d900000u
+ #define SMEM_MAP_BYTES  0x00100000u
+ #define RING_MAGIC      0x32534d51u
+-#define RING_DATA_BYTES 522240u
++#define RING_DATA_BYTES 126976u
+ #define RING_CTRL       0x534d5235u
+ #define FREQ_CTRL       0x51463344u
+-#define INPUT_BYTES     20u
++#define INPUT_BYTES     24u
+ #define STAGE_BYTES     67108864u
+ #define STAGE_MAP_BYTES (STAGE_BYTES + 4096u)
+ 
+@@ -32,12 +37,19 @@
+  volatile u32 max_used;
+  volatile u32 diag_lock,keepalive_enabled,keepalive_anchor;
+  volatile u8 config[INPUT_BYTES];
+- volatile u32 reserved[1005];
++ volatile u32 reserved[1004];
+  u8 data[STAGE_BYTES];
+ };
+ 
+-struct radio_config { u32 lo,hi; u8 profile,multiplier,lna,band; u16 dvga; };
+-
++struct radio_config { u32 lo,hi; u8 profile,multiplier,lna,band; u16 dvga,uarfcn; u8 mode,flags; };
++
++_Static_assert(__builtin_offsetof(struct ci_ring,data)==256, "SMEM data ABI");
++_Static_assert(__builtin_offsetof(struct stage_ring,config)==56, "LFC2 stage ABI");
++_Static_assert(__builtin_offsetof(struct stage_ring,data)==4096, "stage data ABI");
++_Static_assert(sizeof(struct radio_config)==20, "config ABI");
++
++/* Reuses the existing 32-byte RXFIX3 LDM/STM operation, with an AAPCS wrapper. */
++extern void lg_copy_burst(void *dst,const volatile void *src,u32 bytes);
+ static long mmap2(void *a,u32 n,int prot,int flags,int fd,u32 pageoff) {
+  register long r0 __asm__("r0")=(long)a,r1 __asm__("r1")=n,r2 __asm__("r2")=prot;
+  register long r3 __asm__("r3")=flags,r4 __asm__("r4")=fd,r5 __asm__("r5")=pageoff,r7 __asm__("r7")=192;
+@@ -45,6 +57,7 @@
+ }
+ static long fork2(void){return call3(2,0,0,0);}
+ static void pause_ms(u32 ms){long t[2];t[0]=ms/1000;t[1]=(ms%1000)*1000000;call3(162,(long)t,0,0);}
++static void pause_half_ms(void){long t[2]={0,500000};call3(162,(long)t,0,0);}
+ static void barrier(void){__asm__ volatile("dmb sy":::"memory");}
+ static void diag_take(struct stage_ring *q){while(__atomic_exchange_n(&q->diag_lock,1u,__ATOMIC_ACQUIRE))pause_ms(1);}
+ static void diag_release(struct stage_ring *q){__atomic_store_n(&q->diag_lock,0u,__ATOMIC_RELEASE);}
+@@ -101,17 +114,56 @@
+  if(lo<=2112400000u)return 9612;return (u16)((lo+100000u)/200000u-950u);
+ }
+ 
++/* decode: original ELF 0x118c4..0x119ac. */
+ static int decode(const u8 *p,struct radio_config *c) {
+  c->lo=le32(p);c->hi=le32(p+4);
+- if(le32(p+8)!=0x3143464cu||le16(p+18)!=0x4c47u)return 1;
++ if(le32(p+8)!=0x3243464cu||le16(p+18)!=0x4c47u)return 1;
+  c->profile=p[12];c->multiplier=p[13];c->lna=p[14];c->band=p[15];c->dvga=le16(p+16);
++ c->uarfcn=le16(p+20);c->mode=p[22];c->flags=p[23];
+  if((c->band!=1&&c->band!=8)||c->profile>10||c->lna>5)return 2;
+  if(c->multiplier!=10&&c->multiplier!=20&&c->multiplier!=40)return 3;
+- if(!c->lo&&!c->hi)return 4;return 0;
+-}
+-
+-/* Allocation 16128 is the 4x32 KiB modem DMA ring; D3FQ stays resident. */
++ if(c->mode>1)return 4;
++ if(!c->mode&&!c->lo&&!c->hi)return 5;
++ return 0;
++}
++
++/* wait_pll: 0x129f4; apply_gain_controls: 0x12ab0. */
++static int wait_pll(int fd,u32 *pll) {
++ *pll=0;
++ for(u32 n=0;n<20;n++){
++  if(transaction(fd,262,0,0)!=1||answerlen<9)return 26;
++  *pll=answer[7];if(*pll==2)return 0;pause_ms(100);
++ }
++ return *pll==2?0:29;
++}
++static int apply_gain_controls(int fd,const struct radio_config *c) {
++ if(ftm_word(fd,0x003a,c->lna)!=1)return 27;
++ if(ftm_word(fd,0x006f,c->dvga)!=1)return 28;
++ return 0;
++}
++
++/* arm_radio: original ELF 0x11acc..0x12128. Both LFC2 modes preserved. */
+ static int arm_radio(int fd,const struct radio_config *c,u16 *anchor) {
++ if(c->mode==1){
++  u16 next=c->band==8?2788:9750;
++  u32 expected=(u32)c->uarfcn*200000u+(c->band==8?385000000u:0u);
++  if(transaction(fd,8,next,0)!=1)return 31;
++  if(transaction(fd,901,256,0)!=1||answerlen<8||le16(answer+6))return 32;
++  if(frequency_control(fd,3,c->band,c->uarfcn)!=1||answerlen<8||le16(answer+6))return 33;
++  if(transaction(fd,8,next,0)!=1)return 34;
++  u32 pll=0;int rc=wait_pll(fd,&pll);if(rc)return rc;
++  if(frequency_control(fd,2,0,0)!=1||answerlen<48||le16(answer+6))return 35;
++  if(le32(answer+32)!=expected||le32(answer+36)||le32(answer+40)!=expected||le32(answer+44))return 36;
++  u32 word=le32(answer+24);
++  if(frequency_control(fd,4,0,0)!=1||answerlen<40||le16(answer+6))return 37;
++  if(le32(answer+16)!=c->band||le32(answer+20)!=c->uarfcn)return 38;
++  rc=apply_gain_controls(fd,c);if(rc)return rc;
++  if(transaction(fd,901,16128,0)!=1||answerlen<8||le16(answer+6))return 39;
++  *anchor=next;
++  err("READY ");err_u32(expected);err(" 0 PLL ");err_u32(pll);err(" BAND ");err_u32(c->band);
++  err(" MODE UARFCN UARFCN ");err_u32(c->uarfcn);err(" PROFILE_WORD ");err_u32(word);err("\n");
++  return 0;
++ }
+  u16 next=nearest_anchor(c->lo,c->hi,c->band),away=c->band==8?2798:(next==9750?9760:9750);
+  if(transaction(fd,8,away,0)!=1)return 20;
+  if(transaction(fd,901,256,0)!=1||answerlen<8||le16(answer+6))return 21;
+@@ -119,17 +171,12 @@
+  if(transaction(fd,8,next,0)!=1)return 23;
+  if(frequency_control(fd,2,0,0)!=1||answerlen!=48||le16(answer+6))return 24;
+  if(le32(answer+16)!=0x485a4433u||!le32(answer+28)||le32(answer+40)!=c->lo)return 25;
+- /* These are WCDMA factory receive controls, not UI-only labels.  On this
+-  * D325 LNA state 0 measured as the strongest stable state; DVGA 0 keeps the
+-  * calibrated digital gain.  Keep the complete raw ranges available for
+-  * repeatable manual measurements. */
+- if(ftm_word(fd,0x003au,c->lna)!=1)return 27;
+- if(ftm_word(fd,0x006fu,c->dvga)!=1)return 28;
+- u32 pll=0;for(u32 n=0;n<20;n++){if(transaction(fd,262,0,0)!=1||answerlen<9)return 26;pll=answer[7];if(pll==2)break;pause_ms(100);}
+- /* The stock stable path starts the long capture allocation after RX lock. */
+- if(pll==2&&(transaction(fd,901,16128,0)!=1||answerlen<8||le16(answer+6)))return 30;
+- *anchor=next;err("READY ");err_u32(c->lo);err(" ");err_u32(c->hi);err(" PLL ");err_u32(pll);err(" BAND ");err_u32(c->band);err("\n");
+- return pll==2?0:29;
++ int rc=apply_gain_controls(fd,c);if(rc)return rc;
++ u32 pll=0;rc=wait_pll(fd,&pll);
++ if(!rc&&(transaction(fd,901,16128,0)!=1||answerlen<8||le16(answer+6)))return 30;
++ *anchor=next;
++ err("READY ");err_u32(c->lo);err(" ");err_u32(c->hi);err(" PLL ");err_u32(pll);err(" BAND ");err_u32(c->band);err(" MODE EXACT\n");
++ return rc;
+ }
+ 
+ static int ring_command(int fd,u32 start) {
+@@ -163,32 +210,13 @@
+  }sys_exit(q->error?1:0);
+ }
+ 
+-/* FTM8 is the only measured command that keeps factory RX alive.  Run it in
+- * a separate process so a slow DIAG reply cannot stop the SMEM consumer for
+- * longer than the modem ring's 8.27 ms capacity. */
+-static void keepalive(struct stage_ring *q,struct ci_ring *s,int fd) {
+- set_cpu(1u,0);u32 last=s->produced_blocks;
+- while(!q->stop_requested){
+-  barrier();u32 now=s->produced_blocks;
+-  if(q->keepalive_enabled&&now-last>=5000u){
+-   diag_take(q);barrier();
+-   if(q->keepalive_enabled&&!q->stop_requested){
+-    if(transaction(fd,8,(u16)q->keepalive_anchor,0)!=1){q->error=58;q->stop_requested=1;}
+-    sys_alarm(0);last=s->produced_blocks;
+-   }
+-   diag_release(q);
+-  }else pause_ms(1);
+- }
+- sys_alarm(0);sys_exit(q->error?1:0);
+-}
+-
+ static int consume(struct ci_ring *s,struct stage_ring *q,u32 *tail,u32 *pos) {
+  barrier();u32 head=s->head_bytes,available=head-*tail;if(available>RING_DATA_BYTES)return 1;
+  while(available){barrier();u32 qhead=q->head,used=qhead-q->tail;if(used>STAGE_BYTES)return 2;
+   u32 space=STAGE_BYTES-used;if(!space)return 3;u32 qpos=qhead&(STAGE_BYTES-1),n=available;
+   if(used>q->max_used)q->max_used=used;
+-  u32 edge=RING_DATA_BYTES-*pos,qedge=STAGE_BYTES-qpos;if(n>edge)n=edge;if(n>qedge)n=qedge;if(n>space)n=space;
+-  for(u32 i=0;i<n;i+=4)*(u32*)(q->data+qpos+i)=*(volatile u32*)(s->data+*pos+i);
++  u32 edge=RING_DATA_BYTES-*pos,qedge=STAGE_BYTES-qpos;if(n>edge)n=edge;if(n>qedge)n=qedge;if(n>space)n=space;if(n>4096u)n=4096u;
++  if(n)lg_copy_burst(q->data+qpos,s->data+*pos,n);
+   barrier();q->head=qhead+n;*pos+=n;if(*pos==RING_DATA_BYTES)*pos=0;*tail+=n;barrier();s->tail_bytes=*tail;available-=n;
+  }return 0;
+ }
+@@ -199,10 +227,13 @@
+  long lock=sys_open("/data/local/tmp/lg-iq-sampler.lock",66,0600);if(lock<0||call3(143,lock,6,0)<0)return 4;
+  int memfd=sys_open("/dev/mem",2,0);if(memfd<0)return 5;
+  long mapping=mmap2(0,SMEM_MAP_BYTES,3,1,memfd,SMEM_BASE>>12);if((u32)mapping>=0xfffff000u)return 6;
+- volatile u32 *toc=(volatile u32*)(mapping+0xd0u+471u*16u);if(toc[0]!=1||toc[2]<524288||toc[3])return 7;
++ volatile u32 *toc=(volatile u32*)(mapping+0xd0u+471u*16u);if(toc[0]!=1||toc[2]<131072||toc[3])return 7;
+  struct ci_ring *s=(struct ci_ring*)(mapping+toc[1]);
+  long stage_map=mmap2(0,STAGE_MAP_BYTES,3,0x21,-1,0);if((u32)stage_map>=0xfffff000u)return 8;
+- struct stage_ring *q=(struct stage_ring*)stage_map;for(u32 i=0;i<4096/4;i++)((volatile u32*)q)[i]=0;
++ struct stage_ring *q=(struct stage_ring*)stage_map;
++ /* RXFIX3: write one word per page before mlock, then return mlock errno. */
++ for(u32 i=0;i<STAGE_MAP_BYTES;i+=4096u)*(volatile u32*)((u8*)q+i)=0;
++ long prepared=call3(150,stage_map,STAGE_MAP_BYTES,0);if(prepared)return (int)prepared;
+  online_cpu1();
+  int fd=sys_open("/dev/diag",2,0);if(fd<0||sys_ioctl(fd,7,(void*)6)<0)return 9;
+  if(transaction(fd,7,9,0)!=1)return 10;pause_ms(1000);
+@@ -212,12 +243,11 @@
+  set_cpu(2u,1);
+  if(ring_command(fd,1)){q->stop_requested=1;return 13;}sys_alarm(0);
+  barrier();if(s->magic!=RING_MAGIC||s->format!=8||s->capacity!=RING_DATA_BYTES){q->stop_requested=1;return 14;}
+- q->keepalive_anchor=anchor;q->keepalive_enabled=1;
+- long keeper=fork2();if(keeper<0){q->stop_requested=1;return 15;}if(keeper==0)keepalive(q,s,fd);
+- u32 tail=s->tail_bytes,pos=0,seen_config=0,idle=0;q->stream_generation=1;err("STREAM CI8 7680000 5000000\n");
++ q->keepalive_anchor=anchor;q->keepalive_enabled=0;
++ u32 tail=s->tail_bytes,pos=0,seen_config=0,idle=0;q->stream_generation=1;err("STREAM CI8 7680000 5000000 MLOCK_RXFIX_3\n");
+  while(!q->stop_requested&&!q->error){
+   int cr=consume(s,q,&tail,&pos);if(cr){q->error=50+cr;break;}
+-  if(s->missed_slots||s->bad_geometry){q->error=54;break;}
++  if(s->active!=1u||s->bad_geometry){q->error=54;break;}
+   barrier();if(q->config_seq!=seen_config){
+    seen_config=q->config_seq;struct radio_config next;u8 copy[INPUT_BYTES];for(u32 i=0;i<INPUT_BYTES;i++)copy[i]=q->config[i];
+    if(decode(copy,&next)){q->error=55;break;}
+@@ -227,16 +257,19 @@
+    if(!re){rc=arm_radio(fd,&next,&anchor);if(rc)re=rc;}
+    if(!re&&ring_command(fd,1))re=57;
+    sys_alarm(0);diag_release(q);
+-   if(re){q->error=re;break;}config=next;tail=s->tail_bytes;pos=0;q->keepalive_anchor=anchor;q->keepalive_enabled=1;q->stream_generation++;q->config_ack=seen_config;
++   if(re){q->error=re;break;}config=next;tail=s->tail_bytes;pos=0;q->keepalive_anchor=anchor;q->keepalive_enabled=0;q->stream_generation++;q->config_ack=seen_config;
+   }
+-  if(s->head_bytes==tail){if(++idle>1000){pause_ms(1);idle=0;}}else idle=0;
++  if(s->head_bytes==tail){if(++idle>8){pause_half_ms();idle=0;}}else idle=0;
+  }
+  q->keepalive_enabled=0;diag_take(q);ring_command(fd,0);sys_alarm(0);for(u32 n=0;n<1000;n++){consume(s,q,&tail,&pos);barrier();if(s->head_bytes==tail)break;}
+- if(frequency_control(fd,2,0,0)==1&&answerlen==48&&!le16(answer+6)){err("FINAL_FREQ ");err_u32(le32(answer+40));err(" ");err_u32(le32(answer+44));err("\n");}sys_alarm(0);diag_release(q);
++ if(frequency_control(fd,2,0,0)==1&&answerlen==48&&!le16(answer+6)){err("FINAL_FREQ ");err_u32(le32(answer+40));err(" ");err_u32(le32(answer+44));err("\n");}frequency_control(fd,0,0,0);sys_alarm(0);diag_release(q);
+  barrier();q->stop_requested=1;for(u32 n=0;n<10000&&!q->writer_done;n++)pause_ms(1);
+  status("BLOCKS ",s->produced_blocks);status("DROPPED ",s->dropped_blocks);status("MISSED ",s->missed_slots);status("STAGE_ERROR ",q->error);
+  status("STAGE_MAX_USED ",q->max_used);status("TOTAL_LO ",q->total_lo);
+  return q->error?60:0;
+ }
+ 
++#ifndef LG_STREAM_TEST
+ __attribute__((noreturn)) void _start(void){int rc=app_stream();sys_alarm(0);sys_exit(rc);}
++
++#endif

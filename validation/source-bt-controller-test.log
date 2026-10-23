@@ -1,0 +1,1 @@
+PASS: actual Java controller tolerates slow startup, sustains IQ, stops on loss and restarts cleanly

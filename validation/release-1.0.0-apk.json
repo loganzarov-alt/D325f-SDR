@@ -1,0 +1,19 @@
+{
+  "package": "io.github.loganzarov_alt.d325fsdr",
+  "version_name": "1.0.0",
+  "version_code": 1,
+  "apk_sha256": "fd27b42df2ad4042175b3f53e4361086f50dd27cd9b8394d1afccc093531400a",
+  "apk_bytes": 14191184,
+  "certificate_sha256": "810b039e4d8fca63d5c170cb40ed1e0271ab147b0dd30942b1f662a185983c2f",
+  "release_debuggable": false,
+  "abi": "armeabi-v7a",
+  "source_selection_tests": 3,
+  "packaged_helpers": {
+    "lg_stream": "07bf1df32b2f9b16b9530b22765aee3f3bbc0315779a7f5205da3f5ab541dc1d",
+    "lg_factory": "25746316bf3ec68808ef6e90b7db5b1df46af3fc3b34a936b462493f44d30ed4",
+    "lg_online": "71c4ae614dc8b730f93bedd58ae8abcb6def758f81310a318cbc0ae987297992",
+    "btcw-guard": "448b1840d15e604e79ec69e18a354f24d2d549b0d5e3d5c70d1a5912c4a48f13",
+    "sdr-focus": "c5a462b10a30c580a14b67332f2b40078d870e3b03a1f90a1d644177d0aaf747"
+  },
+  "hardware_tested": false
+}

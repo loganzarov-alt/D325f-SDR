@@ -1,0 +1,10 @@
+PASS: repeated underruns do not pause/restart playback or alter samples
+PASS: audio stall, dead track, partial writes, priming reserve, short burst and prompt stop
+PASS: actual source startup preserves audio continuity; queued IQ survives audio mode and visual mode still trims backlog
+PASS: two failures trigger recovery, duplicate errors count once, first IQ resets failures, unconfirmed mode blocks start
+PASS BT guardian: eof
+PASS BT guardian: stall
+PASS BT guardian: live
+PASS BT guardian: no_ack
+PASS BT guardian: rejected
+PASS: actual Java controller tolerates slow startup, sustains IQ, stops on loss and restarts cleanly

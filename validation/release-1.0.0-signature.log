@@ -1,0 +1,17 @@
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+Signer #1 certificate DN: CN=Logan Zarov, OU=D325f SDR
+Signer #1 certificate SHA-256 digest: 810b039e4d8fca63d5c170cb40ed1e0271ab147b0dd30942b1f662a185983c2f
+Signer #1 certificate SHA-1 digest: 626516413b8643fe5be6158bce8d8d00677a0fd9
+Signer #1 certificate MD5 digest: 1a97866cac7721cc62cce5627b583a68
+Signer #1 key algorithm: RSA
+Signer #1 key size (bits): 3072
+Signer #1 public key SHA-256 digest: d8ae7fbdb207be19b86336c61faa135f460238c2bc7461b0f09679536d13a6a4
+Signer #1 public key SHA-1 digest: a302d39b9a3dc27b00325f73deefb5ebb8ea7f26
+Signer #1 public key MD5 digest: 2c0ed81d604b0e437e5db8b23145dd6c

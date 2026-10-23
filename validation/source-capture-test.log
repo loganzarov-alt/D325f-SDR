@@ -1,0 +1,1 @@
+PASS: actual source startup preserves audio continuity; queued IQ survives audio mode and visual mode still trims backlog

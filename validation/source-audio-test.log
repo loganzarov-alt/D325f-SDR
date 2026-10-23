@@ -1,0 +1,2 @@
+PASS: repeated underruns do not pause/restart playback or alter samples
+PASS: audio stall, dead track, partial writes, priming reserve, short burst and prompt stop

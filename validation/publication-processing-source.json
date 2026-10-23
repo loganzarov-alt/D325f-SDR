@@ -1,0 +1,100 @@
+[
+  {
+    "path": "native/from-source/d325-qmi-dms.c",
+    "unchanged": true,
+    "sha256": "5b9078f3981771c35c777663b6152166f52f3523304222236a30d8294f6519a9",
+    "baseline_sha256": "5b9078f3981771c35c777663b6152166f52f3523304222236a30d8294f6519a9",
+    "only_dated_notice_added": false
+  },
+  {
+    "path": "native/from-source/copy-burst.S",
+    "unchanged": true,
+    "sha256": "2ef6440f2ea62e80e96768b713edae94a5b070d1cc5296a9116a7af57bcfc566",
+    "baseline_sha256": "2ef6440f2ea62e80e96768b713edae94a5b070d1cc5296a9116a7af57bcfc566",
+    "only_dated_notice_added": false
+  },
+  {
+    "path": "native/from-source/smem-app-stream.c",
+    "unchanged": true,
+    "sha256": "f40f123d7924d4b1a1633798948de14b65c9085b775656526b76d2b110ff82a5",
+    "baseline_sha256": "f40f123d7924d4b1a1633798948de14b65c9085b775656526b76d2b110ff82a5",
+    "only_dated_notice_added": false
+  },
+  {
+    "path": "native/from-source/tests/oracle.c",
+    "unchanged": true,
+    "sha256": "526e63ccba756528cc2d7c26044e0b28c878ccad37002e179885d1e0704fec59",
+    "baseline_sha256": "526e63ccba756528cc2d7c26044e0b28c878ccad37002e179885d1e0704fec59",
+    "only_dated_notice_added": false
+  },
+  {
+    "path": "native/from-source/transport/pll-probe.c",
+    "unchanged": true,
+    "sha256": "16d0e8938ad6f47077579ef7ee6284fe981e1ea1fd1e5106a2e1f500ea8d2529",
+    "baseline_sha256": "16d0e8938ad6f47077579ef7ee6284fe981e1ea1fd1e5106a2e1f500ea8d2529",
+    "only_dated_notice_added": false
+  },
+  {
+    "path": "nativedsp/src/main/cpp/nativedsp.cpp",
+    "unchanged": false,
+    "sha256": "cecf4d2879ece31167fc6663f967381618e300178c3bf0eb282909eb964dd9d1",
+    "baseline_sha256": "4db06ed90152a4ced1e81a83a1fad120507e9b7b84246fb29d1e2c046ebeca64",
+    "only_dated_notice_added": true
+  },
+  {
+    "path": "nativedsp/src/main/cpp/spectrum_math.h",
+    "unchanged": true,
+    "sha256": "c92a2e981bde92c38745c08299889e7e825569991045d9254f93817d7d6eae4a",
+    "baseline_sha256": "c92a2e981bde92c38745c08299889e7e825569991045d9254f93817d7d6eae4a",
+    "only_dated_notice_added": false
+  },
+  {
+    "path": "nativedsp/src/main/cpp/ci8_unpack.h",
+    "unchanged": true,
+    "sha256": "5f23bc40bdf33d0863a1120cc3c2215eff1b221313be7b69da870904c134e7ff",
+    "baseline_sha256": "5f23bc40bdf33d0863a1120cc3c2215eff1b221313be7b69da870904c134e7ff",
+    "only_dated_notice_added": false
+  },
+  {
+    "path": "nativedsp/src/main/cpp/pffft.c",
+    "unchanged": true,
+    "sha256": "7c7bfc62d5d4e2354220d963c1d95e02643041692ddbe2bc3f821e54d17c1bc7",
+    "baseline_sha256": "7c7bfc62d5d4e2354220d963c1d95e02643041692ddbe2bc3f821e54d17c1bc7",
+    "only_dated_notice_added": false
+  },
+  {
+    "path": "nativedsp/src/main/cpp/bandwidth.h",
+    "unchanged": true,
+    "sha256": "59de49cafa1141bee8e5e12d3761e1aebc7e498e425378f998eb2953e3815c4f",
+    "baseline_sha256": "59de49cafa1141bee8e5e12d3761e1aebc7e498e425378f998eb2953e3815c4f",
+    "only_dated_notice_added": false
+  },
+  {
+    "path": "nativedsp/src/main/cpp/pffft.h",
+    "unchanged": true,
+    "sha256": "f07a580d03403ead8c4fbd10eb56ce1125b2a4bbd5a5eb628a58290f2f4881df",
+    "baseline_sha256": "f07a580d03403ead8c4fbd10eb56ce1125b2a4bbd5a5eb628a58290f2f4881df",
+    "only_dated_notice_added": false
+  },
+  {
+    "path": "nativedsp/src/main/cpp/ci8_mixer.h",
+    "unchanged": true,
+    "sha256": "b6500a346b321732da4db210321bf3f2049d544d45278c9e5eefcc8cae1850ce",
+    "baseline_sha256": "b6500a346b321732da4db210321bf3f2049d544d45278c9e5eefcc8cae1850ce",
+    "only_dated_notice_added": false
+  },
+  {
+    "path": "tools/btcw/btcw.c",
+    "unchanged": true,
+    "sha256": "3470f9c25ff3ac324d6540bca807dc219faeb5f74045c2e82e2e533d88897867",
+    "baseline_sha256": "3470f9c25ff3ac324d6540bca807dc219faeb5f74045c2e82e2e533d88897867",
+    "only_dated_notice_added": false
+  },
+  {
+    "path": "tools/focus/focus.c",
+    "unchanged": true,
+    "sha256": "ef80bc7aa389a73144d625a794c2262639411d7285b58ea22740915195c95c24",
+    "baseline_sha256": "ef80bc7aa389a73144d625a794c2262639411d7285b58ea22740915195c95c24",
+    "only_dated_notice_added": false
+  }
+]

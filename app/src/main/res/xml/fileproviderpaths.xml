@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <files-path name="internal_files" path="." />
+    <external-files-path name="external_files" path="." />
+    <!-- Provider itself is not exported; root-path allows sharing a user-created
+         recording from a removable SD /recordings directory via a granted URI. -->
+    <root-path name="recording_root" path="." />
+</paths>

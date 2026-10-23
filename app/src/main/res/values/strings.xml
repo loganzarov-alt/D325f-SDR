@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">D325f SDR</string>
+    <string name="about_screen_html"><![CDATA[
+<h2>D325f SDR</h2>
+LG modem SDR integration and project modifications: Logan Zarov, 2026.<br /><br />
+<h3>Application code</h3>
+Based in part on RF Analyzer by Dennis Mantz and contributors, copyright 2025.
+The upstream code is GPL version 2 or later; this combined application is distributed under GPL version 3 or later.<br /><br />
+<a href="https://github.com/loganzarov-alt/D325f-SDR">Project and corresponding source code</a><br />
+<a href="https://github.com/demantz/RFAnalyzer">RF Analyzer upstream</a><br /><br />
+You may use, modify and redistribute this program under the GNU General Public License, version 3 or (at your option) any later version.
+Provided without any warranty, including merchantability or fitness for a particular purpose.<br /><br />
+<h3>Components</h3>
+pffft / FFTPACK: Julien Pommier, Paul Swarztrauber, UCAR/NCAR; permissive FFTPACK license.<br />
+AndroidX, Kotlin and other dependencies retain their own licenses.
+Full license texts and notices are available below, offline.<br /><br />
+Custom native helpers are built from source. Proprietary Qualcomm firmware and phone vendor libraries are separate system components and are not included in this project.<br /><br />
+Independent project; no endorsement by LG, Qualcomm or upstream authors is implied.
+]]></string>
+</resources>
