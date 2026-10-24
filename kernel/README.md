@@ -59,7 +59,7 @@ Evidence that the test phone runs a kernel with this patch:
   CI repeats the check), and all eight base files match the recorded SHA-256.
 - A kernel has not yet been rebuilt from this folder and compared with the
   installed boot image, and the boot-image packaging script is not published yet.
-- The owner-supplied boot.img was inspected: its embedded version identifies build #6 and its kernel contains the D325 IQ/SMEM patch strings. Binary release upload is pending. See [SHA-256 and TWRP instructions](../docs/DEVICE-SETUP.md#boot-image--twrp).
+- The owner-supplied boot.img was inspected: its embedded version identifies build #6 and its kernel contains the D325 IQ/SMEM patch strings. [Download boot.img](https://github.com/loganzarov-alt/D325f-SDR/releases/download/kernel-6-source/boot.img). See [SHA-256 and TWRP instructions](../docs/DEVICE-SETUP.md#boot-image--twrp).
 
 ---
 
@@ -97,4 +97,4 @@ D325f SDR работает на ядре LineageOS 14.1 для LG D325 с неб
 Статус: патч восстановлен по истории работы и чисто ложится на базовый коммит
 (проверено 24.10.2026, CI повторяет проверку). Сборка из этой папки ещё не
 сравнивалась с установленным boot.img; скрипт упаковки boot.img пока не
-опубликован. Предоставленный владельцем boot.img проверен: внутри сборка #6 и строки патча IQ/SMEM. Загрузка бинарного образа в Releases пока не выполнена. [SHA-256 и TWRP](../docs/DEVICE-SETUP.md#bootimg-через-twrp).
+опубликован. Предоставленный владельцем boot.img проверен: внутри сборка #6 и строки патча IQ/SMEM. [Скачать boot.img](https://github.com/loganzarov-alt/D325f-SDR/releases/download/kernel-6-source/boot.img). [SHA-256 и TWRP](../docs/DEVICE-SETUP.md#bootimg-через-twrp).
