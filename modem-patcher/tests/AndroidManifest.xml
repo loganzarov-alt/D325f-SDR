@@ -1,0 +1,7 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="io.github.loganzarov_alt.d325fmodem.tests" android:versionCode="1" android:versionName="1">
+    <uses-sdk android:minSdkVersion="25" android:targetSdkVersion="34" />
+    <application android:label="D325f regression tests" android:largeHeap="true" android:allowBackup="false" />
+    <instrumentation android:name="io.github.loganzarov_alt.d325fmodem.CacheRegression"
+        android:targetPackage="io.github.loganzarov_alt.d325fmodem" android:functionalTest="true" />
+</manifest>

@@ -1,0 +1,6 @@
+build/
+dist/
+toolchain/
+*.keystore
+*.img
+*.bin

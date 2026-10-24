@@ -1,0 +1,41 @@
+{
+  "arm_qemu_fixture_tests": [
+    {
+      "test": "stock twice toggle",
+      "before": "1d6d32af2821cc96e9f80b6f9bf9d381b73e9ae60b1bec6fe45786603578f455",
+      "between": "71887ace9a41c96b3eded0e914459e405f5dc3fed101311362b77d73b6ecc0b4",
+      "after": "1d6d32af2821cc96e9f80b6f9bf9d381b73e9ae60b1bec6fe45786603578f455",
+      "passed": true
+    },
+    {
+      "test": "working twice toggle",
+      "before": "42ecd06546fad39d22428290b8284e1256ce14e1a88a2b5ef56b4c44ffaf227e",
+      "between": "29d891ebba69a8a008c0d7b6a086ac6ca3a71e1f3eb8352512770779c275af50",
+      "after": "42ecd06546fad39d22428290b8284e1256ce14e1a88a2b5ef56b4c44ffaf227e",
+      "passed": true
+    },
+    {
+      "test": "same firmware at different FAT cluster location",
+      "old_cluster": 2093,
+      "new_cluster": 4094,
+      "passed": true
+    },
+    {
+      "test": "mixed state rejected without writes",
+      "passed": true
+    },
+    {
+      "test": "unknown firmware rejected without writes",
+      "passed": true
+    },
+    {
+      "test": "wrong-sized image rejected without writes",
+      "passed": true
+    },
+    {
+      "test": "injected write failure rolls back all changed sectors",
+      "passed": true
+    }
+  ],
+  "actual_twrp_flash_test": false
+}

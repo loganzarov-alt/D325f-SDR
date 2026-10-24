@@ -36,3 +36,15 @@ C and its transport/ASM files were traced to the supplied recovery archive.
 The original binary test fixture is excluded from the public tree. No license
 is asserted over Qualcomm firmware or system libraries. Historical kernel/modem
 experiment archives were not published as a complete, reproducible firmware source.
+
+## Modem preparation tools
+
+Modem Patcher 1.0.4 / TWRP Toggle 1.1 is a separate component under
+`modem-patcher/`. The supplied source archive SHA-256 was
+`2cee7430e219597dac4ec93fa4920208b297781aedfcf25e7e8714ca42724fb6`.
+
+Published APK and TWRP ZIP retain the supplied bytes and signatures.
+The source package adds the project license, documentation, a synthetic host test
+and support for repackaging supplied reports. Application/native source, XOR
+payload and third-party runtime files are unchanged.
+See [publication verification](../modem-patcher/reports/publication-review.json).

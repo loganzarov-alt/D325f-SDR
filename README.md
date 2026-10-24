@@ -26,6 +26,13 @@ kernel, modem/IQ configuration and vendor QMI libraries. Installing the APK alon
 does not prepare a stock phone. See [device setup](docs/DEVICE-SETUP.md) and the
 [hardware photographs with B8/B1 identification](docs/HARDWARE.md).
 
+## Modem preparation tools
+
+[Modem Patcher 1.0.4 and TWRP Toggle 1.1](modem-patcher/README.md) provide reversible
+changes to supported modem files. [Downloads](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/modem-patcher-v1.0.4).
+These tools are experimental: the supplied tests do not confirm real-partition
+writes or a TWRP flash. They do not install a kernel or replace the hardware setup.
+
 ## Build
 
 Linux x86_64, JDK 17, Python 3 and Android SDK:

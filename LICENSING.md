@@ -21,6 +21,8 @@ This license does not grant rights over proprietary vendor firmware or libraries
 | NDK C++/compiler runtime portions linked into native code | LLVM Apache-2.0 WITH LLVM-exception; legacy MIT/NCSA and other notices preserved in `LICENSES/Android-NDK-LLVM-NOTICE.txt` | Exact NOTICE shipped with NDK 27.2.12479018; full toolchain notice retained, including components not necessarily linked |
 | Gradle wrapper/build tooling | Apache-2.0 and tool-specific terms; tooling is not app code | Gradle wrapper, Android SDK/NDK, Kotlin/AGP |
 | `tools/prepWAV.py` | GPLv2 notice retained; standalone utility, not linked into the APK | Dennis Mantz, 2015 |
+| Modem Patcher project code and scripts | GPL-3.0-or-later | Separate component in `modem-patcher/`; see its LICENSING.md |
+| Modem Patcher static musl/GCC runtime | MIT/BSD notices and GPLv3 with GCC Runtime Library Exception, as applicable | `modem-patcher/licenses/`; original musl source archive included |
 | Qualcomm/LG firmware and system QMI libraries | proprietary/system components; not distributed here | supplied by the prepared phone |
 
 ## Redistribution
@@ -63,3 +65,11 @@ References checked 2026-10-23:
 - https://www.gnu.org/licenses/gpl-faq.html#v2v3Compatibility
 - https://www.apache.org/licenses/GPL-compatibility.html
 - https://www.gnu.org/licenses/gpl-3.0.html
+
+## Modem patcher
+
+The separate Modem Patcher component includes XOR masks and expected firmware-file
+hashes, not complete proprietary firmware images. Its GPL license covers
+project-controlled code; it grants no rights over LG/Qualcomm firmware.
+A delta format does not itself establish redistribution permission.
+Component terms and retained notices are in [modem-patcher/LICENSING.md](modem-patcher/LICENSING.md).

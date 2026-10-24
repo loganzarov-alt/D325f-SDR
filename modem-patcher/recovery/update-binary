@@ -1,0 +1,53 @@
+#!/sbin/sh
+# LG D325 reversible modem patch. Run by TWRP; no serial/device-index binding.
+OUTFD=$2
+ZIPFILE=$3
+WORK=/tmp/d325-modem-toggle-$$
+ui_print() { printf 'ui_print %s\nui_print\n' "$*" > /proc/self/fd/"$OUTFD"; }
+abort() { ui_print "$*"; rm -rf "$WORK"; exit 1; }
+case "$OUTFD" in ''|*[!0-9]*) exit 1;; esac
+[ -d /twres ] || abort "Этот ZIP запускается из TWRP."
+model=$(getprop ro.product.model)
+device=$(getprop ro.product.device)
+case "$model:$device" in *D325*:*|*:w5ds) ;; *) abort "Поддерживается LG D325; обнаружено: $model ($device)";; esac
+mkdir -p "$WORK" || abort "Не удалось создать временный каталог."
+unzip -o "$ZIPFILE" tools/modem-toggle patch.payload scan-partition.sh -d "$WORK" >/dev/null 2>&1 || abort "Ошибка распаковки ZIP."
+chmod 0755 "$WORK/tools/modem-toggle" || abort "Ошибка подготовки инструмента."
+"$WORK/tools/modem-toggle" --self-test > "$WORK/self-test.log" 2>&1 || abort "Не прошла проверка SHA-256."
+sh "$WORK/scan-partition.sh" > "$WORK/scan.txt" 2>&1 || abort "Не удалось найти modem-раздел."
+TAB=$(printf '\t')
+mounts=
+labels=
+bad=
+while IFS="$TAB" read -r marker kind path sectors; do
+    [ "$marker" = D325F_BAD_MOUNT ] && bad=1
+    [ "$marker" = D325F_CAND ] || continue
+    case "$path" in /dev/block/*) ;; *) abort "Некорректный путь раздела.";; esac
+    case "$path" in *..*) abort "Некорректный путь раздела.";; esac
+    if [ "$sectors" != 131072 ]; then
+        [ "$kind" != MOUNT ] || bad=1
+        continue
+    fi
+    case "$kind" in
+        MOUNT) mounts="$mounts $path";;
+        LABEL) labels="$labels $path";;
+    esac
+done < "$WORK/scan.txt"
+[ -z "$bad" ] || abort "Смонтированная прошивка не прошла проверку размера."
+candidates=$mounts
+[ -n "$candidates" ] || candidates=$labels
+candidates=$(for p in $candidates; do printf '%s\n' "$p"; done | sort -u)
+set -- $candidates
+[ "$#" -eq 1 ] || abort "Не найден единственный modem-раздел 64 МиБ."
+block=$1
+ui_print "LG D325: проверка версии файлов модема…"
+ui_print "Сток → установка патча; патч → восстановление стока."
+if "$WORK/tools/modem-toggle" --block "$block" --payload "$WORK/patch.payload" --toggle --allow-block-write > "$WORK/result.log" 2>&1; then
+    while IFS= read -r line; do ui_print "$line"; done < "$WORK/result.log"
+    ui_print "Готово. Изменения проверены повторным чтением."
+    ui_print "Для переключения обратно прошейте этот ZIP ещё раз."
+    rm -rf "$WORK"
+    exit 0
+fi
+while IFS= read -r line; do ui_print "$line"; done < "$WORK/result.log"
+abort "Операция не завершена. Смотрите сообщение проверки выше."

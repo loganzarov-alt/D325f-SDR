@@ -1,0 +1,12 @@
+{
+  "zip": "LG-D325-Modem-Toggle-TWRP-v1.1.zip",
+  "sha256": "b62fb59b2569a2b31fc9ec1470733b439ee192129e2c8a49656f6ad05ba4c442",
+  "architecture": "ARMv7 static musl; runtime notices included",
+  "requires": "TWRP on LG D325 and supported firmware file hashes",
+  "toggle": "STOCK -> PATCHED -> STOCK",
+  "external_backup_required": false,
+  "partition_selection": "mounted firmware or exact modem label; 64 MiB required",
+  "device_binding": "model and firmware contents only; no serial, IMEI or block index",
+  "writes": "changed sectors of modem only; no modemst/persist/fsg/boot",
+  "actual_twrp_flash_test": "not run: user will test in TWRP"
+}

@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-24",
+  "original_archive_sha256": "2cee7430e219597dac4ec93fa4920208b297781aedfcf25e7e8714ca42724fb6",
+  "apk_sha256": "dfb111ae799efa71a7542ac6e05af18db33949731d19319ce03a1ea14410b383",
+  "twrp_zip_sha256": "b62fb59b2569a2b31fc9ec1470733b439ee192129e2c8a49656f6ad05ba4c442",
+  "source_manifest_verified": 39,
+  "embedded_native_payload_scanner_and_notices_byte_identical": true,
+  "regenerated_payload_byte_identical": true,
+  "musl_source_hash_verified": true,
+  "musl_copyright_matches_source_archive": true,
+  "gcc_runtime_exception_included": true,
+  "apk_signature": {
+    "apk_v2_signature_verified": true,
+    "content_digest_verified": true,
+    "apk_sha256": "dfb111ae799efa71a7542ac6e05af18db33949731d19319ce03a1ea14410b383",
+    "signers": [
+      {
+        "certificate_sha256": "5b84326cbe5b394c70d155061297b8a58989ec479e5e0887dc9f5a084359941a",
+        "subject": "CN=LG IQ Local Build"
+      }
+    ]
+  },
+  "synthetic_host_checks_passed": 13,
+  "host_tests": "tests/host-synthetic.py",
+  "host_architecture": "x86_64",
+  "real_device_access": false,
+  "fresh_android_or_arm_rebuild": false,
+  "provided_reports": {
+    "android_checks": 14,
+    "real_modem_writes": 0,
+    "arm_qemu_fixture_checks": 7,
+    "twrp_flash_test": false
+  },
+  "publication_changes": "Project GPL-3.0-or-later license, documentation, synthetic tests, and source-packaging support; runtime source and binaries unchanged."
+}

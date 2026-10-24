@@ -1,0 +1,15 @@
+{
+  "apk": "Modem-Patcher-LG-D325-v1.0.4.apk",
+  "sha256": "dfb111ae799efa71a7542ac6e05af18db33949731d19319ce03a1ea14410b383",
+  "version": "1.0.4",
+  "source_complete": true,
+  "java_firmware_buffers": false,
+  "root_cache_labels": "files are created by app UID before root writes",
+  "payload": "XOR masks, offsets and file SHA256 values; no full firmware image",
+  "inverse_without_backup": true,
+  "serial_or_block_index_binding": false,
+  "real_modem_write_test": false,
+  "device_validation": "14 app-UID checks passed; real modem read only, regular-file transformations verified",
+  "native_validation": "7 ARM fixture tests passed, including rollback",
+  "runtime_notices_included": true
+}
