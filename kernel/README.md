@@ -6,6 +6,11 @@ D325f SDR runs on the LineageOS 14.1 kernel for the LG D325 with a small patch.
 This folder is the corresponding source for that kernel: the patch against the
 public LineageOS tree, the full kernel configuration and the build settings.
 
+[Download the kernel #6 source package](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/kernel-6-source).
+It contains the patch, configuration, preparation script and GPL-2.0 license;
+the script fetches the pinned upstream source tree. This is not a boot.img or
+a flashable TWRP ZIP. A rebuilt kernel has not been compared with the installed image.
+
 | | |
 | --- | --- |
 | Base tree | [LineageOS/android_kernel_lge_msm8226](https://github.com/LineageOS/android_kernel_lge_msm8226), branch cm-14.1 |
@@ -64,6 +69,10 @@ D325f SDR работает на ядре LineageOS 14.1 для LG D325 с неб
 Здесь — исходник этого ядра по GPL: патч к публичному дереву LineageOS, полный
 конфиг и параметры сборки. База: `LineageOS/android_kernel_lge_msm8226`,
 ветка cm-14.1, коммит `bf756279…` (Linux 3.4.0).
+
+[Скачать исходники ядра #6](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/kernel-6-source): патч, конфиг, скрипт подготовки и лицензия GPL-2.0.
+Скрипт скачивает базовое дерево по закреплённому коммиту. В архиве нет boot.img
+или ZIP для прошивки через TWRP; результат пересборки ещё не сверялся с установленным образом.
 
 Что меняет патч:
 - **smem.c** — при загрузке выделяет SMEM **471** (128 КиБ); туда пропатченный

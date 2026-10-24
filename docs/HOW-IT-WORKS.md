@@ -56,6 +56,8 @@ active.
 
 ## Recorded examples
 
+[Download the three original IQ files](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/iq-samples-2026-10-23), with a format description and SHA-256 checksums.
+
 IQ files recorded on the phone with the app (7.68 MS/s CI8) and analysed on a
 PC. All three are below 800 MHz, so they were received through the Bluetooth
 local oscillator. In all three the I/Q levels are balanced and uncorrelated,
@@ -116,6 +118,8 @@ M8610B-AAAANAZM-1.0.6047) с трансивером семейства WTR. Об
 2402 + канал МГц, а модем настраивается на (2402 + канал) − F. Так принято
 FM-вещание на 93,5 МГц. Усиление фиксировано (LNA 0, DVGA 0). Кольцо —
 около 8,3 мс; самый длинный задокументированный приём — 158 с без потерь.
+
+[Три исходные IQ-записи с описанием формата и SHA-256](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/iq-samples-2026-10-23).
 
 Примеры записей с телефона (графики выше): FM-диапазон около 90,4 МГц — шесть
 станций, у всех стереопилот 19 кГц, у 89,4 МГц RDS; аналоговое ТВ на 551,25 МГц —

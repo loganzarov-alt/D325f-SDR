@@ -29,24 +29,26 @@ voice, 8.035 MHz and the 1875 MHz LTE downlink, all received by the phone's own
 modem. IQ recordings from the phone (FM stations with stereo pilot and RDS,
 an analog TV carrier at 551.25 MHz, shortwave AM) are analysed in
 [how it works](docs/HOW-IT-WORKS.md#recorded-examples).
+[Download the three original IQ recordings](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/iq-samples-2026-10-23) (signed CI8, 7.68 MS/s; SHA-256 included).
 
 ## Release and requirements
 
 **1.0.0** is the first public release: versionCode **1**, ARMv7, Android 7.1+
-(API 25). Logan Zarov tested the published APK on the modified LG D325 and
-confirmed it works on **24 October 2026**.
+(API 25). The published APK was tested successfully on a modified LG D325
+on **24 October 2026**.
 
 Modem reception requires root access and a prepared phone with the matching
 kernel ([source](kernel/README.md)), modem/IQ configuration and vendor QMI libraries. Installing the APK alone
 does not prepare a stock phone. See [device setup](docs/DEVICE-SETUP.md) and the
-[hardware photographs with B8/B1 identification](docs/HARDWARE.md).
+[hardware photographs and adapter wiring](docs/HARDWARE.md).
+[Kernel #6 source package](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/kernel-6-source): patch, configuration and source preparation script; no boot.img or flashable kernel ZIP.
 
 ## Modem preparation tools
 
 [Modem Patcher 1.1.0 and TWRP ZIPs 1.2](modem-patcher/README.md) apply and reverse
 the modem patch on the phone's own modem partition. They save a verified dump
 before the first write and can restore from it. [Downloads](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/modem-patcher-v1.1.0).
-Logan Zarov reported that the tools work on his LG D325 on 24 October 2026;
+The tools were tested successfully on one LG D325 on 24 October 2026;
 no second phone has been tested. They do not install a kernel or replace the
 hardware setup.
 
