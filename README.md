@@ -41,7 +41,7 @@ Modem reception requires root access and a prepared phone with the matching
 kernel ([source](kernel/README.md)), modem/IQ configuration and vendor QMI libraries. Installing the APK alone
 does not prepare a stock phone. See [device setup](docs/DEVICE-SETUP.md) and the
 [hardware photographs and adapter wiring](docs/HARDWARE.md).
-[Kernel #6 source package](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/kernel-6-source): patch, configuration and source preparation script; no boot.img or flashable kernel ZIP.
+[Kernel #6 source package](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/kernel-6-source): patch, configuration and source preparation script. The owner-supplied boot image has been inspected; see [boot image identity, SHA-256 and TWRP instructions](docs/DEVICE-SETUP.md#boot-image--twrp). Binary release upload is pending.
 
 ## Modem preparation tools
 
