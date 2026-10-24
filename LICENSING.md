@@ -23,6 +23,7 @@ This license does not grant rights over proprietary vendor firmware or libraries
 | `tools/prepWAV.py` | unmodified upstream file without its own notice, covered by RF Analyzer's GPL-2.0-or-later grant; standalone utility, not linked into the APK | Dennis Mantz, 2015 |
 | Modem Patcher project code and scripts | GPL-3.0-or-later | Separate component in `modem-patcher/`; see its LICENSING.md |
 | Modem Patcher static musl/GCC runtime | MIT/BSD notices and GPLv3 with GCC Runtime Library Exception, as applicable | `modem-patcher/licenses/`; original musl source archive included |
+| Kernel patch and configuration in `kernel/` | GPL-2.0-only, as the Linux kernel | Patch against LineageOS android_kernel_lge_msm8226; full text in `LICENSES/GPL-2.0.txt` |
 | Photographs in `docs/images/` | GPL-3.0-or-later, as part of the project documentation | Logan Zarov |
 | Qualcomm/LG firmware and system QMI libraries | proprietary/system components; not distributed here | supplied by the prepared phone |
 
@@ -52,8 +53,9 @@ format identifiers remain solely to read existing recordings.
 The old `lg_stream` ELF is not distributed in the public tree: its exact original
 C source is unavailable. It may be extracted locally from the owner's reference
 APK for differential tests. Production helpers build from the provided C/ASM.
-No kernel image, kernel patch archive, modem firmware dump or private signing
-key is included in this application snapshot.
+The kernel changes are published as a patch with the full configuration in
+`kernel/`. No kernel image, modem firmware dump or private signing key is
+included.
 
 ## Audit limits
 

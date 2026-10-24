@@ -27,7 +27,7 @@ D325f SDR app (RF Analyzer DSP): FFT, waterfall, demodulation, recording
 | Piece | What it does | Where |
 | --- | --- | --- |
 | Modem patch | Adds an FTM902 command handler and an IRQ-driven producer that fills a CI8 ring in shared memory; hooks the stock RX/TX PLL calculation so any 64-bit frequency in Hz can be requested (D3FQ). 6 files, 2,672 bytes. | [`modem-patcher/`](../modem-patcher/README.md) |
-| Kernel | Reserves SMEM item 471 (128 KiB) for the ring and shares it with the modem after authentication. Based on LineageOS `android_kernel_lge_msm8226` (cm-14.1). | patch to be published |
+| Kernel | Allocates SMEM item 471 (128 KiB) for the ring. Patch against LineageOS `android_kernel_lge_msm8226` (cm-14.1). | [`kernel/`](../kernel/README.md) |
 | Native helper | Puts the modem into factory test mode over DIAG, tunes it, starts the ring and streams blocks to the app; restores normal mode on exit. | [`native/from-source/`](../native/from-source/) |
 | App | RF Analyzer–based UI and DSP with an LG modem source. | [`app/`](../app/), [`nativedsp/`](../nativedsp/) |
 | Hardware | Two wires on the RF board for the B8 and B1 paths. | [HARDWARE.md](HARDWARE.md) |
@@ -75,7 +75,7 @@ M8610B-AAAANAZM-1.0.6047) с трансивером семейства WTR. Об
 - **Патч модема** добавляет обработчик FTM902 и producer по прерыванию, который
   кладёт каждый аппаратный блок IQ в кольцо CI8 в SMEM, и хук перед штатным
   расчётом PLL, позволяющий задать любую частоту в Гц (D3FQ).
-- **Ядро** резервирует SMEM 471 (128 КиБ) под кольцо и открывает его модему.
+- **Ядро** выделяет SMEM 471 (128 КиБ) под кольцо ([`kernel/`](../kernel/README.md#по-русски)).
 - **Нативный помощник** переводит модем в FTM через DIAG, настраивает частоту,
   запускает кольцо и передаёт блоки приложению.
 - **Приложение** на основе RF Analyzer: спектр, водопад, демодуляция, запись.
