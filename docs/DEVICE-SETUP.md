@@ -53,8 +53,22 @@ next to it. Unsupported firmware and mixed states are refused.
 записью и переключает сток ↔ патч; ZIP Restore-Dump восстанавливает дамп,
 лежащий рядом с ним. Неподдерживаемая прошивка и смешанное состояние отклоняются.
 
-**Статус:** приложенные отчёты подтверждают чтение реального modem-раздела,
-запись в файлы-копии и тесты ARM/QEMU. Проверка прошивки TWRP ZIP и записи
-в реальный раздел пока не подтверждена. Дополнительные 13 host-тестов прошли
-на искусственных FAT-образах. Успешный тест SDR-приложения 1.0.0 не заменяет
-проверку патчера.
+## Validation / Проверки
+
+The 1.1.0 bundle reports 37 offline fixture checks: 16 host-native, 15 ARM/QEMU
+and 6 installer checks. Publication separately reran 19 synthetic-image host
+tests, the native SHA-256 self-test and the cache-read contract check. The APK
+signature, source manifest and matching native/payload/license files were verified.
+These checks do not exercise a physical modem partition or a TWRP flash.
+The owner's device report in the project README is separate from these automated
+results; the bundled reports record no phone installation or real modem writes.
+
+В комплекте 1.1.0 приложены отчёты о 37 проверках на файлах-копиях: 16 на хосте,
+15 в ARM/QEMU и 6 проверках установщиков. При публикации отдельно повторены
+19 host-тестов на искусственных образах, самопроверка SHA-256 и проверка порядка
+сброса кеша/прямого чтения. Проверены подпись APK, манифест исходников и совпадение
+native-программы, патча и лицензий между исходниками, APK и ZIP.
+Эти проверки не выполняют запись в реальный modem-раздел и прошивку через TWRP.
+Сообщение владельца о работе инструментов в README проекта учитывается отдельно:
+в приложенных автоматических отчётах установка на телефон и запись в реальный
+модем не зафиксированы.
