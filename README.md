@@ -27,7 +27,7 @@ signal path, specifications and limitations.
 confirmed it works on **24 October 2026**.
 
 Modem reception requires root access and a prepared phone with the matching
-kernel, modem/IQ configuration and vendor QMI libraries. Installing the APK alone
+kernel ([source](kernel/README.md)), modem/IQ configuration and vendor QMI libraries. Installing the APK alone
 does not prepare a stock phone. See [device setup](docs/DEVICE-SETUP.md) and the
 [hardware photographs with B8/B1 identification](docs/HARDWARE.md).
 

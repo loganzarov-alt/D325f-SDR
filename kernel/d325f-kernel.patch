@@ -1,0 +1,345 @@
+D325f SDR kernel changes for LineageOS android_kernel_lge_msm8226 (cm-14.1)
+base commit bf756279493c2cc4656b784afa29822b30838e98; apply with: patch -p1 < d325f-kernel.patch
+SPDX-License-Identifier: GPL-2.0-only
+Copyright (C) 2026 Logan Zarov (D325f SDR changes)
+
+--- a/arch/arm/include/asm/uaccess.h
++++ b/arch/arm/include/asm/uaccess.h
+@@ -148,17 +148,17 @@
+ 
+ #define __put_user_x(__r2,__p,__e,__l,__s)				\
+ 	   __asm__ __volatile__ (					\
+-		__asmeq("%0", "r0") __asmeq("%2", "r2")			\
++		__asmeq("%0", "r0") __asmeq("%1", "r2")			\
+ 		__asmeq("%3", "r1")					\
+ 		"bl	__put_user_" #__s				\
+-		: "=&r" (__e)						\
+-		: "0" (__p), "r" (__r2), "r" (__l)			\
++		: "=&r" (__e), "+r" (__r2)						\
++		: "0" (__p), "r" (__l)			\
+ 		: "ip", "lr", "cc")
+ 
+ #define put_user(x,p)							\
+ 	({								\
+ 		unsigned long __limit = current_thread_info()->addr_limit - 1; \
+-		register const typeof(*(p)) __r2 asm("r2") = (x);	\
++		register typeof(*(p)) __r2 asm("r2") = (x);	\
+ 		register const typeof(*(p)) __user *__p asm("r0") = (p);\
+ 		register unsigned long __l asm("r1") = __limit;		\
+ 		register int __e asm("r0");				\
+--- a/arch/arm/mach-msm/peripheral-loader.c
++++ b/arch/arm/mach-msm/peripheral-loader.c
+@@ -275,15 +275,20 @@
+ 				  const struct elf32_phdr *phdr, int num)
+ {
+ 	bool reloc = segment_is_relocatable(phdr);
++	bool d325_iq_extent = num == 6 && phdr->p_paddr == 0x05000000 &&
++		phdr->p_memsz == 0x04700000 && phdr->p_filesz == 0;
+ 	const struct pil_priv *priv = desc->priv;
+ 	struct pil_seg *seg;
+ 
+-	if (!reloc && memblock_overlaps_memory(phdr->p_paddr, phdr->p_memsz)) {
++	if (!reloc && memblock_overlaps_memory(phdr->p_paddr, phdr->p_memsz) &&
++	    !d325_iq_extent) {
+ 		pil_err(desc, "kernel memory would be overwritten [%#08lx, %#08lx)\n",
+ 			(unsigned long)phdr->p_paddr,
+ 			(unsigned long)(phdr->p_paddr + phdr->p_memsz));
+ 		return ERR_PTR(-EPERM);
+ 	}
++	if (d325_iq_extent)
++		pil_info(desc, "allowing reserved D325 modem IQ extent\n");
+ 
+ 	if (phdr->p_filesz > phdr->p_memsz) {
+ 		pil_err(desc, "Segment %d: file size (%u) is greater than mem size (%u).\n",
+@@ -546,6 +551,16 @@
+ 	/* Zero out trailing memory */
+ 	paddr = seg->paddr + seg->filesz;
+ 	count = seg->sz - seg->filesz;
++	/*
++	 * Header 6 only extends the MBA/XPU aperture over DT-reserved memory.
++	 * It contains no firmware bytes and must not be ioremapped as a normal
++	 * PIL BSS segment; the modem initializes the shared ring after mapping it.
++	 */
++	if (num == 6 && seg->filesz == 0 && seg->paddr == 0x05000000 &&
++	    seg->sz == 0x04700000) {
++		pil_info(desc, "skipping clear of reserved D325 modem IQ extent\n");
++		count = 0;
++	}
+ 	while (count > 0) {
+ 		int size;
+ 		u8 __iomem *buf;
+@@ -563,7 +578,11 @@
+ 		paddr += size;
+ 	}
+ 
+-	if (desc->ops->verify_blob) {
++	/* The synthetic D325 extent is metadata for the MBA/XPU aperture only.
++	 * It contains no image bytes and must not advance RMB_PMI_CODE_LENGTH. */
++	if (desc->ops->verify_blob &&
++	    !(num == 6 && seg->filesz == 0 && seg->paddr == 0x05000000 &&
++	      seg->sz == 0x04700000)) {
+ 		ret = desc->ops->verify_blob(desc, seg->paddr, seg->sz);
+ 		if (ret)
+ 			pil_err(desc, "Blob%u failed verification\n", num);
+--- a/arch/arm/mach-msm/pil-msa.c
++++ b/arch/arm/mach-msm/pil-msa.c
+@@ -20,6 +20,7 @@
+ #include <linux/err.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/dma-mapping.h>
++#include <mach/scm.h>
+ 
+ #include "peripheral-loader.h"
+ #include "pil-q6v5.h"
+@@ -57,6 +58,108 @@
+ #define STATUS_META_DATA_AUTH_SUCCESS	0x3
+ #define STATUS_AUTH_COMPLETE		0x4
+ 
++/*
++ * The D325 IQ ring lives in a DT-reserved HLOS range below the signed MSS
++ * image.  Keep the modem ELF/authentication range untouched and ask TZ to
++ * share only that reserved range with MSS after MBA authentication succeeds.
++ */
++#define D325_IQ_RING_PHYS		0x05000000
++#define D325_IQ_RING_SIZE		0x04000000
++#define D325_SCM_MP_ASSIGN		0x16
++#define D325_VMID_HLOS			0x3
++#define D325_VMID_MSS_MSA		0xf
++#define D325_PERM_RW			0x6
++
++struct d325_scm_mem_map_info {
++	__le64 mem_addr;
++	__le64 mem_size;
++};
++
++struct d325_scm_perm_info {
++	__le32 vmid;
++	__le32 perm;
++	__le64 ctx;
++	__le32 ctx_size;
++	__le32 unused;
++};
++
++struct d325_scm_assign_req {
++	u32 mem_region;
++	u32 mem_region_size;
++	u32 source;
++	u32 source_size;
++	u32 destination;
++	u32 destination_size;
++	u32 spare;
++};
++
++static int d325_share_iq_ring_with_mss(struct pil_desc *pil)
++{
++	static bool assigned;
++	struct d325_scm_mem_map_info *map;
++	struct d325_scm_perm_info *dest;
++	struct d325_scm_assign_req request;
++	dma_addr_t dma;
++	u8 *buf;
++	u32 *source;
++	u32 scm_ret = 0;
++	int available;
++	int ret;
++
++	if (assigned)
++		return 0;
++
++	available = scm_is_call_available(SCM_SVC_MP, D325_SCM_MP_ASSIGN);
++	if (available <= 0) {
++		dev_err(pil->dev, "D325 IQ assign_mem unavailable: %d\n",
++			available);
++		return 0;
++	}
++
++	/* Three independently 64-byte-aligned SCM arrays. */
++	buf = dma_alloc_coherent(pil->dev, 192, &dma, GFP_KERNEL);
++	if (!buf)
++		return -ENOMEM;
++	memset(buf, 0, 192);
++
++	source = (u32 *)(buf + 0);
++	map = (struct d325_scm_mem_map_info *)(buf + 64);
++	dest = (struct d325_scm_perm_info *)(buf + 128);
++
++	source[0] = cpu_to_le32(D325_VMID_HLOS);
++	map->mem_addr = cpu_to_le64(D325_IQ_RING_PHYS);
++	map->mem_size = cpu_to_le64(D325_IQ_RING_SIZE);
++	dest[0].vmid = cpu_to_le32(D325_VMID_HLOS);
++	dest[0].perm = cpu_to_le32(D325_PERM_RW);
++	dest[1].vmid = cpu_to_le32(D325_VMID_MSS_MSA);
++	dest[1].perm = cpu_to_le32(D325_PERM_RW);
++
++	request.mem_region = (u32)(dma + 64);
++	request.mem_region_size = sizeof(*map);
++	request.source = (u32)dma;
++	request.source_size = sizeof(*source);
++	request.destination = (u32)(dma + 128);
++	request.destination_size = 2 * sizeof(*dest);
++	request.spare = 0;
++
++	ret = scm_call(SCM_SVC_MP, D325_SCM_MP_ASSIGN, &request,
++		       sizeof(request), &scm_ret, sizeof(scm_ret));
++	dma_free_coherent(pil->dev, 192, buf, dma);
++
++	if (ret || scm_ret) {
++		dev_err(pil->dev,
++			"D325 IQ assign_mem failed: call=%d secure=%u\n",
++			ret, scm_ret);
++		return 0;
++	}
++
++	assigned = true;
++	dev_info(pil->dev,
++		 "D325 IQ ring shared HLOS+MSS: 0x%08x+0x%08x\n",
++		 D325_IQ_RING_PHYS, D325_IQ_RING_SIZE);
++	return 0;
++}
++
+ /* External BHS */
+ #define EXTERNAL_BHS_ON			BIT(0)
+ #define EXTERNAL_BHS_STATUS		BIT(4)
+@@ -374,6 +477,8 @@
+ 		dev_err(pil->dev, "MBA returned error %d for image\n", status);
+ 		ret = -EINVAL;
+ 	}
++	if (!ret)
++		d325_share_iq_ring_with_mss(pil);
+ 
+ 	return ret;
+ }
+--- a/arch/arm/mach-msm/smem.c
++++ b/arch/arm/mach-msm/smem.c
+@@ -1209,6 +1209,8 @@
+ 	struct smem_area *smem_areas_tmp = NULL;
+ 	int smem_idx = 0;
+ 	bool security_enabled;
++	void *lg_iq_ring;
++	phys_addr_t lg_iq_phys;
+ 
+ 	if (!smem_initialized_check())
+ 		return -ENODEV;
+@@ -1334,6 +1336,18 @@
+ 	if (ret)
+ 		LOG_ERR("%s: of_platform_populate failed %d\n", __func__, ret);
+ 
++	/* Private APPS<->MODEM uncached ring used by the LG D325 IQ recorder. */
++	lg_iq_ring = smem_alloc2(471, 128 * 1024);
++	if (lg_iq_ring) {
++		memset_io(lg_iq_ring, 0, 128 * 1024);
++		wmb();
++		lg_iq_phys = smem_virt_to_phys(lg_iq_ring);
++		pr_err("LG D325 IQ SMEM ready id=471 phys=%pa size=%u\n",
++			 &lg_iq_phys, 128 * 1024);
++	} else {
++		pr_err("LG D325 IQ SMEM allocation failed\n");
++	}
++
+ 	return 0;
+ 
+ free_smem_areas:
+--- /dev/null
++++ b/include/linux/compiler-gcc16.h
+@@ -0,0 +1 @@
++#include <linux/compiler-gcc4.h>
+--- a/include/linux/compiler-gcc4.h
++++ b/include/linux/compiler-gcc4.h
+@@ -4,7 +4,7 @@
+ 
+ /* GCC 4.1.[01] miscompiles __weak */
+ #ifdef __KERNEL__
+-# if __GNUC_MINOR__ == 1 && __GNUC_PATCHLEVEL__ <= 1
++# if __GNUC__ == 4 && __GNUC_MINOR__ == 1 && __GNUC_PATCHLEVEL__ <= 1
+ #  error Your version of gcc miscompiles the __weak directive
+ # endif
+ #endif
+@@ -13,7 +13,7 @@
+ #define __must_check 		__attribute__((warn_unused_result))
+ #define __compiler_offsetof(a,b) __builtin_offsetof(a,b)
+ 
+-#if __GNUC_MINOR__ >= 3
++#if __GNUC__ > 4 || __GNUC_MINOR__ >= 3
+ /* Mark functions as cold. gcc will assume any path leading to a call
+    to them will be unlikely.  This means a lot of manual unlikely()s
+    are unnecessary now for any paths leading to the usual suspects
+@@ -31,7 +31,7 @@
+ 
+ #define __linktime_error(message) __attribute__((__error__(message)))
+ 
+-#if __GNUC_MINOR__ >= 5
++#if __GNUC__ > 4 || __GNUC_MINOR__ >= 5
+ /*
+  * Mark a position in code as unreachable.  This can be used to
+  * suppress control flow warnings after asm blocks that transfer
+@@ -49,10 +49,10 @@
+ #endif
+ #endif
+ 
+-#if __GNUC_MINOR__ > 0
++#if __GNUC__ > 4 || __GNUC_MINOR__ > 0
+ #define __compiletime_object_size(obj) __builtin_object_size(obj, 0)
+ #endif
+-#if __GNUC_MINOR__ >= 4 && !defined(__CHECKER__)
++#if (__GNUC__ > 4 || __GNUC_MINOR__ >= 4) && !defined(__CHECKER__)
+ #define __compiletime_warning(message) __attribute__((warning(message)))
+ #define __compiletime_error(message) __attribute__((error(message)))
+ #endif
+--- a/scripts/dtc/dtc-lexer.l
++++ b/scripts/dtc/dtc-lexer.l
+@@ -39,7 +39,7 @@
+ #include "srcpos.h"
+ #include "dtc-parser.tab.h"
+ 
+-YYLTYPE yylloc;
++extern YYLTYPE yylloc;
+ 
+ /* CAUTION: this will stop working if we ever use yyless() or yyunput() */
+ #define	YY_USER_ACTION \
+--- a/scripts/dtc/dtc-lexer.lex.c_shipped
++++ b/scripts/dtc/dtc-lexer.lex.c_shipped
+@@ -637,7 +637,7 @@
+ #include "srcpos.h"
+ #include "dtc-parser.tab.h"
+ 
+-YYLTYPE yylloc;
++extern YYLTYPE yylloc;
+ 
+ /* CAUTION: this will stop working if we ever use yyless() or yyunput() */
+ #define	YY_USER_ACTION \
+--- a/scripts/gcc-wrapper.py
++++ b/scripts/gcc-wrapper.py
+@@ -53,7 +53,7 @@
+     line = line.rstrip('\n')
+     m = warning_re.match(line)
+     if m and m.group(2) not in allowed_warnings:
+-        print "error, forbidden warning:", m.group(2)
++        print("error, forbidden warning:", m.group(2))
+ 
+         # If there is a warning, remove any object if it exists.
+         if ofile:
+@@ -76,19 +76,19 @@
+     compiler = sys.argv[0]
+ 
+     try:
+-        proc = subprocess.Popen(args, stderr=subprocess.PIPE)
++        proc = subprocess.Popen(args, stderr=subprocess.PIPE, universal_newlines=True)
+         for line in proc.stderr:
+-            print line,
++            print(line, end='')
+             interpret_warning(line)
+ 
+         result = proc.wait()
+     except OSError as e:
+         result = e.errno
+         if result == errno.ENOENT:
+-            print args[0] + ':',e.strerror
+-            print 'Is your PATH set correctly?'
++            print(args[0] + ':', e.strerror)
++            print('Is your PATH set correctly?')
+         else:
+-            print ' '.join(args), str(e)
++            print(' '.join(args), str(e))
+ 
+     return result
+ 

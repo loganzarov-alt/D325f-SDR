@@ -1,0 +1,30 @@
+name: Kernel patch checks
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'kernel/**'
+      - '.github/workflows/kernel-checks.yml'
+  pull_request:
+    paths:
+      - 'kernel/**'
+      - '.github/workflows/kernel-checks.yml'
+permissions:
+  contents: read
+jobs:
+  patch-applies:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Patch applies to the LineageOS base commit
+        run: |
+          mkdir base && cd base
+          git init -q
+          git remote add origin https://github.com/LineageOS/android_kernel_lge_msm8226.git
+          git config core.sparseCheckout true
+          grep -E '^\+\+\+ b/' ../kernel/d325f-kernel.patch | sed 's#^+++ b/##' > .git/info/sparse-checkout
+          git fetch -q --depth 1 --filter=blob:none origin bf756279493c2cc4656b784afa29822b30838e98
+          git checkout -q FETCH_HEAD
+          patch -p1 --dry-run --forward < ../kernel/d325f-kernel.patch
