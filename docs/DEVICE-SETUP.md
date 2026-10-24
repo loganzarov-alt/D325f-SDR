@@ -53,6 +53,40 @@ next to it. Unsupported firmware and mixed states are refused.
 записью и переключает сток ↔ патч; ZIP Restore-Dump восстанавливает дамп,
 лежащий рядом с ним. Неподдерживаемая прошивка и смешанное состояние отклоняются.
 
+## Boot image / TWRP
+
+The owner supplied a 23,068,672-byte `boot.img` on 24 October 2026. Offline extraction confirms Linux 3.4.0+, build #6, GCC 16.1.0, dated 13 September 2026 12:36:46 UTC, and the D325 IQ/SMEM 471 patch strings. This identifies the embedded build; a rebuild from the published source has not yet been compared byte-for-byte, and this supplied image has not been flashed during these checks.
+
+SHA-256 of the supplied image:
+
+```text
+d0c827f232e613bff481fcc5405cb962aaca30effc50ba21277453ab1f35ced0  boot.img
+```
+
+This is a complete boot image, including its ramdisk, for the project's LG D325 / LineageOS 14.1 setup. Compatibility with other devices or ROMs is not established. **Release upload of this binary is pending; the source archive is not a flashable image.**
+
+In TWRP:
+
+1. Back up **Boot** and copy the backup off the phone.
+2. Select **Install → Install Image → boot.img → Boot**.
+3. Swipe to flash, then reboot System. Do not select Recovery or wipe Data.
+4. If it fails to boot, return to TWRP and restore your Boot backup.
+
+The boot image does not apply the modem patch. Modem preparation and hardware changes remain separate steps.
+
+## boot.img через TWRP
+
+Владелец предоставил образ размером 23 068 672 байта. Из образа извлечена строка Linux 3.4.0+, сборка **#6**, GCC 16.1.0, 13.09.2026 12:36:46 UTC; найдены строки патча D325 IQ/SMEM 471. Это подтверждает идентификатор встроенной сборки, но не побайтовое соответствие опубликованным исходникам. Прошивка этого файла в рамках проверки не выполнялась.
+
+SHA-256 указан выше. Образ включает ядро и ramdisk для конфигурации проекта LG D325 / LineageOS 14.1; совместимость с другими моделями и прошивками не установлена. **Загрузка бинарного образа в Releases пока не выполнена. Архив исходников прошивать нельзя.**
+
+1. В TWRP сохраните резервную копию **Boot** и скопируйте её с телефона.
+2. **Установка → Установка IMG → boot.img → Boot**.
+3. Подтвердите прошивку свайпом и перезагрузите систему. Не выбирайте Recovery и не очищайте Data.
+4. Если система не загружается, вернитесь в TWRP и восстановите копию Boot.
+
+Патч модема и аппаратная доработка выполняются отдельно.
+
 ## Validation / Проверки
 
 The 1.1.0 bundle reports 37 offline fixture checks: 16 host-native, 15 ARM/QEMU
