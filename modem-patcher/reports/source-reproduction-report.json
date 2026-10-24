@@ -1,9 +1,0 @@
-{
-  "passed": true,
-  "source_manifest_verified": true,
-  "no_original_apk_or_firmware_used": true,
-  "matching_native_binary": true,
-  "matching_classes_dex": true,
-  "matching_xor_payload": true,
-  "new_local_signing_key_generated": true
-}

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Logan Zarov
 /* SHA-256 as specified by FIPS 180-4. No external crypto/runtime service. */
 #include "sha256.h"
 #include <string.h>

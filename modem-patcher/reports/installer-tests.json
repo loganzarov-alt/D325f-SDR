@@ -1,0 +1,30 @@
+{
+  "tests": [
+    {
+      "test": "toggle creates persistent stock dump before writing",
+      "passed": true
+    },
+    {
+      "test": "second toggle returns exact stock and retains both dumps",
+      "passed": true
+    },
+    {
+      "test": "toggle ZIP restores UNKNOWN from adjacent supported dump",
+      "passed": true
+    },
+    {
+      "test": "restore ZIP restores dump over healthy patched state",
+      "passed": true
+    },
+    {
+      "test": "multiple supported adjacent dumps rejected without writing",
+      "passed": true
+    },
+    {
+      "test": "corrupt adjacent checksum rejected without writing",
+      "passed": true
+    }
+  ],
+  "environment": "offline filesystem bindings and regular-file native targets",
+  "real_device_writes": 0
+}

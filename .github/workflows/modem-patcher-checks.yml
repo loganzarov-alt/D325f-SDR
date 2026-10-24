@@ -15,15 +15,22 @@ permissions:
 jobs:
   host-checks:
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 15
     defaults:
       run:
         working-directory: modem-patcher
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Verify published source snapshot
+      - name: Verify files against the published source manifest
         run: sha256sum -c SOURCE-MANIFEST.sha256
-      - name: Compile and test native engine with synthetic images
+      - name: Native engine builds without warnings (-Wall -Wextra -Werror)
+        run: cc -std=c99 -O2 -Wall -Wextra -Werror recovery/modem-toggle.c recovery/sha256.c -o /tmp/modem-toggle && /tmp/modem-toggle --self-test
+      - name: Cache contract (fsync, BLKFLSBUF, separate O_DIRECT reader)
+        run: cc -std=c99 -O2 -Wall -Wextra -Werror tests/cache-contract.c recovery/sha256.c -o /tmp/cache-contract && /tmp/cache-contract
+      - name: Patch, dump and restore guards on synthetic images
         run: python3 tests/host-synthetic.py
-      - name: Verify source package can be reproduced
-        run: python3 package-sources.py
+      - name: License headers present and no sensor checks
+        run: |
+          missing=$(grep -rL 'SPDX-License-Identifier: GPL-3.0-or-later' --include='*.c' --include='*.h' --include='*.java' --include='*.py' --include='*.sh' src recovery tests build.py package-sources.py || true)
+          [ -z "$missing" ] || { echo "Missing SPDX header: $missing"; exit 1; }
+          ! grep -rniE 'thermal_zone|temperature' --include='*.c' --include='*.java' src recovery

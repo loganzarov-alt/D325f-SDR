@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Logan Zarov
 package io.github.loganzarov_alt.d325fmodem;
 
 import java.io.File;
@@ -14,7 +16,7 @@ final class PrivateFiles {
 
     static File prepare(File cache, String name) throws PatchException {
         if (!name.matches("[A-Za-z0-9_.-]+") || name.contains("..")) {
-            throw new PatchException("Недопустимое имя временного файла");
+            throw new PatchException("Invalid temporary file name");
         }
         File file = new File(cache, name);
         if (file.exists()) file.delete();
@@ -25,13 +27,13 @@ final class PrivateFiles {
             // Remove only this cache file; recreate it from the app process.
             ModemOps.Shell cleanup = ModemOps.su("rm -f " + quote(file.getAbsolutePath()));
             if (cleanup.exit != 0) {
-                throw new PatchException("Не удалось удалить старый временный файл: "
+                throw new PatchException("Could not remove legacy temporary file: "
                         + file.getName() + "\n" + cleanup.out, first);
             }
             try {
                 create(file);
             } catch (IOException second) {
-                throw new PatchException("Не удалось создать временный файл: "
+                throw new PatchException("Could not create temporary file: "
                         + file.getName(), second);
             }
         }

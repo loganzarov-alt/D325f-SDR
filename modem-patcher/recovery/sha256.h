@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Logan Zarov
 #ifndef D325_SHA256_H
 #define D325_SHA256_H
 #include <stdint.h>

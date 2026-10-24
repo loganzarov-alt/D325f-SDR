@@ -1,42 +1,39 @@
 #!/usr/bin/env python3
-"""Package a whitelist of rebuildable sources, never personal firmware backups."""
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 Logan Zarov
+"""Package only project sources, release artifacts and verification reports."""
 from pathlib import Path
-import hashlib,json,shutil,tarfile
+import hashlib,json,shutil,tarfile,zipfile
 ROOT=Path(__file__).resolve().parent
-NAME='LG-D325-Modem-Patcher-sources-v1.0.4'
-STAGE=ROOT/'build/public-source'/NAME
+DIST=ROOT/'dist';NAME='LG-D325-Modem-Patcher-v1.1.0'
+STAGE=ROOT/'build/source-package'/NAME
 if STAGE.exists():shutil.rmtree(STAGE)
 STAGE.mkdir(parents=True)
-files=['AndroidManifest.xml','build.py','README.ru.txt','README.md','LICENSE','LICENSING.md','.gitignore','package-sources.py',
-'assets/d325-rx-42ec.xor.json','third_party/musl-1.2.5.tar.gz',
-'recovery/build-runtime.sh','recovery/build-payload.py','recovery/build-zip.py',
-'recovery/modem-toggle.c','recovery/sha256.c','recovery/sha256.h',
-'recovery/update-binary','recovery/scan-partition.sh','recovery/patch.payload',
-'recovery/tools/modem-toggle','recovery/test-toggle.py',
-'tests/CacheRegression.java','tests/AndroidManifest.xml','tests/build-tests.py','tests/run-device-tests.py','tests/host-synthetic.py']
-files += [str(p.relative_to(ROOT)) for p in (ROOT/'src').rglob('*.java') if p.name!='ReversiblePatch.java']
-files += [str(p.relative_to(ROOT)) for p in (ROOT/'licenses').glob('*')]
+files=['LICENSE','README.md','README.ru.md','AndroidManifest.xml','.gitignore','build.py','package-sources.py']
+for folder in ['src','tests','recovery','assets','licenses','third_party','reports']:
+    for p in (ROOT/folder).rglob('*'):
+        if p.is_file() and (p.suffix in {'.java','.py','.c','.h','.sh','.json','.txt','.md','.log'} or p.name in {'update-binary','patch.payload','modem-toggle','musl-1.2.5.tar.gz'}):
+            files.append(str(p.relative_to(ROOT)))
 for name in files:
-    source=ROOT/name;target=STAGE/name;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source,target)
-reports=STAGE/'reports';reports.mkdir()
-for name in ['build-report.json','twrp-build-report.json','recovery-tests.json','recovery-tests.log','device-regression.txt','device-test-report.json','source-reproduction-report.json','publication-review.json']:
-    source=ROOT/'dist'/name
-    # Keep supplied reports when packaging an extracted source release.
-    if not source.exists():source=ROOT/'reports'/name
-    if not source.exists():raise RuntimeError('Missing verification report: '+name)
-    if source.suffix=='.json':
-        obj=json.loads(source.read_text())
-        for key in ['apk','zip']:
-            if key in obj:obj[key]=Path(obj[key]).name
-        (reports/name).write_text(json.dumps(obj,ensure_ascii=False,indent=2)+'\n')
-    else:shutil.copyfile(source,reports/name)
+    target=STAGE/name;target.parent.mkdir(parents=True,exist_ok=True);shutil.copy(ROOT/name,target)
 manifest={str(p.relative_to(STAGE)):hashlib.sha256(p.read_bytes()).hexdigest() for p in STAGE.rglob('*') if p.is_file()}
-(STAGE/'SOURCE-MANIFEST.sha256').write_text(''.join(value+'  '+key+'\n' for key,value in sorted(manifest.items())))
-target=ROOT/'dist'/(NAME+'.tar.gz')
-target.parent.mkdir(parents=True,exist_ok=True)
-with tarfile.open(target,'w:gz') as archive:archive.add(STAGE,arcname=NAME)
-with tarfile.open(target) as archive:
-    names=archive.getnames()
-    assert not any(Path(name).suffix in ('.img','.bin','.apk','.keystore') for name in names)
-    assert not any('inverse.json' in name or 'original/' in name or 'ReversiblePatch.java' in name for name in names)
-print(json.dumps({'archive':str(target),'bytes':target.stat().st_size,'sha256':hashlib.sha256(target.read_bytes()).hexdigest(),'files':len(manifest)+1},indent=2))
+(STAGE/'SOURCE-MANIFEST.sha256').write_text(''.join(digest+'  '+name+'\n' for name,digest in sorted(manifest.items())))
+source=DIST/(NAME+'-sources.tar.gz')
+with tarfile.open(source,'w:gz') as tar:tar.add(STAGE,arcname=NAME)
+with tarfile.open(source) as tar:
+    for member in tar.getmembers():
+        if not member.isfile():continue
+        p=Path(member.name)
+        if p.suffix.lower() in {'.bin','.img','.keystore','.jks','.p12','.pem','.key','.pass'}:raise RuntimeError('Forbidden source archive member: '+member.name)
+        if 'boot.img' in p.name.lower():raise RuntimeError('Boot image must not be archived')
+release=DIST/(NAME+'-release.zip')
+artifacts=[DIST/'Modem-Patcher-LG-D325-v1.1.0.apk',DIST/'LG-D325-Modem-Toggle-TWRP-v1.2.zip',DIST/'LG-D325-Modem-Restore-Dump-TWRP-v1.2.zip',source]
+sums=''.join(hashlib.sha256(p.read_bytes()).hexdigest()+'  '+p.name+'\n' for p in artifacts)
+with zipfile.ZipFile(release,'w',compression=zipfile.ZIP_DEFLATED) as z:
+    for p in artifacts:z.write(p,p.name)
+    for name in ['README.md','README.ru.md','LICENSE']:z.write(ROOT/name,name)
+    for p in (ROOT/'reports').glob('*'):
+        if p.is_file():z.write(p,'reports/'+p.name)
+    z.writestr('SHA256SUMS',sums)
+report={'source':source.name,'source_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'release':release.name,'release_sha256':hashlib.sha256(release.read_bytes()).hexdigest(),'source_files':len(manifest)+1,'full_firmware_images_included':False,'private_keys_included':False}
+print(json.dumps(report,indent=2))

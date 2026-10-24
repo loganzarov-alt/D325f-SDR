@@ -39,12 +39,20 @@ experiment archives were not published as a complete, reproducible firmware sour
 
 ## Modem preparation tools
 
-Modem Patcher 1.0.4 / TWRP Toggle 1.1 is a separate component under
-`modem-patcher/`. The supplied source archive SHA-256 was
-`2cee7430e219597dac4ec93fa4920208b297781aedfcf25e7e8714ca42724fb6`.
+Modem Patcher 1.1.0 / TWRP ZIPs 1.2 is a separate component under
+`modem-patcher/`. Supplied source archive SHA-256:
+`121b385c2a5060f9eec3f1955e223ac8549f21495d07f7dd6c5c274de43cd9ef`; its files
+are listed in `modem-patcher/SOURCE-MANIFEST.sha256` and checked by CI.
+The repository adds `tests/host-synthetic.py` (synthetic-image CI test) and
+`LICENSING.md`; application/native source, the XOR payload and third-party
+runtime files are unchanged from that archive.
 
-Published APK and TWRP ZIP retain the supplied bytes and signatures.
-The source package adds the project license, documentation, a synthetic host test
-and support for repackaging supplied reports. Application/native source, XOR
-payload and third-party runtime files are unchanged.
-See [publication verification](../modem-patcher/reports/publication-review.json).
+| Release artifact | SHA-256 |
+| --- | --- |
+| `Modem-Patcher-LG-D325-v1.1.0.apk` | `e504538ef8490b8bfe149c2269f8eacb2dfa4e72679c51c8fb8a652dc5ae31cc` |
+| `LG-D325-Modem-Toggle-TWRP-v1.2.zip` | `6140ae1530e5c2c433cfeb2e8cd416eeefaa66bd6008412b6f87cbaad6566d23` |
+| `LG-D325-Modem-Restore-Dump-TWRP-v1.2.zip` | `09766098fb5bcc5d1d4bde8cdb8c1235c2a2cf2105851223f2795cdc386efde8` |
+
+The patch payload (`10fc481c…7e2ba8`, 6 files, 2,672 bytes) is unchanged since
+1.0.4. Applied to the stock modem partition `1d6d32af…f455`, it reproduces all 65
+modem files of the image used with D325f SDR 1.0.0 (`42ecd065…227e`) byte for byte.

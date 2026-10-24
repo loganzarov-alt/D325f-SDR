@@ -1,20 +1,22 @@
 #!/sbin/sh
-# LG D325 reversible modem patch. Run by TWRP; no serial/device-index binding.
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 Logan Zarov
 OUTFD=$2
 ZIPFILE=$3
 WORK=/tmp/d325-modem-toggle-$$
 ui_print() { printf 'ui_print %s\nui_print\n' "$*" > /proc/self/fd/"$OUTFD"; }
-abort() { ui_print "$*"; rm -rf "$WORK"; exit 1; }
+abort() { ui_print "$*"; ui_print "Diagnostic files: $WORK"; exit 1; }
 case "$OUTFD" in ''|*[!0-9]*) exit 1;; esac
-[ -d /twres ] || abort "Этот ZIP запускается из TWRP."
+[ -d /twres ] || abort "Run this ZIP from TWRP."
 model=$(getprop ro.product.model)
 device=$(getprop ro.product.device)
-case "$model:$device" in *D325*:*|*:w5ds) ;; *) abort "Поддерживается LG D325; обнаружено: $model ($device)";; esac
-mkdir -p "$WORK" || abort "Не удалось создать временный каталог."
-unzip -o "$ZIPFILE" tools/modem-toggle patch.payload scan-partition.sh -d "$WORK" >/dev/null 2>&1 || abort "Ошибка распаковки ZIP."
-chmod 0755 "$WORK/tools/modem-toggle" || abort "Ошибка подготовки инструмента."
-"$WORK/tools/modem-toggle" --self-test > "$WORK/self-test.log" 2>&1 || abort "Не прошла проверка SHA-256."
-sh "$WORK/scan-partition.sh" > "$WORK/scan.txt" 2>&1 || abort "Не удалось найти modem-раздел."
+case "$model:$device" in *D325*:*|*:w5ds) ;; *) abort "Only LG D325 is supported; detected: $model ($device)";; esac
+mkdir -p "$WORK" || abort "Cannot create the temporary directory."
+unzip -o "$ZIPFILE" tools/modem-toggle patch.payload scan-partition.sh operation -d "$WORK" >/dev/null 2>&1 || abort "Cannot extract the ZIP."
+TOOL=$WORK/tools/modem-toggle
+chmod 0755 "$TOOL" || abort "Cannot prepare the native tool."
+"$TOOL" --self-test > "$WORK/self-test.log" 2>&1 || abort "SHA-256 self-test failed."
+sh "$WORK/scan-partition.sh" > "$WORK/scan.txt" 2>&1 || abort "Cannot scan modem partitions."
 TAB=$(printf '\t')
 mounts=
 labels=
@@ -22,32 +24,72 @@ bad=
 while IFS="$TAB" read -r marker kind path sectors; do
     [ "$marker" = D325F_BAD_MOUNT ] && bad=1
     [ "$marker" = D325F_CAND ] || continue
-    case "$path" in /dev/block/*) ;; *) abort "Некорректный путь раздела.";; esac
-    case "$path" in *..*) abort "Некорректный путь раздела.";; esac
+    case "$path" in /dev/block/*) ;; *) abort "Invalid partition path.";; esac
+    case "$path" in *..*) abort "Invalid partition path.";; esac
     if [ "$sectors" != 131072 ]; then
         [ "$kind" != MOUNT ] || bad=1
         continue
     fi
-    case "$kind" in
-        MOUNT) mounts="$mounts $path";;
-        LABEL) labels="$labels $path";;
-    esac
+    case "$kind" in MOUNT) mounts="$mounts $path";; LABEL) labels="$labels $path";; esac
 done < "$WORK/scan.txt"
-[ -z "$bad" ] || abort "Смонтированная прошивка не прошла проверку размера."
+[ -z "$bad" ] || abort "Mounted firmware failed partition/size validation."
 candidates=$mounts
 [ -n "$candidates" ] || candidates=$labels
 candidates=$(for p in $candidates; do printf '%s\n' "$p"; done | sort -u)
 set -- $candidates
-[ "$#" -eq 1 ] || abort "Не найден единственный modem-раздел 64 МиБ."
+[ "$#" -eq 1 ] || abort "Cannot find a unique 64 MiB modem partition."
 block=$1
-ui_print "LG D325: проверка версии файлов модема…"
-ui_print "Сток → установка патча; патч → восстановление стока."
-if "$WORK/tools/modem-toggle" --block "$block" --payload "$WORK/patch.payload" --toggle --allow-block-write > "$WORK/result.log" 2>&1; then
-    while IFS= read -r line; do ui_print "$line"; done < "$WORK/result.log"
-    ui_print "Готово. Изменения проверены повторным чтением."
-    ui_print "Для переключения обратно прошейте этот ZIP ещё раз."
+show_log() { while IFS= read -r line; do ui_print "$line"; done < "$1"; }
+"$TOOL" --block "$block" --payload "$WORK/patch.payload" > "$WORK/inspect.log" 2>&1 || { show_log "$WORK/inspect.log"; abort "Cannot read the modem partition."; }
+state=$(sed -n 's/^STATE //p' "$WORK/inspect.log")
+source_hash=$(sed -n 's/^SOURCE_SHA256 //p' "$WORK/inspect.log")
+operation=$(cat "$WORK/operation")
+case "$state:$operation" in
+    STOCK:toggle|PATCHED:toggle)
+        # A persistent, verified snapshot is saved before the first write.
+        grep -q ' /data ' /proc/mounts || mount /data >/dev/null 2>&1
+        grep -q ' /data ' /proc/mounts || abort "Mount/decrypt data first so a persistent dump can be saved."
+        DUMPS=/data/media/0/D325f
+        mkdir -p "$DUMPS" || abort "Cannot create the persistent dump directory."
+        lower=$(printf '%s' "$state" | tr 'A-Z' 'a-z')
+        short=$(printf '%s' "$source_hash" | cut -c 1-8)
+        dump=$DUMPS/modem-dump-$lower-$short.bin
+        if [ -e "$dump" ]; then
+            "$TOOL" --image "$dump" --payload "$WORK/patch.payload" --restore-dump "$dump" --dry-run > "$WORK/existing-dump.log" 2>&1 || abort "Existing dump cannot be verified; it will not be overwritten."
+            grep -q "^SOURCE_SHA256 $source_hash$" "$WORK/existing-dump.log" || abort "Existing dump does not match; it will not be overwritten."
+        else
+            ui_print "Saving a dump before writing. Copy it to a PC after booting."
+            "$TOOL" --block "$block" --payload "$WORK/patch.payload" --dump "$DUMPS" > "$WORK/dump.log" 2>&1 || { show_log "$WORK/dump.log"; abort "Cannot save a verified persistent dump."; }
+            show_log "$WORK/dump.log"
+        fi
+        set -- --toggle
+        ;;
+    MIXED:toggle|UNKNOWN:toggle|*:restore-dump)
+        # Place exactly one supported dump beside this ZIP for recovery.
+        ZIPDIR=${ZIPFILE%/*}
+        [ "$ZIPDIR" != "$ZIPFILE" ] || ZIPDIR=.
+        count=0
+        chosen=
+        for dump in "$ZIPDIR"/modem-dump-*.bin; do
+            [ -f "$dump" ] || continue
+            "$TOOL" --image "$dump" --payload "$WORK/patch.payload" --restore-dump "$dump" --dry-run > "$WORK/candidate.log" 2>&1 || continue
+            candidate=$(sed -n 's/^STATE //p' "$WORK/candidate.log")
+            case "$candidate" in STOCK|PATCHED) count=$((count+1)); chosen=$dump;; esac
+        done
+        [ "$count" -eq 1 ] || abort "Place exactly one verified modem-dump-*.bin beside this ZIP, then flash again."
+        ui_print "Restoring from dump: ${chosen##*/}"
+        set -- --restore-dump "$chosen"
+        ;;
+    *) abort "Unsupported installer operation/state.";;
+esac
+ui_print "LG D325: $state; writing changed sectors and verifying with fresh direct reads."
+if "$TOOL" --block "$block" --payload "$WORK/patch.payload" "$@" --allow-block-write > "$WORK/result.log" 2>&1; then
+    show_log "$WORK/result.log"
+    grep -q '^READBACK_VERIFIED$' "$WORK/result.log" || abort "Fresh readback was not confirmed."
+    ui_print "Completed. Save the dump and its checksum on a PC."
+    [ "$operation" != toggle ] || ui_print "Flash the toggle ZIP again to switch back."
     rm -rf "$WORK"
     exit 0
 fi
-while IFS= read -r line; do ui_print "$line"; done < "$WORK/result.log"
-abort "Операция не завершена. Смотрите сообщение проверки выше."
+show_log "$WORK/result.log"
+abort "Operation failed. Read the verification/rollback result above."

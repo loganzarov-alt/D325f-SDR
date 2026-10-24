@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Logan Zarov
 package io.github.loganzarov_alt.d325fmodem;
 
 import java.io.*;
@@ -31,12 +33,12 @@ final class ModemOps {
             }
             int transport=process.waitFor();String text=output.toString("UTF-8").trim();
             int at=text.lastIndexOf(marker);
-            if(at<0)throw new PatchException("su не подтвердил завершение команды ("+transport+"):\n"+text);
+            if(at<0)throw new PatchException("su did not confirm command completion ("+transport+"):\n"+text);
             String status=text.substring(at+marker.length()).trim();
-            if(!status.matches("[0-9]{1,3}"))throw new PatchException("Некорректный ответ su");
+            if(!status.matches("[0-9]{1,3}"))throw new PatchException("Invalid su status response");
             return new Shell(Integer.parseInt(status),text.substring(0,at).trim());
-        } catch(InterruptedException e){Thread.currentThread().interrupt();throw new PatchException("Операция прервана",e);}
-        catch(IOException e){throw new PatchException("Не удалось запустить su. Разрешите приложению root-доступ.",e);}
+        } catch(InterruptedException e){Thread.currentThread().interrupt();throw new PatchException("Operation interrupted",e);}
+        catch(IOException e){throw new PatchException("Could not start su. Grant root access to this application.",e);}
     }
     static String select(String text)throws PatchException{
         LinkedHashSet<String> mounts=new LinkedHashSet<>(),labels=new LinkedHashSet<>();
@@ -47,14 +49,14 @@ final class ModemOps {
             if(!line.startsWith("D325F_CAND\t"))continue;
             String[] bits=line.split("\t",-1);
             if(bits.length!=4||!(bits[1].equals("MOUNT")||bits[1].equals("LABEL"))||!bits[2].matches("/dev/block/[A-Za-z0-9_./:+-]+")||bits[2].contains(".."))
-                throw new PatchException("Некорректный ответ поиска modem-раздела");
+                throw new PatchException("Invalid modem partition scan response");
             if(!bits[3].equals("131072")){if(bits[1].equals("MOUNT"))bad=true;continue;}
             (bits[1].equals("MOUNT")?mounts:labels).add(bits[2]);
         }
-        if(!root)throw new PatchException("Нет root-доступа. Разрешите его приложению в менеджере su.");
-        if(bad)throw new PatchException("Смонтированная прошивка не прошла проверку раздела и размера");
+        if(!root)throw new PatchException("Root access is unavailable. Grant it in your su manager.");
+        if(bad)throw new PatchException("The mounted firmware partition failed validation");
         LinkedHashSet<String> chosen=mounts.isEmpty()?labels:mounts;
-        if(chosen.size()!=1)throw new PatchException("Не найден единственный modem-раздел размером 64 МиБ");
+        if(chosen.size()!=1)throw new PatchException("Could not find a unique 64 MiB modem partition");
         return chosen.iterator().next();
     }
 }

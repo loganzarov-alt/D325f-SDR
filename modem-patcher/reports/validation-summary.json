@@ -1,0 +1,15 @@
+{
+  "version": "1.1.0",
+  "fixture_checks": {
+    "native-host-tests.json": 16,
+    "native-arm-tests.json": 15,
+    "installer-tests.json": 6
+  },
+  "total_fixture_checks": 37,
+  "gcc_wall_wextra_werror": "passed without warnings",
+  "APK_and_instrumentation_build": "passed without warnings",
+  "phone_installation": "not performed",
+  "real_phone_writes": 0,
+  "block_hardware_test": "not performed; cache ioctl contract tested with a mock and O_DIRECT on a regular fixture",
+  "payload_sha256": "10fc481c411f22153fb570e970b0eecb652f2360ca9d7a79df56a57c377e2ba8"
+}

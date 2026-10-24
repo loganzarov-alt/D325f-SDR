@@ -1,6 +1,6 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="io.github.loganzarov_alt.d325fmodem" android:versionCode="5" android:versionName="1.0.4">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="io.github.loganzarov_alt.d325fmodem" android:versionCode="7" android:versionName="1.1.0">
  <uses-sdk android:minSdkVersion="25" android:targetSdkVersion="25"/>
- <application android:label="Modem Patcher" android:theme="@android:style/Theme.Material.Light.NoActionBar" android:allowBackup="false">
+ <application android:label="Modem Patcher" android:icon="@android:drawable/ic_menu_manage" android:theme="@android:style/Theme.Material.Light.NoActionBar" android:allowBackup="false">
   <activity android:name=".MainActivity" android:exported="true">
    <intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter>
   </activity>

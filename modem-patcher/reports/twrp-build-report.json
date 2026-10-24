@@ -1,12 +1,22 @@
 {
-  "zip": "LG-D325-Modem-Toggle-TWRP-v1.1.zip",
-  "sha256": "b62fb59b2569a2b31fc9ec1470733b439ee192129e2c8a49656f6ad05ba4c442",
-  "architecture": "ARMv7 static musl; runtime notices included",
-  "requires": "TWRP on LG D325 and supported firmware file hashes",
-  "toggle": "STOCK -> PATCHED -> STOCK",
-  "external_backup_required": false,
-  "partition_selection": "mounted firmware or exact modem label; 64 MiB required",
+  "artifacts": [
+    {
+      "zip": "LG-D325-Modem-Toggle-TWRP-v1.2.zip",
+      "sha256": "6140ae1530e5c2c433cfeb2e8cd416eeefaa66bd6008412b6f87cbaad6566d23",
+      "operation": "toggle"
+    },
+    {
+      "zip": "LG-D325-Modem-Restore-Dump-TWRP-v1.2.zip",
+      "sha256": "09766098fb5bcc5d1d4bde8cdb8c1235c2a2cf2105851223f2795cdc386efde8",
+      "operation": "restore-dump"
+    }
+  ],
+  "payload_sha256": "10fc481c411f22153fb570e970b0eecb652f2360ca9d7a79df56a57c377e2ba8",
+  "architecture": "ARMv7 static musl; notices included",
+  "direct_readback": true,
+  "requires": "TWRP on LG D325 and supported firmware hashes",
+  "automatic_dump_before_toggle": true,
+  "restore_mixed_unknown_from_dump": true,
   "device_binding": "model and firmware contents only; no serial, IMEI or block index",
-  "writes": "changed sectors of modem only; no modemst/persist/fsg/boot",
-  "actual_twrp_flash_test": "not run: user will test in TWRP"
+  "actual_device_test": "not run; confirmation required before phone writes"
 }
