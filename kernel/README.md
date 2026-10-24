@@ -19,7 +19,7 @@ public LineageOS tree, the full kernel configuration and the build settings.
 | File | Change |
 | --- | --- |
 | `arch/arm/mach-msm/smem.c` | Allocates SMEM item **471** (128 KiB) at boot and clears it. The patched modem firmware writes its IQ ring there. This is the change D325f SDR needs. |
-| `arch/arm/mach-msm/pil-msa.c` | After the modem image is authenticated, asks TrustZone (SCM `MP_ASSIGN`) to share the physical range `0x05000000`+64 MiB between Android and the modem. |
+| `arch/arm/mach-msm/pil-msa.c` | After the modem image is authenticated, asks TrustZone (SCM `MP_ASSIGN`) to share the physical range `0x05000000`+64 MiB between Android and the modem. On the test phone TrustZone does not offer this call (`D325 IQ assign_mem unavailable: 0`), so nothing is shared. |
 | `arch/arm/mach-msm/peripheral-loader.c` | Accepts a modem ELF segment that only describes that range (no image bytes): no memory-overlap error, no clearing, no PMI length update. Inactive with the current modem patch, whose image has no such segment. |
 | `arch/arm/include/asm/uaccess.h`, `include/linux/compiler-gcc4.h`, new `compiler-gcc16.h`, `scripts/dtc/dtc-lexer.*`, `scripts/gcc-wrapper.py` | Build fixes for a modern GCC and Python 3. No runtime change. |
 
@@ -42,6 +42,12 @@ toolchain's prefix for `CROSS_COMPILE`. Pack the
 result into a boot image with your stock ramdisk and device tree.
 
 ## Status
+
+Evidence that the test phone runs a kernel with this patch:
+- `/proc/version`: `Linux version 3.4.0+ (root@kali) (gcc version 16.1.0 (Debian 16.1.0-3)) #6 SMP PREEMPT Sun Sep 13 12:36:46 UTC 2026` — build #6, the build this patch was recovered for.
+- Kernel log: `pil-q6v5-mss fc880000.qcom,mss: D325 IQ assign_mem unavailable: 0` — a message that exists only in this patch.
+- SMEM table during reception: item 471 `allocated=1 size=131072` — the allocation added by this patch.
+
 
 - The patch was reconstructed from the project's work history. It applies
   cleanly to the base commit (checked 2026-10-24 against the upstream files;
@@ -73,6 +79,11 @@ D325f SDR работает на ядре LineageOS 14.1 для LG D325 с неб
 
 Сборка — команды выше (`prepare-source.sh`, затем `make`), GCC 16.1.0 и флаги
 `KAFLAGS=-fno-pie KCFLAGS='-std=gnu89 -fno-pie -Wno-error'`.
+
+Подтверждения на тестовом телефоне: `/proc/version` — сборка #6 от 13.09.2026 12:36 UTC
+(GCC 16.1.0); в журнале ядра есть строка `D325 IQ assign_mem unavailable: 0`, которая
+есть только в этом патче (вызов TrustZone недоступен, поэтому ничего не открывается);
+в таблице SMEM во время приёма item 471 `allocated=1 size=131072`.
 
 Статус: патч восстановлен по истории работы и чисто ложится на базовый коммит
 (проверено 24.10.2026, CI повторяет проверку). Сборка из этой папки ещё не
