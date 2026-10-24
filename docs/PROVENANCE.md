@@ -1,10 +1,8 @@
-# Provenance and frozen working baseline
+# Code provenance
 
 - Upstream application: RF Analyzer, Dennis Mantz,
   https://github.com/demantz/RFAnalyzer.
 - LG modifications: Logan Zarov.
-- Recovered project baseline: `loganzarov-alt/Phone-sdr`, commit
-  `b75f62bb56b12bb5f6202b2615207cefd54e78ee`.
 - Latest behavior reference: `RF-Decoder-from-LG-v20058-20261023.apk`.
 - Native C reconstruction input:
   `LG-D325-lg_stream-kernel-modem-sources-20261023.tar.gz` supplied by the owner.
@@ -26,9 +24,12 @@ The publication revision 1.0.0 removes HackRF/RTL-SDR hardware sources, replaces
 branding and adds offline licensing. File-format switching uses an explicit sample
 format mapping. LG native helper C/ASM remains unchanged; DSP processing code is unchanged,
 with only a dated source modification notice added.
-The frozen v20058 APK remains the owner-tested baseline, not the publication APK. The validation directory distinguishes the frozen baseline from fresh 1.0.0
-host/build checks. CI runs have their own logs and artifacts; device behavior
-must not be inferred from compilation or mocked tests.
+The published **1.0.0** APK was tested on the modified LG D325 by Logan Zarov,
+who confirmed it works on **24 October 2026**. Its SHA-256 is
+`c6acd40b7dce5a4ebb53da4643de93bd6873fbe16d7810b7a3f09c0819f36cc7`.
+The release tag `v1.0.0` identifies the corresponding application source.
+The validation directory retains the earlier v20058 results and the 1.0.0
+build/test records. Later documentation updates do not change the published APK.
 
 The owner identifies the custom modem/SDR work as their project. The reconstructed
 C and its transport/ASM files were traced to the supplied recovery archive.

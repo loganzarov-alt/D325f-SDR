@@ -2,6 +2,12 @@
 
 ## First public release 1.0.0 (versionCode 1)
 
+Logan Zarov tested the published APK on the modified LG D325 and confirmed that
+it works on **24 October 2026**. APK SHA-256:
+`c6acd40b7dce5a4ebb53da4643de93bd6873fbe16d7810b7a3f09c0819f36cc7`.
+This is a functional check on that prepared phone; no RF measurement results or
+second-device test are recorded here.
+
 - `release-1.0.0-build.log`: clean source build and three source-selection/file-format unit tests.
 - `release-1.0.0-host-tests.log`: audio underruns/recovery, partial writes, IQ continuity,
   RX recovery and BT guardian/controller tests.
@@ -12,9 +18,7 @@
   against the owner-tested baseline: 13 unchanged, one differs only by a dated
   modification comment; its processing code is unchanged.
 
-These are host/build checks. The new package, icon, source selection and user interface
-still need validation on the owner's prepared LG D325. A successful build does not
-establish RF performance or correct operation on a stock phone.
+The files above record automated host/build checks separately from the device check.
 
 ## Archived v20058 native-source baseline
 

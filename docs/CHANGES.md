@@ -1,4 +1,4 @@
-# 1.0.0 — first public release (2026-10-23)
+# 1.0.0 — first public release (2026-10-24)
 
 - Visible name D325f SDR, original vector icon and versionCode 1.
 - Separate application ID `io.github.loganzarov_alt.d325fsdr`: installs alongside
@@ -10,12 +10,16 @@
 - Local manual, offline license texts/notices, source-selection unit tests and CI.
 - Include the NDK LLVM runtime notice for statically linked C++ runtime portions.
 - Native helper processing source is unchanged from the working reconstructed
-  baseline. DSP code differs only by its dated modification notice. New APK hardware validation is still required.
+  baseline. DSP code differs only by its dated modification notice.
+- Published APK tested on the modified LG D325 by Logan Zarov; working operation
+  confirmed on 2026-10-24.
+- Hardware photographs and the author's B8/B1 wire identification documented in
+  [HARDWARE.md](HARDWARE.md).
 
 Modified upstream-derived source files (including changes carried over from the
 working baseline) carry dated notices; original copyright/license headers remain.
-The publication date identifies this source snapshot, not the date each earlier
-change was originally implemented. Compared with upstream snapshot
+The dated notices identify the source snapshot, not the date each earlier change
+was originally implemented. Compared with upstream snapshot
 `bf36c841ef7cc3ef3fbc4c5dcf4fd34a9008783c`:
 
 - `app/src/main/java/com/mantz_it/rfanalyzer/AppModule.kt`

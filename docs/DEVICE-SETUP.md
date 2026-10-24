@@ -1,29 +1,30 @@
-# LG D325 device preparation: current status
+# LG D325 device setup / Подготовка устройства
 
-The owner has a working, modified LG D325 and reported that the source-built
-v20058 APK works there. This repository builds the application. It does not yet
-reproduce the complete phone configuration from a stock device.
+## Tested device
 
-Known runtime requirements include root access, the matching LG/vendor QMI
-libraries, and the device-specific kernel/modem/IQ transport modifications used
-on the working phone. Minimum application API level is 25; this does not establish
-compatibility with arbitrary Android ROMs or other LG/Qualcomm models.
+Logan Zarov tested the published **D325f SDR 1.0.0** APK on the modified LG D325
+and confirmed it works on **24 October 2026**.
 
-The supplied recovery material contains kernel patch records, reconstructed
-fragments and modem/DSP experiments. It does not establish a complete, tested
-flashable firmware bundle. Historical commands and absolute paths are not a
-verified installation guide.
+Modem reception requires:
 
-Before claiming reproducibility on a second phone, record and verify:
+- Root access.
+- The matching LG/vendor QMI libraries.
+- The kernel, modem and IQ transport configuration used on the prepared phone.
+- The hardware modification shown in [Hardware: B8 / B1](HARDWARE.md).
 
-1. Exact LG model, Android ROM/build, bootloader/root method and partition layout.
-2. Hashes of the working boot/kernel and relevant firmware images, their source
-   provenance, and a device-appropriate backup/restore procedure.
-3. Exact kernel source commit, configuration, applied patches and build tools.
-4. The required modem/IQ patches, how they are installed, and which components
-   remain proprietary or cannot be redistributed.
-5. A complete setup trial on a second device, followed by reception, audio,
-   recording, restart/recovery and sustained-run measurements.
+The app requires Android 7.1+ (API 25), ARMv7. The APK installs the application;
+it does not install the phone's kernel or modem firmware. A complete setup
+procedure from a stock phone has not yet been verified on a second device.
 
-No flashing commands are presented here as tested instructions. The current
-hardware evidence is one owner's report on an already prepared phone.
+## По-русски
+
+**24 октября 2026 года** Logan Zarov проверил опубликованный APK **1.0.0**
+на доработанном LG D325 и подтвердил его работу.
+
+Для приёма с модема нужны root-доступ, подходящие системные QMI-библиотеки,
+подготовленные ядро, модем и транспорт IQ. Аппаратная доработка показана
+на [фотографиях с обозначениями B8/B1](HARDWARE.md).
+
+Требования приложения: Android 7.1+ (API 25), ARMv7. APK устанавливает приложение;
+ядро и прошивку модема он не устанавливает. Полная процедура подготовки штатного
+телефона пока не проверена на втором устройстве.

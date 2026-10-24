@@ -40,8 +40,8 @@ against upstream blob hashes and removed. The replacement vector icon was
 created for D325f SDR. The upstream name remains only for factual attribution
 and internal historical identifiers. No endorsement is claimed.
 
-HackRF/RTL-SDR device support and `hackrf_android.aar` have been removed at the
-project owner's request. No libhackrf or libusb binary is packaged. Legacy file
+HackRF/RTL-SDR device support and `hackrf_android.aar` are not included.
+No libhackrf or libusb binary is packaged. Legacy file
 format identifiers remain solely to read existing recordings.
 
 The old `lg_stream` ELF is not distributed in the public tree: its exact original
