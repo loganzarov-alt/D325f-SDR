@@ -1,0 +1,76 @@
+{
+  "platform": "host native",
+  "tests": [
+    {
+      "test": "stock toggle twice is exact; 20 sectors",
+      "passed": true,
+      "before": "1d6d32af2821cc96e9f80b6f9bf9d381b73e9ae60b1bec6fe45786603578f455",
+      "between": "71887ace9a41c96b3eded0e914459e405f5dc3fed101311362b77d73b6ecc0b4"
+    },
+    {
+      "test": "working toggle twice is exact; 20 sectors",
+      "passed": true,
+      "before": "42ecd06546fad39d22428290b8284e1256ce14e1a88a2b5ef56b4c44ffaf227e",
+      "between": "29d891ebba69a8a008c0d7b6a086ac6ca3a71e1f3eb8352512770779c275af50"
+    },
+    {
+      "test": "different FAT cluster placement",
+      "passed": true
+    },
+    {
+      "test": "double-read dump and checksum",
+      "passed": true
+    },
+    {
+      "test": "existing dump is never overwritten",
+      "passed": true
+    },
+    {
+      "test": "restore STOCK dump over PATCHED",
+      "passed": true
+    },
+    {
+      "test": "restore PATCHED dump over STOCK",
+      "passed": true
+    },
+    {
+      "test": "restore dump over UNKNOWN with corrupt FAT header",
+      "passed": true
+    },
+    {
+      "test": "MIXED recovery after injected interruption without rollback",
+      "passed": true,
+      "fail_after_sectors": 1
+    },
+    {
+      "test": "write failure rollback uses fresh verification",
+      "passed": true
+    },
+    {
+      "test": "post-write cache barrier error fails and rolls back",
+      "passed": true
+    },
+    {
+      "test": "cache barrier occurs after write and before READBACK_VERIFIED",
+      "passed": true
+    },
+    {
+      "test": "corrupt sidecar rejected without writes",
+      "passed": true
+    },
+    {
+      "test": "unsupported dump rejected without writes",
+      "passed": true
+    },
+    {
+      "test": "wrong size rejected",
+      "passed": true
+    },
+    {
+      "test": "block ioctl failure and aligned separate O_DIRECT contract (mock ioctl, regular fixture)",
+      "passed": true
+    }
+  ],
+  "real_device_writes": 0,
+  "payload_sha256": "10fc481c411f22153fb570e970b0eecb652f2360ca9d7a79df56a57c377e2ba8"
+}

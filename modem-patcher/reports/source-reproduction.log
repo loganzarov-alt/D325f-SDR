@@ -1,0 +1,61 @@
+XOR payload: 5014 bytes
+PASS SHA256
+{
+  "artifacts": [
+    {
+      "zip": "LG-D325-Modem-Toggle-TWRP-v1.2.zip",
+      "sha256": "952c18790be82830d09c773463fff36eb71bee22a49134bfcbff1d440ad44487",
+      "operation": "toggle"
+    },
+    {
+      "zip": "LG-D325-Modem-Restore-Dump-TWRP-v1.2.zip",
+      "sha256": "cc27d5c56f1fc567ce30a315cc28a3446cdcd4c2d3a7b9a042b5ee545828f1b3",
+      "operation": "restore-dump"
+    }
+  ],
+  "payload_sha256": "10fc481c411f22153fb570e970b0eecb652f2360ca9d7a79df56a57c377e2ba8",
+  "architecture": "ARMv7 static musl; notices included",
+  "direct_readback": true,
+  "requires": "TWRP on LG D325 and supported firmware hashes",
+  "automatic_dump_before_toggle": true,
+  "restore_mixed_unknown_from_dump": true,
+  "device_binding": "model and firmware contents only; no serial, IMEI or block index",
+  "actual_device_test": "not run; confirmation required before phone writes"
+}
+Note: /root/LG-D325-Modem-Patcher-v1.1.0/build/source-reproduction/LG-D325-Modem-Patcher-v1.1.0/src/io/github/loganzarov_alt/d325fmodem/MainActivity.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Signer #1 certificate DN: CN=LG D325 Modem Patcher Release, OU=Public Release, O=Logan Zarov
+Signer #1 certificate SHA-256 digest: c7633b38688d8c57751bb1b602a83c94d8d0d175440b34dbfc8da0047704f41b
+Signer #1 certificate SHA-1 digest: 6510fe7c993c09cb9f152f3df177a6afa6788ec0
+Signer #1 certificate MD5 digest: 26c02c247c8e59370a36c885df7e1217
+
+{
+  "apk": "Modem-Patcher-LG-D325-v1.1.0.apk",
+  "sha256": "5047d15d00aa96c3ae89ebc572d4df89c7b10bc67879141c838d2ebee5075ba9",
+  "version": "1.1.0",
+  "release_certificate": [
+    "Signer #1 certificate DN: CN=LG D325 Modem Patcher Release, OU=Public Release, O=Logan Zarov",
+    "Signer #1 certificate SHA-256 digest: c7633b38688d8c57751bb1b602a83c94d8d0d175440b34dbfc8da0047704f41b",
+    "Signer #1 certificate SHA-1 digest: 6510fe7c993c09cb9f152f3df177a6afa6788ec0",
+    "Signer #1 certificate MD5 digest: 26c02c247c8e59370a36c885df7e1217"
+  ],
+  "payload_sha256": "10fc481c411f22153fb570e970b0eecb652f2360ca9d7a79df56a57c377e2ba8",
+  "dump_and_restore": true,
+  "fresh_direct_block_readback": true,
+  "project_license": "GPL-3.0-or-later",
+  "launcher_icon": "@android:drawable/ic_menu_manage (original icon)",
+  "device_installation": "not run; user confirmation required",
+  "real_modem_writes": 0
+}
+{
+  "passed": true,
+  "payload_format": "D325PT03",
+  "payload_sha256": "10fc481c411f22153fb570e970b0eecb652f2360ca9d7a79df56a57c377e2ba8",
+  "xor_bytes": 2672,
+  "files": 6,
+  "original_icon_restored": true,
+  "license_headers_verified": true,
+  "public_signing_identity_verified": true,
+  "full_images_or_private_keys_in_artifacts": false,
+  "phone_writes": 0
+}

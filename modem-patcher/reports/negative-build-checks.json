@@ -1,0 +1,5 @@
+{
+  "release_build_without_explicit_key": "rejected",
+  "device_test_without_confirmation": "rejected before ADB access",
+  "passed": true
+}

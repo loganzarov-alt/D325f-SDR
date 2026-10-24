@@ -1,0 +1,12 @@
+LG D325 Modem Patcher
+Copyright (C) 2026 Logan Zarov
+SPDX-License-Identifier: GPL-3.0-or-later
+
+The project's own code is licensed under GNU GPL version 3 or, at your option,
+any later version. The complete GPLv3 text accompanies this program as LICENSE.
+The program is supplied without warranty, as described in that license.
+
+Bundled musl and GCC runtime components retain their notices and applicable
+licenses, including the GCC Runtime Library Exception. The launcher icon is a
+reference to the Android operating system's ic_menu_manage drawable; no icon
+image from a device firmware is bundled.

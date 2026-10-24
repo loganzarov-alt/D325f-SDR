@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "payload_format": "D325PT03",
+  "payload_sha256": "10fc481c411f22153fb570e970b0eecb652f2360ca9d7a79df56a57c377e2ba8",
+  "xor_bytes": 2672,
+  "files": 6,
+  "original_icon_restored": true,
+  "license_headers_verified": true,
+  "public_signing_identity_verified": true,
+  "full_images_or_private_keys_in_artifacts": false,
+  "phone_writes": 0
+}

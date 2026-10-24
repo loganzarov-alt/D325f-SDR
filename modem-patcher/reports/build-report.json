@@ -1,15 +1,18 @@
 {
-  "apk": "Modem-Patcher-LG-D325-v1.0.4.apk",
-  "sha256": "dfb111ae799efa71a7542ac6e05af18db33949731d19319ce03a1ea14410b383",
-  "version": "1.0.4",
-  "source_complete": true,
-  "java_firmware_buffers": false,
-  "root_cache_labels": "files are created by app UID before root writes",
-  "payload": "XOR masks, offsets and file SHA256 values; no full firmware image",
-  "inverse_without_backup": true,
-  "serial_or_block_index_binding": false,
-  "real_modem_write_test": false,
-  "device_validation": "14 app-UID checks passed; real modem read only, regular-file transformations verified",
-  "native_validation": "7 ARM fixture tests passed, including rollback",
-  "runtime_notices_included": true
+  "apk": "Modem-Patcher-LG-D325-v1.1.0.apk",
+  "sha256": "e504538ef8490b8bfe149c2269f8eacb2dfa4e72679c51c8fb8a652dc5ae31cc",
+  "version": "1.1.0",
+  "release_certificate": [
+    "Signer #1 certificate DN: CN=LG D325 Modem Patcher Release, OU=Public Release, O=Logan Zarov",
+    "Signer #1 certificate SHA-256 digest: c7633b38688d8c57751bb1b602a83c94d8d0d175440b34dbfc8da0047704f41b",
+    "Signer #1 certificate SHA-1 digest: 6510fe7c993c09cb9f152f3df177a6afa6788ec0",
+    "Signer #1 certificate MD5 digest: 26c02c247c8e59370a36c885df7e1217"
+  ],
+  "payload_sha256": "10fc481c411f22153fb570e970b0eecb652f2360ca9d7a79df56a57c377e2ba8",
+  "dump_and_restore": true,
+  "fresh_direct_block_readback": true,
+  "project_license": "GPL-3.0-or-later",
+  "launcher_icon": "@android:drawable/ic_menu_manage (original icon)",
+  "device_installation": "not run; user confirmation required",
+  "real_modem_writes": 0
 }

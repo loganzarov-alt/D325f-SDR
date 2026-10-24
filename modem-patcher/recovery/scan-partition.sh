@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 Logan Zarov
 uid=$(id -u) || exit 1
 printf 'D325F_UID=%s\n' "$uid"
 [ "$uid" = 0 ] || exit 1

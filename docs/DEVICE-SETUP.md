@@ -32,22 +32,26 @@ procedure from a stock phone has not yet been verified on a second device.
 ## Modem Patcher / Патчер модема
 
 [Source and instructions](../modem-patcher/README.md) ·
-[Инструкция по-русски](../modem-patcher/README.ru.txt) ·
-[APK and TWRP ZIP](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/modem-patcher-v1.0.4)
+[Инструкция по-русски](../modem-patcher/README.ru.md) ·
+[APK and TWRP ZIPs](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/modem-patcher-v1.1.0)
 
 The patcher is one part of preparation. It checks the LG D325 model and the six
 supported modem-file hashes before applying or reversing the XOR patch.
 It does not supply a kernel, root access, complete modem firmware or hardware changes.
 
-В Android сначала нажмите **«Проверить»**: это чтение без записи.
-Для подходящего модема доступны **«Пропатчить модем»** и **«Восстановить сток»**.
-ZIP в TWRP переключает состояние при каждом применении: сток → патч → сток.
-При неподдерживаемой версии или смешанном состоянии запись отклоняется.
+In Android, first press **Save dump** and copy the `.bin` and `.sha256` files
+from *Internal storage/D325f/* to a PC. Then use **Apply patch**; **Restore stock**
+reverses it. **Restore from dump** repairs an interrupted write. Reboot is a
+separate button. The TWRP Toggle ZIP saves a dump before its first write and
+switches stock ↔ patched; the Restore-Dump ZIP restores the single dump placed
+next to it. Unsupported firmware and mixed states are refused.
 
-Перед записью сохраните собственный бэкап modem. Обратный патч восстанавливает
-поддерживаемые файлы без него, но отключение питания может сорвать запись и откат.
-Телефон должен быть холоднее 48 °C; перед записью проверяется порог 58 °C.
-Перезагрузка выполняется отдельно.
+В Android сначала нажмите **Save dump** и скопируйте `.bin` и `.sha256` из
+*Внутренняя память/D325f/* на ПК. Затем **Apply patch**; **Restore stock**
+возвращает сток, **Restore from dump** исправляет оборванную запись.
+Перезагрузка — отдельной кнопкой. TWRP-ZIP Toggle сохраняет дамп перед первой
+записью и переключает сток ↔ патч; ZIP Restore-Dump восстанавливает дамп,
+лежащий рядом с ним. Неподдерживаемая прошивка и смешанное состояние отклоняются.
 
 **Статус:** приложенные отчёты подтверждают чтение реального modem-раздела,
 запись в файлы-копии и тесты ARM/QEMU. Проверка прошивки TWRP ZIP и записи

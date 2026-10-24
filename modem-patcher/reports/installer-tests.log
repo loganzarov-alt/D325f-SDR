@@ -1,0 +1,194 @@
+ui_print Saving a dump before writing. Copy it to a PC after booting.
+ui_print
+ui_print CACHE_FLUSHED POSIX_FADV_DONTNEED
+ui_print
+ui_print STATE STOCK
+ui_print
+ui_print SOURCE_SHA256 1d6d32af2821cc96e9f80b6f9bf9d381b73e9ae60b1bec6fe45786603578f455
+ui_print
+ui_print CACHE_FLUSHED POSIX_FADV_DONTNEED
+ui_print
+ui_print CACHE_FLUSHED POSIX_FADV_DONTNEED
+ui_print
+ui_print DUMP_PATH /root/LG-D325-Modem-Patcher-v1.1.0/build/installer-tests/data/media/0/D325f/modem-dump-stock-1d6d32af.bin
+ui_print
+ui_print DUMP_STATE STOCK
+ui_print
+ui_print DUMP_SHA256 1d6d32af2821cc96e9f80b6f9bf9d381b73e9ae60b1bec6fe45786603578f455
+ui_print
+ui_print DUMP_VERIFIED
+ui_print
+ui_print LG D325: STOCK; writing changed sectors and verifying with fresh direct reads.
+ui_print
+ui_print CACHE_FLUSHED POSIX_FADV_DONTNEED
+ui_print
+ui_print STATE STOCK
+ui_print
+ui_print SOURCE_SHA256 1d6d32af2821cc96e9f80b6f9bf9d381b73e9ae60b1bec6fe45786603578f455
+ui_print
+ui_print TARGET_SHA256 71887ace9a41c96b3eded0e914459e405f5dc3fed101311362b77d73b6ecc0b4
+ui_print
+ui_print DIRECTION STOCK_TO_PATCHED
+ui_print
+ui_print CACHE_FLUSHED POSIX_FADV_DONTNEED
+ui_print
+ui_print CACHE_FLUSHED POSIX_FADV_DONTNEED
+ui_print
+ui_print CHANGED_SECTORS 20
+ui_print
+ui_print RESULT PATCHED
+ui_print
+ui_print READBACK_VERIFIED
+ui_print
+ui_print Completed. Save the dump and its checksum on a PC.
+ui_print
+ui_print Flash the toggle ZIP again to switch back.
+ui_print
+
+ui_print Saving a dump before writing. Copy it to a PC after booting.
+ui_print
+ui_print CACHE_FLUSHED POSIX_FADV_DONTNEED
+ui_print
+ui_print STATE PATCHED
+ui_print
+ui_print SOURCE_SHA256 71887ace9a41c96b3eded0e914459e405f5dc3fed101311362b77d73b6ecc0b4
+ui_print
+ui_print CACHE_FLUSHED POSIX_FADV_DONTNEED
+ui_print
+ui_print CACHE_FLUSHED POSIX_FADV_DONTNEED
+ui_print
+ui_print DUMP_PATH /root/LG-D325-Modem-Patcher-v1.1.0/build/installer-tests/data/media/0/D325f/modem-dump-patched-71887ace.bin
+ui_print
+ui_print DUMP_STATE PATCHED
+ui_print
+ui_print DUMP_SHA256 71887ace9a41c96b3eded0e914459e405f5dc3fed101311362b77d73b6ecc0b4
+ui_print
+ui_print DUMP_VERIFIED
+ui_print
+ui_print LG D325: PATCHED; writing changed sectors and verifying with fresh direct reads.
+ui_print
+ui_print CACHE_FLUSHED POSIX_FADV_DONTNEED
+ui_print
+ui_print STATE PATCHED
+ui_print
+ui_print SOURCE_SHA256 71887ace9a41c96b3eded0e914459e405f5dc3fed101311362b77d73b6ecc0b4
+ui_print
+ui_print TARGET_SHA256 1d6d32af2821cc96e9f80b6f9bf9d381b73e9ae60b1bec6fe45786603578f455
+ui_print
+ui_print DIRECTION PATCHED_TO_STOCK
+ui_print
+ui_print CACHE_FLUSHED POSIX_FADV_DONTNEED
+ui_print
+ui_print CACHE_FLUSHED POSIX_FADV_DONTNEED
+ui_print
+ui_print CHANGED_SECTORS 20
+ui_print
+ui_print RESULT STOCK
+ui_print
+ui_print READBACK_VERIFIED
+ui_print
+ui_print Completed. Save the dump and its checksum on a PC.
+ui_print
+ui_print Flash the toggle ZIP again to switch back.
+ui_print
+
+ui_print Restoring from dump: modem-dump-stock-1d6d32af.bin
+ui_print
+ui_print LG D325: UNKNOWN; writing changed sectors and verifying with fresh direct reads.
+ui_print
+ui_print CACHE_FLUSHED POSIX_FADV_DONTNEED
+ui_print
+ui_print STATE UNKNOWN
+ui_print
+ui_print SOURCE_SHA256 8afbb51006438adc44e871bf091f8b12f2603061bec5fb87aab0e9c2e4467a1d
+ui_print
+ui_print CACHE_FLUSHED POSIX_FADV_DONTNEED
+ui_print
+ui_print RESTORE_DUMP_STATE STOCK
+ui_print
+ui_print TARGET_SHA256 1d6d32af2821cc96e9f80b6f9bf9d381b73e9ae60b1bec6fe45786603578f455
+ui_print
+ui_print DIRECTION UNKNOWN_TO_STOCK
+ui_print
+ui_print CACHE_FLUSHED POSIX_FADV_DONTNEED
+ui_print
+ui_print CACHE_FLUSHED POSIX_FADV_DONTNEED
+ui_print
+ui_print CHANGED_SECTORS 1
+ui_print
+ui_print RESULT STOCK
+ui_print
+ui_print READBACK_VERIFIED
+ui_print
+ui_print Completed. Save the dump and its checksum on a PC.
+ui_print
+ui_print Flash the toggle ZIP again to switch back.
+ui_print
+
+ui_print LG D325: STOCK; writing changed sectors and verifying with fresh direct reads.
+ui_print
+ui_print CACHE_FLUSHED POSIX_FADV_DONTNEED
+ui_print
+ui_print STATE STOCK
+ui_print
+ui_print SOURCE_SHA256 1d6d32af2821cc96e9f80b6f9bf9d381b73e9ae60b1bec6fe45786603578f455
+ui_print
+ui_print TARGET_SHA256 71887ace9a41c96b3eded0e914459e405f5dc3fed101311362b77d73b6ecc0b4
+ui_print
+ui_print DIRECTION STOCK_TO_PATCHED
+ui_print
+ui_print CACHE_FLUSHED POSIX_FADV_DONTNEED
+ui_print
+ui_print CACHE_FLUSHED POSIX_FADV_DONTNEED
+ui_print
+ui_print CHANGED_SECTORS 20
+ui_print
+ui_print RESULT PATCHED
+ui_print
+ui_print READBACK_VERIFIED
+ui_print
+ui_print Completed. Save the dump and its checksum on a PC.
+ui_print
+ui_print Flash the toggle ZIP again to switch back.
+ui_print
+
+ui_print Restoring from dump: modem-dump-stock-1d6d32af.bin
+ui_print
+ui_print LG D325: PATCHED; writing changed sectors and verifying with fresh direct reads.
+ui_print
+ui_print CACHE_FLUSHED POSIX_FADV_DONTNEED
+ui_print
+ui_print STATE PATCHED
+ui_print
+ui_print SOURCE_SHA256 71887ace9a41c96b3eded0e914459e405f5dc3fed101311362b77d73b6ecc0b4
+ui_print
+ui_print CACHE_FLUSHED POSIX_FADV_DONTNEED
+ui_print
+ui_print RESTORE_DUMP_STATE STOCK
+ui_print
+ui_print TARGET_SHA256 1d6d32af2821cc96e9f80b6f9bf9d381b73e9ae60b1bec6fe45786603578f455
+ui_print
+ui_print DIRECTION PATCHED_TO_STOCK
+ui_print
+ui_print CACHE_FLUSHED POSIX_FADV_DONTNEED
+ui_print
+ui_print CACHE_FLUSHED POSIX_FADV_DONTNEED
+ui_print
+ui_print CHANGED_SECTORS 20
+ui_print
+ui_print RESULT STOCK
+ui_print
+ui_print READBACK_VERIFIED
+ui_print
+ui_print Completed. Save the dump and its checksum on a PC.
+ui_print
+
+ui_print Place exactly one verified modem-dump-*.bin beside this ZIP, then flash again.
+ui_print
+ui_print Diagnostic files: /root/LG-D325-Modem-Patcher-v1.1.0/build/installer-tests/tmp/d325-modem-toggle-31690
+ui_print
+
+ui_print Place exactly one verified modem-dump-*.bin beside this ZIP, then flash again.
+ui_print
+ui_print Diagnostic files: /root/LG-D325-Modem-Patcher-v1.1.0/build/installer-tests/tmp/d325-modem-toggle-31749
+ui_print

@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "source_manifest_verified": true,
+  "no_original_apk_or_firmware_required": true,
+  "matching_native_binary": true,
+  "matching_classes_dex": true,
+  "matching_payload": true,
+  "release_key_kept_outside_archive": true,
+  "phone_writes": 0
+}

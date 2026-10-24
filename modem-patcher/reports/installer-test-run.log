@@ -1,0 +1,7 @@
+PASS toggle creates persistent stock dump before writing
+PASS second toggle returns exact stock and retains both dumps
+PASS toggle ZIP restores UNKNOWN from adjacent supported dump
+PASS restore ZIP restores dump over healthy patched state
+PASS multiple supported adjacent dumps rejected without writing
+PASS corrupt adjacent checksum rejected without writing
+PASS 6 offline installer tests
