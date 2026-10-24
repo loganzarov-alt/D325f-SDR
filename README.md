@@ -20,6 +20,16 @@ a patch to the modem firmware; below 800 MHz the phone's Bluetooth transmitter
 serves as the local oscillator. See [how it works](docs/HOW-IT-WORKS.md) for the
 signal path, specifications and limitations.
 
+## Demo
+
+[![FM band, 14.970 MHz shortwave voice, 8.035 MHz and 1875 MHz LTE on the LG D325](docs/images/demo-poster.jpg)](docs/media/d325f-sdr-demo.mp4)
+
+[Video, 36 s](docs/media/d325f-sdr-demo.mp4): FM broadcast band, 14.970 MHz shortwave
+voice, 8.035 MHz and the 1875 MHz LTE downlink, all received by the phone's own
+modem. IQ recordings from the phone (FM stations with stereo pilot and RDS,
+an analog TV carrier at 551.25 MHz, shortwave AM) are analysed in
+[how it works](docs/HOW-IT-WORKS.md#recorded-examples).
+
 ## Release and requirements
 
 **1.0.0** is the first public release: versionCode **1**, ARMv7, Android 7.1+
