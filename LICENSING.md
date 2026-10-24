@@ -20,9 +20,10 @@ This license does not grant rights over proprietary vendor firmware or libraries
 | Maven runtime dependencies | component-specific terms, exact versions and notices inventoried | `docs/runtime-dependencies.json`, `LICENSES/runtime-notices/` |
 | NDK C++/compiler runtime portions linked into native code | LLVM Apache-2.0 WITH LLVM-exception; legacy MIT/NCSA and other notices preserved in `LICENSES/Android-NDK-LLVM-NOTICE.txt` | Exact NOTICE shipped with NDK 27.2.12479018; full toolchain notice retained, including components not necessarily linked |
 | Gradle wrapper/build tooling | Apache-2.0 and tool-specific terms; tooling is not app code | Gradle wrapper, Android SDK/NDK, Kotlin/AGP |
-| `tools/prepWAV.py` | GPLv2 notice retained; standalone utility, not linked into the APK | Dennis Mantz, 2015 |
+| `tools/prepWAV.py` | unmodified upstream file without its own notice, covered by RF Analyzer's GPL-2.0-or-later grant; standalone utility, not linked into the APK | Dennis Mantz, 2015 |
 | Modem Patcher project code and scripts | GPL-3.0-or-later | Separate component in `modem-patcher/`; see its LICENSING.md |
 | Modem Patcher static musl/GCC runtime | MIT/BSD notices and GPLv3 with GCC Runtime Library Exception, as applicable | `modem-patcher/licenses/`; original musl source archive included |
+| Photographs in `docs/images/` | GPL-3.0-or-later, as part of the project documentation | Logan Zarov |
 | Qualcomm/LG firmware and system QMI libraries | proprietary/system components; not distributed here | supplied by the prepared phone |
 
 ## Redistribution
@@ -41,6 +42,8 @@ GPL grant. The inherited launcher images and `rfanalyzer2.png` were verified
 against upstream blob hashes and removed. The replacement vector icon was
 created for D325f SDR. The upstream name remains only for factual attribution
 and internal historical identifiers. No endorsement is claimed.
+Unused vector drawables, including a YouTube logo, were removed; trademarks of
+third parties are not used in the app.
 
 HackRF/RTL-SDR device support and `hackrf_android.aar` are not included.
 No libhackrf or libusb binary is packaged. Legacy file
