@@ -39,7 +39,7 @@ IQ CI8 7,68 MS/s (около 5 МГц) прямо из baseband модема, ч
 ядром ([исходник](kernel/README.md#по-русски)), настройками модема/IQ и системными QMI-библиотеками. Установка APK сама
 по себе не подготавливает штатный телефон. Подробнее: [подготовка устройства](docs/DEVICE-SETUP.md)
 и [фотографии доработки и распиновка переходника](docs/HARDWARE.md).
-[Исходники ядра #6](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/kernel-6-source): патч, конфиг и скрипт подготовки дерева; без boot.img и ZIP для прошивки ядра.
+[Исходники ядра #6](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/kernel-6-source): патч, конфиг и скрипт подготовки дерева. Предоставленный владельцем boot.img проверен: [SHA-256 и установка через TWRP](docs/DEVICE-SETUP.md#bootimg-через-twrp). Загрузка образа в Releases пока не выполнена.
 
 ## Инструменты подготовки модема
 
