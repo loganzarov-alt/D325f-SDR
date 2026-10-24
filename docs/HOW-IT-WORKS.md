@@ -54,6 +54,34 @@ Below a configurable limit (default 800 MHz) the app keys a continuous
 receives directly. This mode transmits in the 2.4 GHz ISM band while it is
 active.
 
+## Recorded examples
+
+IQ files recorded on the phone with the app (7.68 MS/s CI8) and analysed on a
+PC. All three are below 800 MHz, so they were received through the Bluetooth
+local oscillator. In all three the I/Q levels are balanced and uncorrelated,
+nothing is clipped and the streams have no dropouts.
+
+**FM broadcast, centre 90.375 MHz, 6.6 s.** Six stations in the window
+(about 88.3, 88.8, 89.2, 89.4, 89.8 and 90.0 MHz). After FM demodulation every
+one shows the 19 kHz stereo pilot 19–50 dB above its neighbourhood; 89.4 MHz
+also carries the 57 kHz RDS subcarrier.
+
+![FM band around 90.4 MHz](images/iq-fm-90.4MHz.jpg)
+
+**Analog TV, centre 551 MHz, 8.7 s.** Vision carrier at 551.252 MHz
+(channel 31, nominal 551.25 MHz). The carrier's envelope is modulated at the
+15,625 Hz line rate and its harmonics, 49–52 dB above the background, and the
+spectral lines around it are spaced 15.6 kHz.
+
+![Analog TV carrier at 551.25 MHz](images/iq-analog-tv-551MHz.jpg)
+
+**Shortwave, centre 12.382 MHz, 4.3 s.** AM broadcast stations in the 25 m and
+22 m bands. The carriers at 11.765 and 13.751 MHz are amplitude-modulated with
+audio (envelope power 17–27 dB higher in the speech band than outside it);
+the 11.765 MHz carrier is within 0.1 kHz of its nominal frequency.
+
+![Shortwave around 12.4 MHz](images/iq-hf-12.4MHz.jpg)
+
 ## Limitations
 
 - Tested on one modified LG D325. A full procedure from a stock phone has not
@@ -88,6 +116,11 @@ M8610B-AAAANAZM-1.0.6047) с трансивером семейства WTR. Об
 2402 + канал МГц, а модем настраивается на (2402 + канал) − F. Так принято
 FM-вещание на 93,5 МГц. Усиление фиксировано (LNA 0, DVGA 0). Кольцо —
 около 8,3 мс; самый длинный задокументированный приём — 158 с без потерь.
+
+Примеры записей с телефона (графики выше): FM-диапазон около 90,4 МГц — шесть
+станций, у всех стереопилот 19 кГц, у 89,4 МГц RDS; аналоговое ТВ на 551,25 МГц —
+строчная частота 15 625 Гц в огибающей; КВ около 12,4 МГц — AM-вещание со звуком
+на 11,765 и 13,751 МГц. Все три приняты через Bluetooth-гетеродин.
 
 Ограничения: проверено на одном аппарате; чувствительность и точность частоты
 генератором не измерялись; при перегрузке процессора или перегреве приём

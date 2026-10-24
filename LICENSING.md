@@ -24,7 +24,7 @@ This license does not grant rights over proprietary vendor firmware or libraries
 | Modem Patcher project code and scripts | GPL-3.0-or-later | Separate component in `modem-patcher/`; see its LICENSING.md |
 | Modem Patcher static musl/GCC runtime | MIT/BSD notices and GPLv3 with GCC Runtime Library Exception, as applicable | `modem-patcher/licenses/`; original musl source archive included |
 | Kernel patch and configuration in `kernel/` | GPL-2.0-only, as the Linux kernel | Patch against LineageOS android_kernel_lge_msm8226; full text in `LICENSES/GPL-2.0.txt` |
-| Photographs in `docs/images/` | GPL-3.0-or-later, as part of the project documentation | Logan Zarov |
+| Photographs, IQ plots and demo video in `docs/images/` and `docs/media/` | GPL-3.0-or-later, as part of the project documentation | Logan Zarov; recorded with the app on the test phone |
 | Qualcomm/LG firmware and system QMI libraries | proprietary/system components; not distributed here | supplied by the prepared phone |
 
 ## Redistribution

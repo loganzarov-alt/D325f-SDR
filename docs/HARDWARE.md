@@ -33,4 +33,18 @@ landscape photograph above.
 These photographs document the existing modification. A complete circuit diagram
 and identified solder pads have not yet been published.
 
+## Test setup / Тестовая установка
+
+In the test setup an external antenna (magnetic-base whip with an SMA plug) is
+connected to the phone's 3.5 mm headset jack through a home-made SMA → 3.5 mm
+plug adapter shielded with copper foil.
+
+В тестовой установке внешняя антенна (штырь на магнитном основании, разъём SMA)
+подключается к гнезду наушников 3,5 мм через самодельный переходник
+SMA → 3,5 мм, экранированный медной фольгой.
+
+| LG D325 | SMA → 3.5 mm adapter | Antenna |
+| --- | --- | --- |
+| ![LG D325](images/lg-d325-phone.jpg) | ![SMA to 3.5 mm adapter](images/sma-to-3.5mm-adapter.jpg) | ![Antenna](images/antenna.jpg) |
+
 [Device setup / Подготовка телефона](DEVICE-SETUP.md) · [README](../README.md)
