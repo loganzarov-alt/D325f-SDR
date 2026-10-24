@@ -15,6 +15,11 @@ Project and modem integration: **Logan Zarov**.
 - AM, NFM, WFM, USB, LSB and CW demodulation.
 - IQ and demodulated audio recording.
 
+7.68 MS/s CI8 IQ (about 5 MHz wide) straight from the modem's baseband, tuned by
+a patch to the modem firmware; below 800 MHz the phone's Bluetooth transmitter
+serves as the local oscillator. See [how it works](docs/HOW-IT-WORKS.md) for the
+signal path, specifications and limitations.
+
 ## Release and requirements
 
 **1.0.0** is the first public release: versionCode **1**, ARMv7, Android 7.1+
