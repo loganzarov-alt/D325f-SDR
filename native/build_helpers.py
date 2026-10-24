@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 Logan Zarov
+# Part of D325f SDR: https://github.com/loganzarov-alt/D325f-SDR
 """Build all project-owned native APK assets from C/ASM, never from a base ELF."""
 from pathlib import Path
 import os,subprocess,hashlib,json

@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Based on RF Analyzer by Dennis Mantz and contributors (https://github.com/demantz/RFAnalyzer),
+// licensed GPL-2.0-or-later; this modified version is distributed under GPL-3.0-or-later.
 // D325f SDR changes, Logan Zarov, 2026-10-23. See docs/CHANGES.md.
 package com.mantz_it.rfanalyzer.ui.screens
 

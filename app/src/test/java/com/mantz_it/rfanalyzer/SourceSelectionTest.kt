@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Logan Zarov
+// Part of D325f SDR: https://github.com/loganzarov-alt/D325f-SDR
 package com.mantz_it.rfanalyzer
 
 import com.mantz_it.rfanalyzer.ui.composable.SourceType

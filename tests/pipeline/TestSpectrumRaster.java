@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Logan Zarov
+// Part of D325f SDR: https://github.com/loganzarov-alt/D325f-SDR
 import com.mantz_it.rfanalyzer.dsp.SpectrumRaster;
 public class TestSpectrumRaster {
     static void near(float actual,double expected){if(!Float.isFinite(actual)||Math.abs(actual-expected)>0.015)throw new AssertionError(actual+" != "+expected);}

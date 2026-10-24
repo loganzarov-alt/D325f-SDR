@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Logan Zarov
+// Part of D325f SDR: https://github.com/loganzarov-alt/D325f-SDR
 typedef unsigned int u32;
 typedef unsigned char u8;
 typedef void *qmi_client_type;

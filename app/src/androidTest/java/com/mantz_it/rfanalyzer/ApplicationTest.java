@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Based on the original RF Analyzer ApplicationTest by Dennis Mantz,
+// licensed GPL-2.0-or-later (https://github.com/demantz/RFAnalyzer).
+// Changes: Copyright (C) 2026 Logan Zarov. Distributed under GPL-3.0-or-later.
 package com.mantz_it.rfanalyzer;
 
 import android.app.Application;
