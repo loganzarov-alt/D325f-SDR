@@ -8,7 +8,7 @@ digital baseband samples never leave the modem. D325f SDR makes the modem
 publish them to Android and turns the phone into a receiver.
 
 ```
-antenna path (B1 / B8, see HARDWARE.md)
+antenna → SMA adapter → 3.5 mm jack → B1 bypass wire (HARDWARE.md)
    │
 WTR transceiver ── PLL set to any frequency by the D3FQ hook
    │
@@ -30,7 +30,7 @@ D325f SDR app (RF Analyzer DSP): FFT, waterfall, demodulation, recording
 | Kernel | Allocates SMEM item 471 (128 KiB) for the ring. Patch against LineageOS `android_kernel_lge_msm8226` (cm-14.1). | [`kernel/`](../kernel/README.md) |
 | Native helper | Puts the modem into factory test mode over DIAG, tunes it, starts the ring and streams blocks to the app; restores normal mode on exit. | [`native/from-source/`](../native/from-source/) |
 | App | RF Analyzer–based UI and DSP with an LG modem source. | [`app/`](../app/), [`nativedsp/`](../nativedsp/) |
-| Hardware | Two wires on the RF board for the B8 and B1 paths. | [HARDWARE.md](HARDWARE.md) |
+| Hardware | B8 and B1 bypass wires brought out to the 3.5 mm jack; the antenna connects through an SMA adapter to the B1 contact. | [HARDWARE.md](HARDWARE.md) |
 
 ## Specifications
 
@@ -40,7 +40,8 @@ D325f SDR app (RF Analyzer DSP): FFT, waterfall, demodulation, recording
 | Sample rate | 7.68 MS/s native (about 5 MHz usable); 2.56 and 1.28 MS/s modes in the app |
 | Tuning | arbitrary frequency in Hz; streaming starts only after the modem reports PLL lock |
 | PLL lock confirmed | 1700, 2120, 2140, 2160 and 2170.123456 MHz (B1 path); 5000 MHz did not lock and is refused |
-| Below 800 MHz | Bluetooth local oscillator, see below; FM broadcast at 93.5 MHz received |
+| Direct reception shown | 1875 MHz base-station downlink, 1800 MHz band ([demo](https://github.com/loganzarov-alt/D325f-SDR/raw/refs/heads/main/docs/media/d325f-sdr-demo.mp4)) |
+| Below 800 MHz | Bluetooth local oscillator, see below. Received this way: FM broadcast, analog TV at 551 MHz, shortwave 8–15 MHz ([recorded examples](#recorded-examples), [demo](https://github.com/loganzarov-alt/D325f-SDR/raw/refs/heads/main/docs/media/d325f-sdr-demo.mp4)) |
 | Gain | fixed: LNA range 0 (maximum), DVGA offset 0 |
 | Ring buffer | 126,976 bytes, about 8.3 ms at 7.68 MS/s |
 | Longest documented run | 158 s, 1,186,008 blocks, no dropped blocks |
@@ -109,14 +110,15 @@ M8610B-AAAANAZM-1.0.6047) с трансивером семейства WTR. Об
 - **Нативный помощник** переводит модем в FTM через DIAG, настраивает частоту,
   запускает кольцо и передаёт блоки приложению.
 - **Приложение** на основе RF Analyzer: спектр, водопад, демодуляция, запись.
-- **Доработка платы**: две проволоки для трактов B8 и B1.
+- **Доработка**: обходы трактов B8 и B1 выведены на гнездо 3,5 мм, антенна через
+  переходник SMA подключена к контакту B1 ([HARDWARE.md](HARDWARE.md)).
 
 Формат CI8, 7,68 MS/s (около 5 МГц полезной полосы), режимы 2,56 и 1,28 MS/s.
 Захват PLL подтверждён на 1700 и 2120–2170 МГц; 5000 МГц не захватывается и
-отклоняется. Ниже 800 МГц (настраивается) используется Bluetooth-гетеродин:
+отклоняется. Прямой приём показан на 1875 МГц (сигнал базовых станций диапазона 1800 МГц, [демо](https://github.com/loganzarov-alt/D325f-SDR/raw/refs/heads/main/docs/media/d325f-sdr-demo.mp4)). Ниже 800 МГц (настраивается) используется Bluetooth-гетеродин:
 приложение включает непрерывную **передачу** несущей Bluetooth на
-2402 + канал МГц, а модем настраивается на (2402 + канал) − F. Так принято
-FM-вещание на 93,5 МГц. Усиление фиксировано (LNA 0, DVGA 0). Кольцо —
+2402 + канал МГц, а модем настраивается на (2402 + канал) − F. Так приняты FM-вещание,
+аналоговое ТВ 551 МГц и КВ 8–15 МГц. Усиление фиксировано (LNA 0, DVGA 0). Кольцо —
 около 8,3 мс; самый длинный задокументированный приём — 158 с без потерь.
 
 [Три исходные IQ-записи с описанием формата и SHA-256](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/iq-samples-2026-10-23).

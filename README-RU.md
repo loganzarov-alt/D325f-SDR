@@ -21,35 +21,32 @@ IQ CI8 7,68 MS/s (около 5 МГц) прямо из baseband модема, ч
 
 ## Демо
 
-[![FM, КВ 14,970 МГц, 8,035 МГц и LTE 1875 МГц на LG D325](docs/images/demo-poster.jpg)](https://github.com/loganzarov-alt/D325f-SDR/raw/refs/heads/main/docs/media/d325f-sdr-demo.mp4)
+[![FM, КВ 14,970 МГц, 8,035 МГц и 1875 МГц на LG D325](docs/images/demo-poster.jpg)](https://github.com/loganzarov-alt/D325f-SDR/raw/refs/heads/main/docs/media/d325f-sdr-demo.mp4)
 
 [Видео, 36 с](https://github.com/loganzarov-alt/D325f-SDR/raw/refs/heads/main/docs/media/d325f-sdr-demo.mp4): FM-диапазон, речь на КВ 14,970 МГц,
-8,035 МГц и нисходящий LTE 1875 МГц — всё принимает собственный модем телефона.
+8,035 МГц и сигнал базовых станций 1875 МГц (диапазон 1800 МГц) — всё принимает собственный модем телефона.
 Разбор IQ-записей с телефона (FM со стереопилотом и RDS, аналоговое ТВ 551,25 МГц,
 КВ AM) — в разделе [как это работает](docs/HOW-IT-WORKS.md#recorded-examples).
 [Скачать три исходные IQ-записи](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/iq-samples-2026-10-23) (знаковый CI8, 7,68 MS/s; с SHA-256).
 
-## Выпуск и требования
+## Как начать
 
-**1.0.0** — первый публичный выпуск, код версии **1**, ARMv7, Android 7.1+
-(API 25). Опубликованный APK успешно проверен на доработанном LG D325
-**24 октября 2026 года**.
+Проверенная установка: LG D325 (`w5ds`) с LineageOS 14.1, TWRP и root, стоковый
+baseband M8610B-AAAANAZM-1.0.6047. Пошаговая инструкция —
+[подготовка устройства](docs/DEVICE-SETUP.md#по-русски).
 
-Для приёма с модема нужны root-доступ, подготовленный телефон с подходящим
-ядром ([исходник](kernel/README.md#по-русски)), настройками модема/IQ и системными QMI-библиотеками. Установка APK сама
-по себе не подготавливает штатный телефон. Подробнее: [подготовка устройства](docs/DEVICE-SETUP.md)
-и [фотографии доработки и распиновка переходника](docs/HARDWARE.md).
-[Исходники ядра #6](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/kernel-6-source): патч, конфиг и скрипт подготовки дерева. Предоставленный владельцем boot.img проверен: [SHA-256 и установка через TWRP](docs/DEVICE-SETUP.md#bootimg-через-twrp). [Скачать boot.img](https://github.com/loganzarov-alt/D325f-SDR/releases/download/kernel-6-source/boot.img).
+1. **Железо**: обходы B8/B1 выведены на гнездо 3,5 мм, антенна подключается через
+   переходник SMA ([доработка](docs/HARDWARE.md)).
+2. **Ядро**: прошейте [boot.img](https://github.com/loganzarov-alt/D325f-SDR/releases/download/kernel-6-source/boot.img) через TWRP
+   (сборка #6, выделяет SMEM 471; [исходники](kernel/README.md#по-русски)).
+3. **Модем**: в [Modem Patcher 1.1.0](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/modem-patcher-v1.1.0) сохраните дамп,
+   скопируйте его на ПК, примените патч и перезагрузитесь ([подробно](modem-patcher/README.ru.md)).
+4. **Приложение**: установите [D325f SDR 1.0.0](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/v1.0.0) (код версии 1,
+   ARMv7, Android 7.1+) и разрешите root.
 
-## Инструменты подготовки модема
-
-[Modem Patcher 1.1.0 и TWRP ZIP 1.2](modem-patcher/README.ru.md) применяют и
-обращают патч модема на собственном modem-разделе телефона. Перед первой записью
-они сохраняют проверенный дамп и умеют восстанавливать из него.
-[Скачать комплект](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/modem-patcher-v1.1.0).
-Инструменты успешно проверены на одном LG D325 24 октября 2026 года;
-второй телефон не проверялся. Они не устанавливают ядро и не заменяют
-аппаратную доработку.
+24 октября 2026 года Logan Zarov подтвердил, что приложение и инструменты модема
+работают на проверенном телефоне. На втором телефоне процедура пока не повторялась.
+Программные шаги обратимы: копия Boot, Restore stock или сохранённый дамп модема.
 
 ## Сборка
 
