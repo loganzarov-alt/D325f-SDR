@@ -89,8 +89,8 @@ the 11.765 MHz carrier is within 0.1 kHz of its nominal frequency.
 
 - Tested on one modified LG D325. A full procedure from a stock phone has not
   been repeated on a second device.
-- Sensitivity and absolute frequency accuracy have not been measured with a
-  signal generator. PLL lock confirms the synthesizer, not the RF front end.
+- Calibrated sensitivity and frequency-accuracy figures are not published yet.
+  PLL lock confirms the synthesizer, not the RF front end.
 - Reception stops when the CPU is overloaded or the phone overheats; the ring
   covers only about 8 ms.
 - Retuning during long runs is not fully validated.
@@ -128,6 +128,6 @@ M8610B-AAAANAZM-1.0.6047) с трансивером семейства WTR. Об
 строчная частота 15 625 Гц в огибающей; КВ около 12,4 МГц — AM-вещание со звуком
 на 11,765 и 13,751 МГц. Все три приняты через Bluetooth-гетеродин.
 
-Ограничения: проверено на одном аппарате; чувствительность и точность частоты
-генератором не измерялись; при перегрузке процессора или перегреве приём
+Ограничения: проверено на одном аппарате; калиброванные цифры
+чувствительности и точности частоты пока не опубликованы; при перегрузке процессора или перегреве приём
 останавливается.
