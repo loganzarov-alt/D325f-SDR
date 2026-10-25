@@ -21,9 +21,9 @@ IQ CI8 7,68 MS/s (около 5 МГц) прямо из baseband модема, ч
 
 ## Демо
 
-[![FM, КВ 14,970 МГц, 8,035 МГц и LTE 1875 МГц на LG D325](docs/images/demo-poster.jpg)](docs/media/d325f-sdr-demo.mp4)
+[![FM, КВ 14,970 МГц, 8,035 МГц и LTE 1875 МГц на LG D325](docs/images/demo-poster.jpg)](https://github.com/loganzarov-alt/D325f-SDR/raw/refs/heads/main/docs/media/d325f-sdr-demo.mp4)
 
-[Видео, 36 с](docs/media/d325f-sdr-demo.mp4): FM-диапазон, речь на КВ 14,970 МГц,
+[Видео, 36 с](https://github.com/loganzarov-alt/D325f-SDR/raw/refs/heads/main/docs/media/d325f-sdr-demo.mp4): FM-диапазон, речь на КВ 14,970 МГц,
 8,035 МГц и нисходящий LTE 1875 МГц — всё принимает собственный модем телефона.
 Разбор IQ-записей с телефона (FM со стереопилотом и RDS, аналоговое ТВ 551,25 МГц,
 КВ AM) — в разделе [как это работает](docs/HOW-IT-WORKS.md#recorded-examples).
