@@ -22,9 +22,9 @@ signal path, specifications and limitations.
 
 ## Demo
 
-[![FM band, 14.970 MHz shortwave voice, 8.035 MHz and 1875 MHz LTE on the LG D325](docs/images/demo-poster.jpg)](docs/media/d325f-sdr-demo.mp4)
+[![FM band, 14.970 MHz shortwave voice, 8.035 MHz and 1875 MHz LTE on the LG D325](docs/images/demo-poster.jpg)](https://github.com/loganzarov-alt/D325f-SDR/raw/refs/heads/main/docs/media/d325f-sdr-demo.mp4)
 
-[Video, 36 s](docs/media/d325f-sdr-demo.mp4): FM broadcast band, 14.970 MHz shortwave
+[Video, 36 s](https://github.com/loganzarov-alt/D325f-SDR/raw/refs/heads/main/docs/media/d325f-sdr-demo.mp4): FM broadcast band, 14.970 MHz shortwave
 voice, 8.035 MHz and the 1875 MHz LTE downlink, all received by the phone's own
 modem. IQ recordings from the phone (FM stations with stereo pilot and RDS,
 an analog TV carrier at 551.25 MHz, shortwave AM) are analysed in
