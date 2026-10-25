@@ -1,108 +1,156 @@
 # LG D325 device setup / Подготовка устройства
 
-## Tested device
+[Русский](#по-русски)
 
-Logan Zarov tested the published **D325f SDR 1.0.0** APK on the modified LG D325
-and confirmed it works on **24 October 2026**.
+Tested setup: one LG D325 (`w5ds`) with LineageOS 14.1, TWRP and root, stock
+baseband **M8610B-AAAANAZM-1.0.6047**. Logan Zarov confirmed on
+**24 October 2026** that D325f SDR 1.0.0 and Modem Patcher 1.1.0 work on it.
+The procedure has not yet been repeated on a second phone.
 
-Modem reception requires:
+The steps below are in order.
 
-- Root access.
-- The matching LG/vendor QMI libraries.
-- The kernel, modem and IQ transport configuration used on the prepared phone.
-- The hardware modification shown in [Hardware: B8 / B1](HARDWARE.md).
+## 1. Hardware
 
-The app requires Android 7.1+ (API 25), ARMv7. The APK installs the application;
-it does not install the phone's kernel or modem firmware. A complete setup
-procedure from a stock phone has not yet been verified on a second device.
+The B8 and B1 bypass wires are brought out to the phone's 3.5 mm jack, and an
+antenna is connected through an SMA adapter. Photographs, the TRS pinout and the
+adapter wiring: [HARDWARE.md](HARDWARE.md).
 
-## По-русски
+## 2. Kernel (boot.img)
 
-**24 октября 2026 года** Logan Zarov проверил опубликованный APK **1.0.0**
-на доработанном LG D325 и подтвердил его работу.
-
-Для приёма с модема нужны root-доступ, подходящие системные QMI-библиотеки,
-подготовленные ядро, модем и транспорт IQ. Аппаратная доработка показана
-на [фотографиях с обозначениями B8/B1](HARDWARE.md).
-
-Требования приложения: Android 7.1+ (API 25), ARMv7. APK устанавливает приложение;
-ядро и прошивку модема он не устанавливает. Полная процедура подготовки штатного
-телефона пока не проверена на втором устройстве.
-
-## Modem Patcher / Патчер модема
-
-[Source and instructions](../modem-patcher/README.md) ·
-[Инструкция по-русски](../modem-patcher/README.ru.md) ·
-[APK and TWRP ZIPs](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/modem-patcher-v1.1.0)
-
-The patcher is one part of preparation. It checks the LG D325 model and the six
-supported modem-file hashes before applying or reversing the XOR patch.
-It does not supply a kernel, root access, complete modem firmware or hardware changes.
-
-In Android, first press **Save dump** and copy the `.bin` and `.sha256` files
-from *Internal storage/D325f/* to a PC. Then use **Apply patch**; **Restore stock**
-reverses it. **Restore from dump** repairs an interrupted write. Reboot is a
-separate button. The TWRP Toggle ZIP saves a dump before its first write and
-switches stock ↔ patched; the Restore-Dump ZIP restores the single dump placed
-next to it. Unsupported firmware and mixed states are refused.
-
-В Android сначала нажмите **Save dump** и скопируйте `.bin` и `.sha256` из
-*Внутренняя память/D325f/* на ПК. Затем **Apply patch**; **Restore stock**
-возвращает сток, **Restore from dump** исправляет оборванную запись.
-Перезагрузка — отдельной кнопкой. TWRP-ZIP Toggle сохраняет дамп перед первой
-записью и переключает сток ↔ патч; ZIP Restore-Dump восстанавливает дамп,
-лежащий рядом с ним. Неподдерживаемая прошивка и смешанное состояние отклоняются.
-
-## Boot image / TWRP
-
-The owner supplied a 23,068,672-byte `boot.img` on 24 October 2026. Offline extraction confirms Linux 3.4.0+, build #6, GCC 16.1.0, dated 13 September 2026 12:36:46 UTC, and the D325 IQ/SMEM 471 patch strings. This identifies the embedded build; a rebuild from the published source has not yet been compared byte-for-byte, and this supplied image has not been flashed during these checks.
-
-SHA-256 of the supplied image:
+The kernel must allocate SMEM item 471 for the modem's IQ ring.
+[Download boot.img](https://github.com/loganzarov-alt/D325f-SDR/releases/download/kernel-6-source/boot.img)
+(release `kernel-6-source`, 23,068,672 bytes):
 
 ```text
 d0c827f232e613bff481fcc5405cb962aaca30effc50ba21277453ab1f35ced0  boot.img
 ```
 
-This is a complete boot image, including its ramdisk, for the project's LG D325 / LineageOS 14.1 setup. Compatibility with other devices or ROMs is not established. **[Download boot.img](https://github.com/loganzarov-alt/D325f-SDR/releases/download/kernel-6-source/boot.img); the source archive is not a flashable image.**
+It is the complete boot image of the tested phone: kernel build #6
+(Linux 3.4.0+, GCC 16.1.0, 13 September 2026 12:36:46 UTC) with the
+LineageOS 14.1 ramdisk. The kernel contains the D325 IQ/SMEM 471 patch strings,
+and its embedded configuration is byte-identical to
+[`kernel/d325f-kernel.config`](../kernel/d325f-kernel.config). Source:
+[`kernel/`](../kernel/README.md). It is meant for this LineageOS 14.1 setup;
+other ROMs and devices are not supported.
 
 In TWRP:
 
 1. Back up **Boot** and copy the backup off the phone.
-2. Select **Install → Install Image → boot.img → Boot**.
+2. **Install → Install Image → boot.img → Boot**.
 3. Swipe to flash, then reboot System. Do not select Recovery or wipe Data.
-4. If it fails to boot, return to TWRP and restore your Boot backup.
+4. If the phone does not boot, return to TWRP and restore the Boot backup.
 
-The boot image does not apply the modem patch. Modem preparation and hardware changes remain separate steps.
+> **ADB security.** This boot image is a userdebug build with
+> `ro.adb.secure=0`: ADB accepts a USB connection **without the on-screen
+> authorisation prompt**. Turn off USB debugging when you are not using it, and
+> do not leave the phone unattended with it connected.
 
-## boot.img через TWRP
+## 3. Modem patch
 
-Владелец предоставил образ размером 23 068 672 байта. Из образа извлечена строка Linux 3.4.0+, сборка **#6**, GCC 16.1.0, 13.09.2026 12:36:46 UTC; найдены строки патча D325 IQ/SMEM 471. Это подтверждает идентификатор встроенной сборки, но не побайтовое соответствие опубликованным исходникам. Прошивка этого файла в рамках проверки не выполнялась.
+[Modem Patcher 1.1.0](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/modem-patcher-v1.1.0)
+([instructions](../modem-patcher/README.md)) patches the phone's own modem
+partition. It checks the model and the SHA-256 of the six modem files it changes
+and refuses other firmware or a mixed state.
 
-SHA-256 указан выше. Образ включает ядро и ramdisk для конфигурации проекта LG D325 / LineageOS 14.1; совместимость с другими моделями и прошивками не установлена. **[Скачать boot.img](https://github.com/loganzarov-alt/D325f-SDR/releases/download/kernel-6-source/boot.img). Архив исходников прошивать нельзя.**
+1. Install the APK and grant root.
+2. **Save dump**, then copy the `.bin` and `.sha256` from *Internal storage/D325f/*
+   to a PC.
+3. **Apply patch**, then **Reboot phone**.
+4. *Settings → About phone → Baseband version* now reads
+   **P8610B-AAAANAZM-1.0.6047**.
 
-1. В TWRP сохраните резервную копию **Boot** и скопируйте её с телефона.
+**Restore stock** reverses the patch; **Restore from dump** repairs an
+interrupted write. The TWRP Toggle ZIP does the same from recovery (it saves a
+dump before its first write); the Restore-Dump ZIP restores the single dump
+placed next to it.
+
+## 4. App
+
+Install [D325f SDR 1.0.0](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/v1.0.0)
+(Android 7.1+, ARMv7) and grant root. Choose **LG D325 · SDR** as the signal source.
+
+Below 800 MHz (configurable) the app keys a Bluetooth carrier in the 2.4 GHz band
+as the local oscillator; see [how it works](HOW-IT-WORKS.md#bluetooth-local-oscillator-below-800-mhz).
+
+## Validation
+
+Modem Patcher 1.1.0 ships reports of 37 offline fixture checks (16 host-native,
+15 ARM/QEMU, 6 installer). Publication reran 19 synthetic-image host tests, the
+native SHA-256 self-test and the cache-read contract check, and verified the APK
+signature, source manifest and the native, payload and license files shared by
+source, APK and ZIPs. These automated checks do not write a physical modem
+partition or flash TWRP; the device confirmation above is separate.
+
+---
+
+## По-русски
+
+Проверенная установка: один LG D325 (`w5ds`) с LineageOS 14.1, TWRP и root,
+стоковый baseband **M8610B-AAAANAZM-1.0.6047**. **24 октября 2026 года**
+Logan Zarov подтвердил работу D325f SDR 1.0.0 и Modem Patcher 1.1.0.
+На втором телефоне процедура пока не повторялась.
+
+Шаги выполняются по порядку.
+
+### 1. Железо
+
+Обходы трактов B8 и B1 выведены на гнездо 3,5 мм, антенна подключается через
+переходник SMA. Фото, распиновка TRS и схема переходника — [HARDWARE.md](HARDWARE.md).
+
+### 2. Ядро (boot.img)
+
+Ядро должно выделять SMEM 471 под кольцо IQ модема.
+[Скачать boot.img](https://github.com/loganzarov-alt/D325f-SDR/releases/download/kernel-6-source/boot.img)
+(релиз `kernel-6-source`, 23 068 672 байта, SHA-256 выше).
+
+Это полный boot-образ проверенного телефона: ядро сборки #6 (Linux 3.4.0+,
+GCC 16.1.0, 13.09.2026 12:36:46 UTC) и ramdisk LineageOS 14.1. В ядре есть строки
+патча D325 IQ/SMEM 471, а встроенный в него конфиг побайтно совпадает с
+[`kernel/d325f-kernel.config`](../kernel/d325f-kernel.config). Исходники —
+[`kernel/`](../kernel/README.md#по-русски). Образ рассчитан на эту установку
+LineageOS 14.1; другие прошивки и модели не поддерживаются.
+
+В TWRP:
+
+1. Сохраните резервную копию **Boot** и скопируйте её с телефона.
 2. **Установка → Установка IMG → boot.img → Boot**.
-3. Подтвердите прошивку свайпом и перезагрузите систему. Не выбирайте Recovery и не очищайте Data.
-4. Если система не загружается, вернитесь в TWRP и восстановите копию Boot.
+3. Подтвердите свайпом и перезагрузите систему. Не выбирайте Recovery и не очищайте Data.
+4. Если телефон не загружается, вернитесь в TWRP и восстановите копию Boot.
 
-Патч модема и аппаратная доработка выполняются отдельно.
+> **Безопасность ADB.** Это сборка userdebug с `ro.adb.secure=0`: ADB по USB
+> подключается **без запроса подтверждения на экране**. Выключайте отладку по
+> USB, когда она не нужна, и не оставляйте подключённый телефон без присмотра.
 
-## Validation / Проверки
+### 3. Патч модема
 
-The 1.1.0 bundle reports 37 offline fixture checks: 16 host-native, 15 ARM/QEMU
-and 6 installer checks. Publication separately reran 19 synthetic-image host
-tests, the native SHA-256 self-test and the cache-read contract check. The APK
-signature, source manifest and matching native/payload/license files were verified.
-These checks do not exercise a physical modem partition or a TWRP flash.
-The owner's device report in the project README is separate from these automated
-results; the bundled reports record no phone installation or real modem writes.
+[Modem Patcher 1.1.0](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/modem-patcher-v1.1.0)
+([инструкция](../modem-patcher/README.ru.md)) патчит собственный modem-раздел
+телефона. Он проверяет модель и SHA-256 шести изменяемых файлов модема и
+отказывается работать с другой прошивкой или смешанным состоянием.
 
-В комплекте 1.1.0 приложены отчёты о 37 проверках на файлах-копиях: 16 на хосте,
-15 в ARM/QEMU и 6 проверках установщиков. При публикации отдельно повторены
-19 host-тестов на искусственных образах, самопроверка SHA-256 и проверка порядка
-сброса кеша/прямого чтения. Проверены подпись APK, манифест исходников и совпадение
-native-программы, патча и лицензий между исходниками, APK и ZIP.
-Эти проверки не выполняют запись в реальный modem-раздел и прошивку через TWRP.
-Сообщение владельца о работе инструментов в README проекта учитывается отдельно:
-в приложенных автоматических отчётах установка на телефон и запись в реальный
-модем не зафиксированы.
+1. Установите APK и разрешите root.
+2. **Save dump**, затем скопируйте `.bin` и `.sha256` из *Внутренняя память/D325f/* на ПК.
+3. **Apply patch**, затем **Reboot phone**.
+4. В сведениях о телефоне версия baseband станет **P8610B-AAAANAZM-1.0.6047**.
+
+**Restore stock** возвращает сток, **Restore from dump** исправляет оборванную
+запись. TWRP-ZIP Toggle делает то же из recovery (перед первой записью сохраняет
+дамп); ZIP Restore-Dump восстанавливает дамп, лежащий рядом с ним.
+
+### 4. Приложение
+
+Установите [D325f SDR 1.0.0](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/v1.0.0)
+(Android 7.1+, ARMv7) и разрешите root. Источник сигнала — **LG D325 · SDR**.
+
+Ниже 800 МГц (настраивается) приложение включает несущую Bluetooth в диапазоне
+2,4 ГГц как гетеродин — см. [как это работает](HOW-IT-WORKS.md#по-русски).
+
+### Проверки
+
+К Modem Patcher 1.1.0 приложены отчёты о 37 проверках на файлах-копиях (16 на хосте,
+15 в ARM/QEMU, 6 установщиков). При публикации повторены 19 host-тестов на
+искусственных образах, самопроверка SHA-256 и проверка сброса кеша/прямого
+чтения; проверены подпись APK, манифест исходников и совпадение native-программы,
+патча и лицензий между исходниками, APK и ZIP. Эти автоматические проверки не пишут
+в реальный modem-раздел и не прошивают TWRP; подтверждение работы на телефоне выше —
+отдельное.
