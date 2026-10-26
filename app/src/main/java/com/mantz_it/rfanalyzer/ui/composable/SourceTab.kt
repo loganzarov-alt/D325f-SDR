@@ -23,6 +23,11 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.mantz_it.rfanalyzer.analyzer.ReceiverFocus
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -182,6 +187,19 @@ fun SourceTabComposable(
         when (sourceType) {
 
             SourceType.LGMODEM -> {
+                val context = LocalContext.current
+                val iqPrefs = remember(context) { context.getSharedPreferences(LgModemSource.IQ_TEST_PREFS, Context.MODE_PRIVATE) }
+                var invertIq by remember { mutableStateOf(iqPrefs.getBoolean(LgModemSource.IQ_TEST_EXTRA, true)) }
+                OutlinedSwitch(
+                    label = "Инверсия IQ · тест",
+                    helpText = "Вкл: дополнительный разворот спектра и демодуляции. Выкл: поведение 1.0.0. Менять при остановленном приёме. Сырые IQ-файлы не изменяются.",
+                    isChecked = invertIq,
+                    enabled = !analyzerRunning && !analyzerStartPending,
+                    onCheckedChange = { value ->
+                        iqPrefs.edit().putBoolean(LgModemSource.IQ_TEST_EXTRA, value).apply()
+                        invertIq = value
+                    }
+                )
                 OutlinedListDropDown(
                     items = SourceType.LGMODEM.availableSampleRates,
                     getDisplayName = { LgModemSource.bandwidthLabel(it) },

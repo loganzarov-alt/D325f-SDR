@@ -42,6 +42,13 @@ public final class LgModemSource implements IQSourceInterface {
     /** 2.13 ms of CI8: large enough to avoid per-block GC, small enough for low latency. */
     private static final int PACKET_BYTES = 32768;
 
+    public static final String IQ_TEST_PREFS = "iq_orientation_test";
+    public static final String IQ_TEST_EXTRA = "extra_conjugation";
+    private android.content.SharedPreferences iqTestPreferences;
+    private boolean extraConjugation = true;
+    private boolean conjugateIq(long rf) {
+        return (rf < BtRxLimit.activeHz) ^ extraConjugation;
+    }
     private volatile long frequency;
     private volatile int processingRate = SAMPLE_RATE;
     private long bandwidthHandle;
@@ -62,7 +69,7 @@ public final class LgModemSource implements IQSourceInterface {
             bandwidthHandle = nativeDsp.createBandwidth(processingRate);
             bandwidthFrequency = frequency;
         }
-        bandwidthCount = nativeDsp.filterBandwidth(bandwidthHandle, packet, bandwidthRe, bandwidthIm, frequency < BtRxLimit.activeHz);
+        bandwidthCount = nativeDsp.filterBandwidth(bandwidthHandle, packet, bandwidthRe, bandwidthIm, conjugateIq(frequency));
     }
     public void releaseBandwidth() {
         if (bandwidthHandle != 0) nativeDsp.destroyBandwidth(bandwidthHandle);
@@ -348,6 +355,7 @@ public final class LgModemSource implements IQSourceInterface {
 
     @Override public boolean open(final Context context, final Callback cb) {
         callback = cb;
+        iqTestPreferences = context.getSharedPreferences(IQ_TEST_PREFS, Context.MODE_PRIVATE);
         new Thread(() -> {
             try {
                 bt = BtCwController.get(context);
@@ -680,6 +688,9 @@ public final class LgModemSource implements IQSourceInterface {
     }
 
     @Override public synchronized void startSampling() {
+        extraConjugation = iqTestPreferences == null || iqTestPreferences.getBoolean(IQ_TEST_EXTRA, true);
+        releaseBandwidth();
+        resetNativeDemodState();
         if (sampling || !opened) return;
         BtRxLimit.reload();
         blocks = 0; // A failed new handshake must not inherit healthy-session counters.
@@ -903,7 +914,7 @@ public final class LgModemSource implements IQSourceInterface {
         for (int i = 0; i < count; i++) {
             int offset = i * 2;
             float ir = packet[offset] / 128.0f;
-            float qr = packet[offset + 1] / 128.0f;
+            float qr = packet[offset + 1] / 128.0f * (conjugateIq(frequency) ? -1f : 1f);
             if (mix) {
                 double angle = phase + step * i;
                 double cosine = Math.cos(angle);
@@ -934,7 +945,7 @@ public final class LgModemSource implements IQSourceInterface {
             target.setSize(start + count); target.setSampleRate(processingRate); target.setFrequency(frequency);
             return count;
         }
-        final int count = frequency < BtRxLimit.activeHz
+        final int count = conjugateIq(frequency)
                 ? nativeDsp.unpackCi8Conjugated(packet, target.re(), target.im(), start)
                 : nativeDsp.unpackCi8(packet, target.re(), target.im(), start);
         target.setSize(start + count);
@@ -973,11 +984,11 @@ public final class LgModemSource implements IQSourceInterface {
             target.setSize(start + produced); target.setSampleRate(256_000); target.setFrequency(channel);
             return produced;
         }
-        final boolean useBtMixer = sourceFrequency < BtRxLimit.activeHz;
+        final boolean conjugated = conjugateIq(sourceFrequency);
         final int produced = nativeDsp.mixDownsampleCi8Boxcar30(
                 packet, target.re(), target.im(), start, room,
-                (double)(useBtMixer ? channel - sourceFrequency : sourceFrequency - channel), (double)SAMPLE_RATE, demodNativeState);
-        if (useBtMixer) nativeDsp.conjugate(target.im(), start, produced);
+                (double)(conjugated ? channel - sourceFrequency : sourceFrequency - channel), (double)SAMPLE_RATE, demodNativeState);
+        if (conjugated) nativeDsp.conjugate(target.im(), start, produced);
         target.setSize(start + produced);
         target.setSampleRate(256_000);
         target.setFrequency(channel);
