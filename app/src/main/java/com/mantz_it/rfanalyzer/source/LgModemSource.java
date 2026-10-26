@@ -688,10 +688,10 @@ public final class LgModemSource implements IQSourceInterface {
     }
 
     @Override public synchronized void startSampling() {
+        if (sampling || !opened) return;
         extraConjugation = iqTestPreferences == null || iqTestPreferences.getBoolean(IQ_TEST_EXTRA, true);
         releaseBandwidth();
         resetNativeDemodState();
-        if (sampling || !opened) return;
         BtRxLimit.reload();
         blocks = 0; // A failed new handshake must not inherit healthy-session counters.
         try {
