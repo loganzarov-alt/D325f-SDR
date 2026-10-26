@@ -6,7 +6,8 @@ import os, subprocess, tempfile
 from pathlib import Path
 root=Path(__file__).resolve().parents[2]
 stubs={
- 'android/content/Context.java': '''package android.content; public class Context {public static final int MODE_PRIVATE=0; public java.io.File getDir(String n,int m){return new java.io.File(".");}public android.content.res.AssetManager getAssets(){return new android.content.res.AssetManager();}}''',
+ 'android/content/SharedPreferences.java': '''package android.content; public interface SharedPreferences {boolean getBoolean(String key,boolean fallback);}''',
+ 'android/content/Context.java': '''package android.content; public class Context {public static final int MODE_PRIVATE=0; public SharedPreferences getSharedPreferences(String n,int m){return (key,fallback)->fallback;} public java.io.File getDir(String n,int m){return new java.io.File(".");}public android.content.res.AssetManager getAssets(){return new android.content.res.AssetManager();}}''',
  'android/content/res/AssetManager.java': '''package android.content.res; public class AssetManager {public java.io.InputStream open(String n)throws java.io.IOException{return new java.io.ByteArrayInputStream(new byte[0]);}}''',
  'android/os/Process.java': '''package android.os; public class Process {public static final int THREAD_PRIORITY_DISPLAY=-4;public static void setThreadPriority(int n){}}''',
  'android/os/SystemClock.java': '''package android.os;public class SystemClock {public static long elapsedRealtime(){return System.nanoTime()/1000000;}}''',
@@ -28,6 +29,13 @@ public class TestCapturePolicy {
  static Object get(Object s,String n)throws Exception {Field f=s.getClass().getDeclaredField(n);f.setAccessible(true);return f.get(s);}
  public static void main(String[] args)throws Exception {
   LgModemSource s=new LgModemSource(1700000000L,1,0,0,0,20,0,0);
+  java.lang.reflect.Method orientation=s.getClass().getDeclaredMethod("conjugateIq",long.class);
+  orientation.setAccessible(true);
+  for(boolean extra:new boolean[]{false,true}) {
+   set(s,"extraConjugation",extra);
+   if(!orientation.invoke(s,1700000000L).equals(extra))throw new AssertionError("Direct orientation");
+   if(!orientation.invoke(s,137000000L).equals(!extra))throw new AssertionError("BT orientation");
+  }
   set(s,"opened",true);set(s,"factoryHeld",true);set(s,"streamer",new File(System.getenv("FAKE_STREAM")));
   s.setDemodulationContinuityMode(true);
   try {

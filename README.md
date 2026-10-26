@@ -5,7 +5,7 @@
 Experimental SDR receiver using the LG D325's built-in cellular modem.
 Project and modem integration: **Logan Zarov**.
 
-[Русский](README-RU.md) · [Download 1.0.0](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/v1.0.0) ·
+[Русский](README-RU.md) · [Download 1.0.1](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/v1.0.1) ·
 [Build](docs/BUILD.md) · [Device setup](docs/DEVICE-SETUP.md) · [Hardware / B8 and B1](docs/HARDWARE.md)
 
 ## Features
@@ -43,7 +43,7 @@ baseband M8610B-AAAANAZM-1.0.6047. Step-by-step guide:
    (kernel build #6, allocates SMEM item 471; [source](kernel/README.md)).
 3. **Modem**: with [Modem Patcher 1.1.0](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/modem-patcher-v1.1.0) save a dump,
    copy it to a PC, apply the patch and reboot ([details](modem-patcher/README.md)).
-4. **App**: install [D325f SDR 1.0.0](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/v1.0.0) (versionCode 1, ARMv7,
+4. **App**: install [D325f SDR 1.0.1](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/v1.0.1) (versionCode 2, ARMv7,
    Android 7.1+) and grant root.
 
 Logan Zarov confirmed on 24 October 2026 that the app and the modem tools work
@@ -75,3 +75,7 @@ Combined application: **GPL-3.0-or-later**. Original copyright notices and
 third-party licenses are retained in [LICENSING.md](LICENSING.md), [LICENSE](LICENSE)
 and the app's offline notices. See [code provenance](docs/PROVENANCE.md).
 This independent project is not endorsed by LG, Qualcomm or the upstream authors.
+
+## 1.0.1 — IQ orientation correction
+
+[Release notes / Описание исправления](docs/RELEASE-1.0.1.md). The correction is enabled by default; the original orientation remains selectable. / Исправление включено по умолчанию; прежнюю ориентацию можно выбрать переключателем.
