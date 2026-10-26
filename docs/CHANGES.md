@@ -1,3 +1,7 @@
+# 1.0.1 — IQ orientation (2026-10-26)
+
+Corrects LG live-input IQ orientation across FFT and demodulation. Enabled by default, with an off switch for the 1.0.0 orientation. Raw recordings and file playback remain unchanged. Owner-confirmed on the test build; no calibrated sensitivity gain claimed. See [release notes](RELEASE-1.0.1.md) for validation and signing status.
+
 # 1.0.0 — first public release (2026-10-24)
 
 - Visible name D325f SDR, original vector icon and versionCode 1.

@@ -2,7 +2,7 @@ name: Build and test D325f SDR
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [main, release/1.0.1-iq]
   pull_request:
 permissions:
   contents: read
@@ -28,6 +28,12 @@ jobs:
         run: python3 tools/check-license-headers.py
       - name: Build APK and run source-selection tests
         run: ./gradlew --no-daemon :app:assembleRelease :app:testReleaseUnitTest
+      - name: Test IQ inversion
+        run: |
+          g++ -O3 -std=c++17 -Inativedsp/src/main/cpp tests/pipeline/test_ci8_mixer.cpp -o /tmp/test-ci8
+          /tmp/test-ci8
+          g++ -O3 -std=c++17 -Inativedsp/src/main/cpp tests/pipeline/test_bandwidth.cpp -o /tmp/test-bandwidth
+          /tmp/test-bandwidth
       - name: Test audio, IQ continuity, recovery and BT
         run: bash tools/verify-host.sh
       - name: Compile optional native differential test
@@ -37,13 +43,13 @@ jobs:
       - name: Upload test-signed APK, sources and checksums
         run: |
           mkdir -p dist
-          cp app/build/outputs/apk/release/app-release.apk dist/D325f-SDR-1.0.0-ci-test-signed.apk
+          cp app/build/outputs/apk/release/app-release.apk dist/D325f-SDR-1.0.1-ci-test-signed.apk
           git archive --format=tar.gz --prefix=D325f-SDR/ HEAD > dist/D325f-SDR-source.tar.gz
           cd dist
           sha256sum *.apk *.tar.gz > SHA256SUMS
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: D325f-SDR-1.0.0-ci-test-signed
+          name: D325f-SDR-1.0.1-ci-test-signed
           retention-days: 30
           if-no-files-found: error
           path: dist/

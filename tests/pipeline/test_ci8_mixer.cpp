@@ -8,6 +8,25 @@
 #include <cstdlib>
 #include <chrono>
 int main() {
+ // Positive and negative RF offsets must both tune to DC after conjugation.
+ for (bool inverted : {false, true}) for (double hz : {-37000., 53000.}) {
+  const int n=16380; std::vector<int8_t> tone(2*n);
+  for(int k=0;k<n;k++) {
+   double a=6.28318530717958647692*hz*k/7680000;
+   tone[2*k]=(int8_t)std::lround(100*cos(a));
+   tone[2*k+1]=(int8_t)std::lround((inverted?-100:100)*sin(a));
+  }
+  double mixHz=inverted?hz:-hz;
+  Ci8Mixer30 m(6.28318530717958647692*mixHz/7680000);
+  float state[5]={1,0,0,0,0}; std::vector<float> re(n/30),im(n/30);
+  int out=m.process(tone.data(),n,re.data(),im.data(),n/30,state);
+  if(out!=n/30)abort();
+  for(int k=0;k<out;k++) {
+   if(inverted) im[k]=-im[k];
+   if(std::abs(re[k]-100./128)>0.004 || std::abs(im[k])>0.004)abort();
+  }
+ }
+ puts("PASS: inverted/non-inverted CI8, positive/negative channels tune to DC");
  std::mt19937 rng(131);
  std::vector<int8_t> raw(2*16384*50); for(auto& x:raw)x=(int8_t)rng();
  for(double hz:{0.,1.,-123456.,200000.,-3800000.}) {

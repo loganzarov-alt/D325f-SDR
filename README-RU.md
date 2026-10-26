@@ -5,7 +5,7 @@
 Экспериментальный SDR-приёмник на встроенном сотовом модеме LG D325.
 Проект и интеграция модемной части — **Logan Zarov**.
 
-[English](README.md) · [Скачать 1.0.0](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/v1.0.0) ·
+[English](README.md) · [Скачать 1.0.0](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/v1.0.1) ·
 [Сборка](docs/BUILD.md) · [Подготовка телефона](docs/DEVICE-SETUP.md) · [Аппаратная доработка: B8 и B1](docs/HARDWARE.md)
 
 ## Возможности
@@ -41,7 +41,7 @@ baseband M8610B-AAAANAZM-1.0.6047. Пошаговая инструкция —
    (сборка #6, выделяет SMEM 471; [исходники](kernel/README.md#по-русски)).
 3. **Модем**: в [Modem Patcher 1.1.0](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/modem-patcher-v1.1.0) сохраните дамп,
    скопируйте его на ПК, примените патч и перезагрузитесь ([подробно](modem-patcher/README.ru.md)).
-4. **Приложение**: установите [D325f SDR 1.0.0](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/v1.0.0) (код версии 1,
+4. **Приложение**: установите [D325f SDR 1.0.1](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/v1.0.1) (код версии 1,
    ARMv7, Android 7.1+) и разрешите root.
 
 24 октября 2026 года Logan Zarov подтвердил, что приложение и инструменты модема
@@ -74,3 +74,7 @@ Java/Kotlin/C/C++/ASM. [Сборка и подпись](docs/BUILD.md) · [Пр�
 [LICENSING.md](LICENSING.md), [LICENSE](LICENSE) и раздел лицензий в приложении.
 [Происхождение кода](docs/PROVENANCE.md). Проект независимый и не связан с официальной
 поддержкой LG, Qualcomm или авторов исходного приложения.
+
+## 1.0.1 — IQ orientation correction
+
+[Release notes / Описание исправления](docs/RELEASE-1.0.1.md). The correction is enabled by default; the original orientation remains selectable. / Исправление включено по умолчанию; прежнюю ориентацию можно выбрать переключателем.
