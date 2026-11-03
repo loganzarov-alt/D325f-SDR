@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v2_stop">Detener</string>
+    <string name="v2_busy">Receptor ocupado o transmisión seleccionada</string>
+    <string name="v2_error">Error</string>
+    <string name="v2_recovering">Recuperando recepción</string>
+    <string name="v2_recording">Grabando</string>
+    <string name="v2_cooling">Control de enfriamiento</string>
+    <string name="v2_completed">Finalizado</string>
+    <string name="v2_manual_language">Elegir idioma manualmente</string>
+    <string name="v2_system_language">Usar idioma del sistema</string>
+    <string name="v2_invert">Invertir espectro IQ</string>
+    <string name="v2_stream">Transmisión IQ por Wi-Fi</string>
+    <string name="v2_stream_info">rtl_tcp • CU8 • 1,28 / 2,56 / 7,68 MS/s. Grabación y espectro locales desactivados.</string>
+    <string name="v2_port">Puerto TCP</string>
+    <string name="v2_start_stream">Iniciar transmisión</string>
+    <string name="v2_task_settings">Tareas únicas. Ganancia, ancho de banda, inversión y BT se copian de Source.</string>
+    <string name="v2_start_time">Inicio: aaaa-MM-dd HH:mm:ss</string>
+    <string name="v2_duration">Duración, segundos</string>
+    <string name="v2_frequency">Frecuencia central, MHz</string>
+    <string name="v2_reboot">Reiniciar al finalizar</string>
+    <string name="v2_thermal">Controlar temperatura al finalizar</string>
+    <string name="v2_thermal_info">Después: bajar 3 °C en 10 minutos o apagar. A 70 °C se apaga inmediatamente. Sin apagado térmico durante la tarea.</string>
+    <string name="v2_folder">Carpeta de grabación (vacío = automática)</string>
+    <string name="v2_add">Añadir tarea</string>
+    <string name="v2_cancel">Cancelar tarea y control</string>
+    <string name="v2_delete">Eliminar</string>
+    <string name="v2_listening">Esperando al PC</string>
+    <string name="v2_bt_warning">Según mediciones en este dispositivo, los niveles 8–9 superan 10 mW. Uso bajo su responsabilidad.</string>
+</resources>

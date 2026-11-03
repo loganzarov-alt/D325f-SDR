@@ -114,6 +114,8 @@ const val RECORDINGS_DIRECTORY = "recordings"
 
 @AndroidEntryPoint
 class MainActivity: ComponentActivity() {
+    override fun attachBaseContext(base: Context) { super.attachBaseContext(com.mantz_it.rfanalyzer.automation.AppLanguage.wrap(base)) }
+
 
     @Inject lateinit var appStateRepository: AppStateRepository
     private val mainViewModel: MainViewModel by viewModels()

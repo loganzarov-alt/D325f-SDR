@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v2_stop">停止</string>
+    <string name="v2_busy">受信機が使用中、またはストリーミングが選択されています</string>
+    <string name="v2_error">エラー</string>
+    <string name="v2_recovering">受信を復旧中</string>
+    <string name="v2_recording">録音中</string>
+    <string name="v2_cooling">冷却を監視中</string>
+    <string name="v2_completed">完了</string>
+    <string name="v2_manual_language">言語を手動で選択</string>
+    <string name="v2_system_language">システム言語を使用</string>
+    <string name="v2_invert">IQ スペクトルを反転</string>
+    <string name="v2_stream">Wi-Fi IQ ストリーミング</string>
+    <string name="v2_stream_info">rtl_tcp • CU8 • 1.28 / 2.56 / 7.68 MS/s。本体の録音とスペクトル表示は無効です。</string>
+    <string name="v2_port">TCP ポート</string>
+    <string name="v2_start_stream">ストリーミング開始</string>
+    <string name="v2_task_settings">単発タスク。ゲイン、帯域幅、反転、BT 設定は Source からコピーされます。</string>
+    <string name="v2_start_time">開始：yyyy-MM-dd HH:mm:ss</string>
+    <string name="v2_duration">録音時間（秒）</string>
+    <string name="v2_frequency">中心周波数（MHz）</string>
+    <string name="v2_reboot">完了後に再起動</string>
+    <string name="v2_thermal">完了後に温度を監視</string>
+    <string name="v2_thermal_info">完了後：10 分以内に 3 °C 下がらなければ電源オフ。70 °C で即時オフ。タスク実行中は温度による電源オフを行いません。</string>
+    <string name="v2_folder">保存先（空欄＝自動）</string>
+    <string name="v2_add">タスクを追加</string>
+    <string name="v2_cancel">タスクと監視をキャンセル</string>
+    <string name="v2_delete">削除</string>
+    <string name="v2_listening">PC の接続待ち</string>
+    <string name="v2_bt_warning">この端末での測定ではレベル 8–9 は 10 mW を超えます。自己責任で使用してください。</string>
+</resources>

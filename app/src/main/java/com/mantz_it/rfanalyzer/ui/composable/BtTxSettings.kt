@@ -18,31 +18,34 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
-fun BtTxSettings() {
+fun BtTxSettings(frequency: Long = Long.MAX_VALUE) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    val captureBusy by com.mantz_it.rfanalyzer.automation.CaptureSettings.busy.collectAsState()
+    val maximumChannel = if (frequency < 100_000_000L) 30 else 78
     var channelText by remember { mutableStateOf("30") }
-    var power by remember { mutableIntStateOf(9) }
+    var power by remember { mutableIntStateOf(7) }
     var status by remember { mutableStateOf("") }
     var busy by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         runCatching { withContext(Dispatchers.IO) { BtCwController.get(context).power } }.onSuccess { power = it; channelText = BtCwController.getChannel().toString() }
     }
-    OutlinedBox(label = "BT TX · гетеродин") {
+    OutlinedBox(label = "BT TX") {
         Column(Modifier.padding(12.dp)) {
+            if(power >= 8) Text(androidx.compose.ui.res.stringResource(com.mantz_it.rfanalyzer.R.string.v2_bt_warning), color=MaterialTheme.colorScheme.error)
             OutlinedTextField(
                 value = channelText,
                 onValueChange = { if (it.length <= 2 && it.all(Char::isDigit)) channelText = it },
-                label = { Text("BT-канал (0–78)") },
+                label = { Text("BT (0–$maximumChannel)") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 singleLine = true,
-                enabled = !busy
+                enabled = !busy && !captureBusy
             )
             val selectedChannel = channelText.toIntOrNull()
-            Text(if (selectedChannel != null && selectedChannel in 0..78)
+            Text(if (selectedChannel != null && selectedChannel in 0..maximumChannel)
                 "Частота TX: ${2402 + selectedChannel} МГц" else "Введите канал 0–78")
             Text("Смена канала — при остановленном приёме.", style = MaterialTheme.typography.bodySmall)
-            Button(enabled = !busy && selectedChannel != null && selectedChannel in 0..78, onClick = {
+            Button(enabled = !busy && !captureBusy && selectedChannel != null && selectedChannel in 0..maximumChannel, onClick = {
                 val next = selectedChannel ?: return@Button
                 busy = true
                 scope.launch {
@@ -56,7 +59,7 @@ fun BtTxSettings() {
             Text("Мощность TX: уровень $power / 9")
 
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Button(enabled = power > 0 && !busy, onClick = {
+                Button(enabled = power > 0 && !busy && !captureBusy, onClick = {
                     val next = power - 1; busy = true
                     scope.launch {
                         try { withContext(Dispatchers.IO) { BtCwController.get(context).setPower(next) }; power = next }
@@ -64,7 +67,7 @@ fun BtTxSettings() {
                         busy = false
                     }
                 }) { Text("TX −") }
-                Button(enabled = power < 9 && !busy, onClick = {
+                Button(enabled = power < 9 && !busy && !captureBusy, onClick = {
                     val next = power + 1; busy = true
                     scope.launch {
                         try { withContext(Dispatchers.IO) { BtCwController.get(context).setPower(next) }; power = next }

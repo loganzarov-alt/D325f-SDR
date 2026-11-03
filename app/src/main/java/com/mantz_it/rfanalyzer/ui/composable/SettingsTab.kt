@@ -96,11 +96,13 @@ fun SettingsTabComposable(
     controlDrawerSide: ControlDrawerSide,
     showDebugInformation: Boolean,
     loggingEnabled: Boolean,
-    settingsTabActions: SettingsTabActions
+    settingsTabActions: SettingsTabActions,
+    frequency: Long = Long.MAX_VALUE
 ) {
     ScrollableColumnWithFadingEdge {
+        com.mantz_it.rfanalyzer.automation.LanguageSettings()
         SdrFocusSettings()
-        BtTxSettings()
+        BtTxSettings(frequency)
         OutlinedEnumDropDown(
             label = "Screen Orientation",
             selectedEnum = screenOrientation,

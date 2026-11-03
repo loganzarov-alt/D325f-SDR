@@ -132,9 +132,11 @@ fun SourceTabComposable(
     filesourceFileFormat: FilesourceFileFormat,
     filesourceRepeatEnabled: Boolean,
     suppressDcSpike: Boolean,
-    sourceTabActions: SourceTabActions
+    sourceTabActions: SourceTabActions,
+    appState: com.mantz_it.rfanalyzer.database.AppStateRepository? = null
 ) {
     ScrollableColumnWithFadingEdge {
+        appState?.let { com.mantz_it.rfanalyzer.automation.CaptureSourceControls(it) }
         Row(modifier = Modifier.fillMaxWidth()) {
             OutlinedEnumDropDown(
                 label = "Signal Source",

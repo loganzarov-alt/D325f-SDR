@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v2_stop">停止</string>
+    <string name="v2_busy">接收器忙碌或已選擇串流模式</string>
+    <string name="v2_error">錯誤</string>
+    <string name="v2_recovering">正在恢復接收</string>
+    <string name="v2_recording">正在錄製</string>
+    <string name="v2_cooling">監測降溫</string>
+    <string name="v2_completed">已完成</string>
+    <string name="v2_manual_language">手動選擇語言</string>
+    <string name="v2_system_language">使用系統語言</string>
+    <string name="v2_invert">反轉 IQ 頻譜</string>
+    <string name="v2_stream">Wi-Fi IQ 串流</string>
+    <string name="v2_stream_info">rtl_tcp • CU8 • 1.28 / 2.56 / 7.68 MS/s。本機錄製和頻譜顯示已停用。</string>
+    <string name="v2_port">TCP 連接埠</string>
+    <string name="v2_start_stream">開始串流</string>
+    <string name="v2_task_settings">單次任務。增益、頻寬、反轉和 BT 設定從 Source 複製。</string>
+    <string name="v2_start_time">開始：yyyy-MM-dd HH:mm:ss</string>
+    <string name="v2_duration">錄製時長（秒）</string>
+    <string name="v2_frequency">中心頻率（MHz）</string>
+    <string name="v2_reboot">完成後重新啟動</string>
+    <string name="v2_thermal">完成後監測溫度</string>
+    <string name="v2_thermal_info">完成後：10 分鐘內降溫 3 °C，否則關機。達到 70 °C 立即關機。任務執行期間停用溫控關機。</string>
+    <string name="v2_folder">錄製資料夾（留空為自動）</string>
+    <string name="v2_add">新增任務</string>
+    <string name="v2_cancel">取消任務和監測</string>
+    <string name="v2_delete">刪除</string>
+    <string name="v2_listening">等待電腦連線</string>
+    <string name="v2_bt_warning">根據此裝置的測量結果，8–9 檔超過 10 mW。使用風險由您自行承擔。</string>
+</resources>

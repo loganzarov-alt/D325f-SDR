@@ -247,7 +247,7 @@ class AnalyzerService : Service() {
     private var recoveryEpoch = 0L
     @Volatile private var startRequested = false
 
-    fun stopAnalyzer(releaseSource: Boolean = false) {
+    fun stopAnalyzer(releaseSource: Boolean = true) {
         com.mantz_it.rfanalyzer.source.SdrFocusController.get(this).stop()
         startRequested = false
         recoveryEpoch++
@@ -282,7 +282,7 @@ class AnalyzerService : Service() {
         appStateRepository.analyzerStartPending.set(false)
         GlobalPerformanceData.reset()
 
-        if (!recoveryPending) stopForegroundService()
+        if (!recoveryPending) { com.mantz_it.rfanalyzer.automation.CaptureSettings.release(this); stopForegroundService() }
     }
 
     /**
@@ -291,6 +291,12 @@ class AnalyzerService : Service() {
      * processing loop.
      */
     fun startAnalyzer() : Boolean {
+        if (com.mantz_it.rfanalyzer.automation.CaptureSettings.prefs(this).getBoolean("stream",false) ||
+            !com.mantz_it.rfanalyzer.automation.CaptureSettings.acquire(this)) {
+            appStateRepository.analyzerStartPending.set(false)
+            Toast.makeText(this, getString(R.string.v2_busy), Toast.LENGTH_LONG).show()
+            return false
+        }
         recoveryEpoch++
         if (!recoveryStarting) recoveryAttempts = 0
         if (appStateRepository.analyzerRunning.value) return true
@@ -352,6 +358,7 @@ class AnalyzerService : Service() {
         
 
         if (source is LgModemSource) {
+            (source as LgModemSource).setInvertSpectrum(com.mantz_it.rfanalyzer.automation.CaptureSettings.inverted(this))
             // One-time migration: discard pathological saved zoom/FFT settings.
             if (!appStateRepository.lgSmoothDisplayMigrated.value) {
                 appStateRepository.fftSize.set(8192)

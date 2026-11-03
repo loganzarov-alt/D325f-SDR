@@ -317,3 +317,14 @@ Java_com_mantz_1it_nativedsp_NativeDsp_mixBandwidth(JNIEnv* e,jobject,jfloatArra
  state[0]=cr;state[1]=ci;state[2]=sr;state[3]=si;state[4]=pending;e->SetFloatArrayRegion(stateArray,0,5,state);
  e->ReleaseFloatArrayElements(re,r,JNI_ABORT);e->ReleaseFloatArrayElements(im,q,JNI_ABORT);e->ReleaseFloatArrayElements(outRe,rr,0);e->ReleaseFloatArrayElements(outIm,qq,0);return n;
 }
+
+// Exact signed-byte spectrum reversal by I/Q exchange: j * conjugate(z).
+// Avoids overflow/clipping of -128 and preserves a zero-filled outage.
+extern "C" JNIEXPORT void JNICALL
+Java_com_mantz_1it_nativedsp_NativeDsp_invertCi8(JNIEnv* env, jobject, jbyteArray raw) {
+    const jsize n = env->GetArrayLength(raw);
+    jbyte* bytes = env->GetByteArrayElements(raw, nullptr);
+    if (!bytes) return;
+    for (jsize i=0; i+1<n; i+=2) std::swap(bytes[i],bytes[i+1]);
+    env->ReleaseByteArrayElements(raw, bytes, 0);
+}

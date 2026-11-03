@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v2_stop">Stoppen</string>
+    <string name="v2_busy">Empfänger belegt oder Streaming ausgewählt</string>
+    <string name="v2_error">Fehler</string>
+    <string name="v2_recovering">Empfang wird wiederhergestellt</string>
+    <string name="v2_recording">Aufnahme</string>
+    <string name="v2_cooling">Abkühlung überwachen</string>
+    <string name="v2_completed">Abgeschlossen</string>
+    <string name="v2_manual_language">Sprache manuell wählen</string>
+    <string name="v2_system_language">Systemsprache verwenden</string>
+    <string name="v2_invert">IQ-Spektrum invertieren</string>
+    <string name="v2_stream">IQ-Streaming über WLAN</string>
+    <string name="v2_stream_info">rtl_tcp • CU8 • 1,28 / 2,56 / 7,68 MS/s. Lokale Aufnahme und Spektrum sind deaktiviert.</string>
+    <string name="v2_port">TCP-Port</string>
+    <string name="v2_start_stream">Streaming starten</string>
+    <string name="v2_task_settings">Einmalige Aufgaben. Verstärkung, Bandbreite, Invertierung und BT werden aus Source übernommen.</string>
+    <string name="v2_start_time">Beginn: JJJJ-MM-TT HH:mm:ss</string>
+    <string name="v2_duration">Aufnahmedauer, Sekunden</string>
+    <string name="v2_frequency">Mittenfrequenz, MHz</string>
+    <string name="v2_reboot">Nach Abschluss neu starten</string>
+    <string name="v2_thermal">Temperatur nach Abschluss überwachen</string>
+    <string name="v2_thermal_info">Danach: um 3 °C in 10 Minuten abkühlen, sonst ausschalten. Bei 70 °C sofort ausschalten. Während der Aufgabe keine Temperaturabschaltung.</string>
+    <string name="v2_folder">Aufnahmeordner (leer = automatisch)</string>
+    <string name="v2_add">Aufgabe hinzufügen</string>
+    <string name="v2_cancel">Aufgabe und Überwachung abbrechen</string>
+    <string name="v2_delete">Löschen</string>
+    <string name="v2_listening">Warten auf PC</string>
+    <string name="v2_bt_warning">Messungen an diesem Gerät: Stufen 8–9 überschreiten 10 mW. Nutzung auf eigene Verantwortung.</string>
+</resources>

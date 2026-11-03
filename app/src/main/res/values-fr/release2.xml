@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v2_stop">Arrêter</string>
+    <string name="v2_busy">Récepteur occupé ou diffusion sélectionnée</string>
+    <string name="v2_error">Erreur</string>
+    <string name="v2_recovering">Rétablissement de la réception</string>
+    <string name="v2_recording">Enregistrement</string>
+    <string name="v2_cooling">Surveillance du refroidissement</string>
+    <string name="v2_completed">Terminé</string>
+    <string name="v2_manual_language">Choisir la langue manuellement</string>
+    <string name="v2_system_language">Langue du système</string>
+    <string name="v2_invert">Inverser le spectre IQ</string>
+    <string name="v2_stream">Diffusion IQ par Wi-Fi</string>
+    <string name="v2_stream_info">rtl_tcp • CU8 • 1,28 / 2,56 / 7,68 MS/s. Enregistrement et spectre locaux désactivés.</string>
+    <string name="v2_port">Port TCP</string>
+    <string name="v2_start_stream">Démarrer la diffusion</string>
+    <string name="v2_task_settings">Tâches uniques. Gain, bande passante, inversion et BT copiés depuis Source.</string>
+    <string name="v2_start_time">Début : aaaa-MM-jj HH:mm:ss</string>
+    <string name="v2_duration">Durée, secondes</string>
+    <string name="v2_frequency">Fréquence centrale, MHz</string>
+    <string name="v2_reboot">Redémarrer après la tâche</string>
+    <string name="v2_thermal">Surveiller la température après la tâche</string>
+    <string name="v2_thermal_info">Après la tâche : baisse de 3 °C en 10 minutes, sinon extinction. À 70 °C, extinction immédiate. Pas de coupure thermique pendant la tâche.</string>
+    <string name="v2_folder">Dossier (vide = automatique)</string>
+    <string name="v2_add">Ajouter une tâche</string>
+    <string name="v2_cancel">Annuler la tâche et la surveillance</string>
+    <string name="v2_delete">Supprimer</string>
+    <string name="v2_listening">En attente du PC</string>
+    <string name="v2_bt_warning">Selon les mesures sur cet appareil, les niveaux 8–9 dépassent 10 mW. Utilisation sous votre responsabilité.</string>
+</resources>
