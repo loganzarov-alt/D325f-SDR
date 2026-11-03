@@ -31,8 +31,18 @@ class CaptureService : Service() {
     @Volatile private var client: Socket? = null
     override fun onBind(i: Intent?) = null
     override fun onStartCommand(i: Intent?, flags: Int, id: Int): Int {
-        if(i?.action==STOP) { cancelled=true; CaptureSettings.cancelRequested=true; client?.close(); server?.close(); return START_NOT_STICKY }
-        if(worker?.isAlive==true) return START_NOT_STICKY
+        if(i?.action==STOP) {
+            cancelled=true; CaptureSettings.cancelRequested=true
+            runCatching { client?.close() };runCatching { server?.close() }
+            if(worker?.isAlive!=true)stopSelf()
+            return START_NOT_STICKY
+        }
+        if(worker?.isAlive==true) {
+            i?.getStringExtra("task")?.let { json ->
+                if(!i.getBooleanExtra("stream",false)) TaskStore.mark(this,CaptureTask.from(JSONObject(json)).id,"skipped")
+            }
+            return START_NOT_STICKY
+        }
         val json=i?.getStringExtra("task") ?: run { stopSelf(); return START_NOT_STICKY }
         val task=CaptureTask.from(JSONObject(json)); val streaming=i.getBooleanExtra("stream",false)
         val stop=PendingIntent.getService(this,0,Intent(this,CaptureService::class.java).setAction(STOP),PendingIntent.FLAG_IMMUTABLE)
@@ -45,7 +55,10 @@ class CaptureService : Service() {
         wake=(getSystemService(POWER_SERVICE) as PowerManager).newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"D325f:Capture").apply { acquire() }
         worker=Thread({
             try { if(streaming) stream(task) else automate(task) }
-            catch(e: Exception) { CaptureSettings.status.value="${getString(R.string.v2_error)}: ${e.message}" }
+            catch(e: Exception) {
+                if(!streaming)runCatching { TaskStore.mark(this,task.id,if(stopped())"cancelled" else "failed") }
+                CaptureSettings.status.value="${getString(R.string.v2_error)}: ${e.message}"
+            }
             finally {
                 source?.close(); source=null
                 runCatching { client?.close() }; runCatching { server?.close() }
@@ -135,6 +148,8 @@ class CaptureService : Service() {
     private data class Packet(val bytes: ByteArray,val at: Long)
     private fun automate(t: CaptureTask) {
         TaskStore.mark(this,t.id,"running")
+        val initialBt=BtCwController.get(this)
+        val initialChannel=BtCwController.getChannel();val initialPower=initialBt.power
         val initialBtLimit=getSharedPreferences("bt_rx_limit",0).getLong("upper_hz",800_000_000)
         val start=SystemClock.elapsedRealtime(); val end=start+max(0,t.end-System.currentTimeMillis())
         val queue=ArrayBlockingQueue<Packet>(128)
@@ -146,11 +161,7 @@ class CaptureService : Service() {
         val zero=ByteArray(65536)
         var encoder=Encoder(t.rate)
         fun zeros(until: Long) {
-            if(stream==null)return
-            val goal=max(0,until-firstAt)*t.rate/1000*2
-            while(written<goal && !stopped()) {
-                val n=min(zero.size.toLong(),goal-written).toInt();stream!!.write(zero,0,n);written+=n
-            }
+            written=IqGap.fill(stream,written,firstAt,until,t.rate,zero) { stopped() }
         }
         val capture=Thread({
             var s: LgModemSource?=null
@@ -160,12 +171,14 @@ class CaptureService : Service() {
                         if(s==null)s=createSource(t)
                         s.setLosslessConsumerMode(true); s.startSampling()
                         while(!varFlag.done && !stopped() && SystemClock.elapsedRealtime()<end) {
-                            val raw=s.getPacket(250) ?: break
+                            val raw=s.getPacket(250)
+                            if(raw==null) { varFlag.outage=true;break }
+                            varFlag.outage=false
                             val now=SystemClock.elapsedRealtime()
                             val copy=raw.copyOf();s.returnPacket(raw)
                             while(!varFlag.done && !stopped() && !queue.offer(Packet(copy,now),200,TimeUnit.MILLISECONDS)) { }
                         }
-                    } catch(e: Exception) { CaptureSettings.status.value="${getString(R.string.v2_recovering)}: ${e.message}" }
+                    } catch(e: Exception) { varFlag.outage=true;CaptureSettings.status.value="${getString(R.string.v2_recovering)}: ${e.message}" }
                     s?.stopSampling()
                     if(!varFlag.done && !stopped())Thread.sleep(500)
                 }
@@ -177,7 +190,7 @@ class CaptureService : Service() {
                 val now=SystemClock.elapsedRealtime()
                 if(now-lastTemp>=10_000) {
                     val temp=temperatures();logTemperature(t,temp);lastTemp=now
-                    if(t.temperature && temp.all { it.isNaN() }) { varFlag.done=true;capture.join(25_000);stream?.close();stream=null;TaskStore.mark(this,t.id,"sensor-error");power(true);return }
+                    if(t.temperature && temp.all { it.isNaN() }) { varFlag.done=true;capture.join(30_000);stream?.flush();if(stream!=null)recordingRaw?.fd?.sync();stream?.close();stream=null;TaskStore.mark(this,t.id,"sensor-error");power(true);return }
                 }
                 val packet=queue.poll(100,TimeUnit.MILLISECONDS)
                 if(packet!=null && packet.at<=end) {
@@ -198,8 +211,9 @@ class CaptureService : Service() {
                 }
                 if(policy.failed(now)) { failure=true;break }
                 if(now>=end) {
+                    if(capture.isAlive && now-end<5000) continue
                     // If the task ended during an unresolved outage, preserve its five-minute shutdown deadline.
-                    if(!policy.hasReceived() || varFlag.gap) {
+                    if(!policy.hasReceived() || varFlag.gap || varFlag.outage) {
                         varFlag.done=true
                         if(!capture.isAlive && queue.isEmpty()) { zeros(end);stream?.close();stream=null }
                         continue
@@ -222,6 +236,7 @@ class CaptureService : Service() {
             }
             encoder.close()
             getSharedPreferences("bt_rx_limit",0).edit().putLong("upper_hz",initialBtLimit).commit();BtRxLimit.reload()
+            if(!capture.isAlive)runCatching { initialBt.setChannel(initialChannel);initialBt.setPower(initialPower) }
         }
         if(stopped()) { TaskStore.mark(this,t.id,"cancelled");return }
         if(failure) { TaskStore.mark(this,t.id,"failed");power(false);return }
@@ -242,7 +257,7 @@ class CaptureService : Service() {
         }
         CaptureSettings.status.value=getString(R.string.v2_completed)
     }
-    private class VolatileBox { @Volatile var done=false; @Volatile var closed=true; var gap=false }
+    private class VolatileBox { @Volatile var done=false; @Volatile var closed=true; @Volatile var outage=true; var gap=false }
     private fun rawDurationMs(raw: ByteArray)=raw.size.toLong()*1000/(2*LgModemSource.SAMPLE_RATE)
 
     /** rtl_tcp framing: 12-byte RTL0 greeting, CU8 IQ and 5-byte big-endian commands. */

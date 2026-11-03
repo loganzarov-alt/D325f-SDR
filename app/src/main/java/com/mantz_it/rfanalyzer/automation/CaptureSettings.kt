@@ -53,7 +53,7 @@ data class CaptureTask(
                      reboot: Boolean, temperature: Boolean): CaptureTask {
             val bt = BtCwController.get(c)
             return CaptureTask(start=start, duration=duration, frequency=frequency,
-                rate=a.sourceSampleRate.value.toInt(), band=a.lgRfBand.value, profile=a.lgPllProfile.value,
+                rate=a.sourceSampleRates.getValue(com.mantz_it.rfanalyzer.ui.composable.SourceType.LGMODEM).value.toInt(), band=a.lgRfBand.value, profile=a.lgPllProfile.value,
                 multiplier=a.lgPllMultiplier.value, lna=a.lgLnaState.value, dvga=a.lgDvgaOffset.value,
                 inverted=CaptureSettings.inverted(c), btChannel=BtCwController.getChannel(), btPower=bt.power,
                 btLimit=BtRxLimit.activeHz, folder=CaptureSettings.prefs(c).getString("folder", "") ?: "",

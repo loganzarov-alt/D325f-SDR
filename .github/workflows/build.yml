@@ -30,8 +30,9 @@ jobs:
         run: ./gradlew --no-daemon :app:assembleRelease :app:testReleaseUnitTest
       - name: Test automation decisions
         run: |
-          javac -d /tmp/v2-tests app/src/main/java/com/mantz_it/rfanalyzer/automation/CapturePolicy.java tests/pipeline/TestCapturePolicyV2.java
+          javac -d /tmp/v2-tests app/src/main/java/com/mantz_it/rfanalyzer/automation/CapturePolicy.java tests/pipeline/TestCapturePolicyV2.java app/src/main/java/com/mantz_it/rfanalyzer/automation/IqGap.java tests/pipeline/TestIqGap.java
           java -cp /tmp/v2-tests TestCapturePolicyV2
+          java -cp /tmp/v2-tests TestIqGap
           g++ -std=c++17 -Wall -Wextra -Werror tests/pipeline/test_iq_orientation.cpp -o /tmp/iq-test
           /tmp/iq-test
       - name: Test audio, IQ continuity, recovery and BT

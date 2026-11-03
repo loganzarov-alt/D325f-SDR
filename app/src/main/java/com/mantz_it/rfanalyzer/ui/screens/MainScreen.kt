@@ -67,6 +67,8 @@ fun MainScreen(analyzerSurface: AnalyzerSurface, viewModel: MainViewModel, appSt
     val isDrawerOpen = rememberSaveable { mutableStateOf(true) }
     val controlDrawerSide by appStateRepository.controlDrawerSide.stateFlow.collectAsState()
     val analyzerRunning by appStateRepository.analyzerRunning.stateFlow.collectAsState()
+    val exclusiveCapture by com.mantz_it.rfanalyzer.automation.CaptureSettings.busy.collectAsState()
+    val captureStatus by com.mantz_it.rfanalyzer.automation.CaptureSettings.status.collectAsState()
     val analyzerStartPending by appStateRepository.analyzerStartPending.stateFlow.collectAsState()
 
     CustomSideDrawerOverlay(
@@ -76,7 +78,9 @@ fun MainScreen(analyzerSurface: AnalyzerSurface, viewModel: MainViewModel, appSt
         } else DrawerSide.BOTTOM,
         content = {
             Box(modifier = Modifier.fillMaxSize()) {
-                AndroidView(
+                if(exclusiveCapture) {
+                    Text(captureStatus, modifier=Modifier.align(Alignment.Center).padding(24.dp))
+                } else AndroidView(
                     factory = { _ ->
                         Log.d("MainScreen", "AndroidView.factory: reusing surface: ${System.identityHashCode(analyzerSurface)} (parent: ${analyzerSurface.parent})")
                         (analyzerSurface.parent as? ViewGroup)?.removeView(analyzerSurface)
@@ -86,6 +90,7 @@ fun MainScreen(analyzerSurface: AnalyzerSurface, viewModel: MainViewModel, appSt
                 )
 
                 val stateLabel = when {
+                    exclusiveCapture -> "RUNNING"
                     analyzerRunning -> "RUNNING"
                     analyzerStartPending -> "STARTING"
                     else -> "STOPPED"

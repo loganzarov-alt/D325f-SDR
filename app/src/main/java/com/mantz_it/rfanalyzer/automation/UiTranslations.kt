@@ -5,6 +5,46 @@ import android.content.Context
 import com.mantz_it.rfanalyzer.R
 object UiTranslations {
     private val ids=mapOf(
+"Portrait" to R.string.extra_0,
+"Landscape" to R.string.extra_1,
+"Reverse Portrait" to R.string.extra_2,
+"Reverse Landscape" to R.string.extra_3,
+"Small" to R.string.extra_4,
+"Normal" to R.string.extra_5,
+"Large" to R.string.extra_6,
+"Right" to R.string.extra_7,
+"Left" to R.string.extra_8,
+"Disabled" to R.string.extra_9,
+"Seconds" to R.string.extra_10,
+"Minutes" to R.string.extra_11,
+"IQ File" to R.string.extra_12,
+"Sample rate / полоса" to R.string.extra_13,
+"Частота приёма" to R.string.extra_14,
+"Вход / SAW" to R.string.extra_15,
+"Усиление LNA" to R.string.extra_16,
+"Калибровка DVGA" to R.string.extra_17,
+"Профиль PLL" to R.string.extra_18,
+"Множитель" to R.string.extra_19,
+"Сброс усиления" to R.string.extra_20,
+"Сброс модема" to R.string.extra_21,
+"Производительность" to R.string.extra_22,
+"Выключено" to R.string.extra_23,
+"Очистка RAM + CPU" to R.string.extra_24,
+"Заморозка фона и System UI + CPU" to R.string.extra_25,
+"Применить канал" to R.string.extra_26,
+"Верхняя граница BT RX, МГц" to R.string.extra_27,
+"Смена канала — при остановленном приёме." to R.string.extra_28,
+"BT TX и режим производительности — в настройках" to R.string.extra_29,
+"Справка · профили приёма" to R.string.extra_30,
+"Диапазоны настройки PLL, МГц" to R.string.extra_31,
+"Профиль" to R.string.extra_32,
+"Light" to R.string.extra_33,
+"Dark" to R.string.extra_34,
+"System" to R.string.extra_35,
+"FM (narrow)" to R.string.extra_36,
+"FM (wide)" to R.string.extra_37,
+"Auto" to R.string.extra_38,
+"AUTO" to R.string.extra_39,
         "Source" to R.string.ui_0,
         "Demodulation" to R.string.ui_1,
         "Recording" to R.string.ui_2,
@@ -77,5 +117,12 @@ object UiTranslations {
         "storage-error" to R.string.ui_69,
         "sensor-error" to R.string.ui_70
     )
-    fun text(c: Context,s: String): String = ids[s]?.let { c.getString(it) } ?: s
+    fun text(c: Context,s: String): String {
+        ids[s.trim()]?.let { return c.getString(it) }
+        // Legacy controls append units outside their translated label.
+        ids.keys.sortedByDescending { it.length }.firstOrNull { s.startsWith(it + " (") }?.let {
+            return c.getString(ids.getValue(it)) + s.substring(it.length)
+        }
+        return s
+    }
 }

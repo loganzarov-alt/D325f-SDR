@@ -24,8 +24,8 @@ outside git. CI here intentionally produces test-signed artifacts only; no publi
 release or signing secret is created by the build workflow. Preserve device data
 before changing installation/signing arrangements.
 
-Package ID is `io.github.loganzarov_alt.d325fsdr`, versionName `1.0.0`,
-versionCode `1`. It installs separately from the development app; there is no
+Package ID is `io.github.loganzarov_alt.d325fsdr`, versionName `2.0.0`,
+versionCode `20000`. It installs separately from the development app; there is no
 in-place upgrade or automatic settings import. Existing IQ files can be opened
 with the system file picker. Internal Java package names retain upstream names
 for provenance. Legacy recording-format IDs remain readable; CI8 maps explicitly
@@ -45,3 +45,5 @@ qemu-arm native/from-source/build/oracle native/from-source/reference/lg_stream-
 
 This runs 4,272 cases against mocked hardware calls. CI compiles the oracle but
 does not claim to run the differential cases without the external reference.
+
+Version 2.0 personal validation details: [RELEASE-2.0.md](RELEASE-2.0.md).
