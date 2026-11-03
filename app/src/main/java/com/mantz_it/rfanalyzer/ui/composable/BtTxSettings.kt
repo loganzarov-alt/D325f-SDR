@@ -6,6 +6,7 @@ package com.mantz_it.rfanalyzer.ui.composable
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
+import com.mantz_it.rfanalyzer.automation.LocalizedText as Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -29,6 +30,13 @@ fun BtTxSettings(frequency: Long = Long.MAX_VALUE) {
     var busy by remember { mutableStateOf(false) }
     LaunchedEffect(Unit) {
         runCatching { withContext(Dispatchers.IO) { BtCwController.get(context).power } }.onSuccess { power = it; channelText = BtCwController.getChannel().toString() }
+    }
+    LaunchedEffect(frequency) {
+        if (frequency < 100_000_000L && BtCwController.getChannel() > 30 && !captureBusy) {
+            runCatching { withContext(Dispatchers.IO) { BtCwController.get(context).enforceChannelForRf(frequency) } }
+                .onSuccess { channelText = "0" }
+                .onFailure { status = it.message ?: "BT error" }
+        }
     }
     OutlinedBox(label = "BT TX") {
         Column(Modifier.padding(12.dp)) {

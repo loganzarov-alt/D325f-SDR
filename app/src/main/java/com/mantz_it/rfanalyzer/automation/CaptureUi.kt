@@ -63,7 +63,8 @@ object AppLanguage {
     var streaming by remember { mutableStateOf(p.getBoolean("stream",false)) }
     var port by remember { mutableStateOf(p.getInt("port",1234).toString()) }
     var error by remember { mutableStateOf("") }
-    val locked=running || pending || busy
+    val recording by a.recordingRunning.stateFlow.collectAsState()
+    val locked=running || pending || busy || recording
     Column {
         Row { Checkbox(invert,{invert=it;p.edit().putBoolean("invert",it).commit()},enabled=!locked);Text(stringResource(R.string.v2_invert)) }
         Row { Checkbox(streaming,{streaming=it;p.edit().putBoolean("stream",it).commit()},enabled=!locked);Text(stringResource(R.string.v2_stream)) }

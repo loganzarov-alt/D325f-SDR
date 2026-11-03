@@ -16,7 +16,12 @@ import java.net.*
 import kotlin.math.*
 
 /** Owns the modem independently of Activities. No sticky restart or persisted thermal latch. */
+@dagger.hilt.android.AndroidEntryPoint
 class CaptureService : Service() {
+    @javax.inject.Inject lateinit var recordingDao: com.mantz_it.rfanalyzer.database.RecordingDao
+    override fun attachBaseContext(base: Context) { super.attachBaseContext(AppLanguage.wrap(base)) }
+    private var recordingFile: File? = null
+    private var recordingRaw: FileOutputStream? = null
     companion object { const val STOP = "capture.stop" }
     private var worker: Thread? = null
     private var wake: PowerManager.WakeLock? = null
@@ -95,7 +100,9 @@ class CaptureService : Service() {
             override fun onIQSourceReady(source: IQSourceInterface) { ready.countDown() }
             override fun onIQSourceError(source: IQSourceInterface,message: String) { error=message; ready.countDown() }
         })
-        check(ready.await(20,TimeUnit.SECONDS) && s.isOpen) { error ?: "Opening modem timed out" }
+        if(!ready.await(20,TimeUnit.SECONDS) || !s.isOpen) {
+            s.close(); throw IOException(error ?: "Opening modem timed out")
+        }
         val bt=BtCwController.get(this)
         bt.stop(); bt.setChannel(if(t.frequency<100_000_000 && t.btChannel>30)0 else t.btChannel); bt.setPower(t.btPower)
         // Session uses its own BT boundary; restore the user's preference on completion.
@@ -121,7 +128,9 @@ class CaptureService : Service() {
         check(directory.isDirectory || directory.mkdirs()) { "Cannot create recording folder" }
         val name="${t.start}_${t.frequency}Hz_${t.rate}Sps_CI8_${t.id.take(8)}.iq"
         val f=File(directory,name); check(f.createNewFile()) { "Recording already exists" }
-        return BufferedOutputStream(FileOutputStream(f),1024*1024)
+        recordingFile=f
+        val raw=FileOutputStream(f);recordingRaw=raw
+        return BufferedOutputStream(raw,1024*1024)
     }
     private data class Packet(val bytes: ByteArray,val at: Long)
     private fun automate(t: CaptureTask) {
@@ -133,6 +142,7 @@ class CaptureService : Service() {
         val varFlag=VolatileBox()
         var stream: BufferedOutputStream?=null
         var firstAt=0L; var written=0L; var failure=false; var storageError=false
+        recordingFile=null;recordingRaw=null
         val zero=ByteArray(65536)
         var encoder=Encoder(t.rate)
         fun zeros(until: Long) {
@@ -202,7 +212,14 @@ class CaptureService : Service() {
             varFlag.done=true
             capture.join(30_000)
             if((capture.isAlive || !varFlag.closed) && !stopped()) failure=true
-            runCatching { stream?.flush();stream?.close() }.onFailure { storageError=true }
+            runCatching { if(stream!=null) { stream!!.flush();recordingRaw?.fd?.sync();stream!!.close() } }.onFailure { storageError=true }
+            recordingFile?.let { file ->
+                runCatching { kotlinx.coroutines.runBlocking {
+                    recordingDao.insert(com.mantz_it.rfanalyzer.database.Recording(name="Automation",frequency=t.frequency,
+                        sampleRate=t.rate.toLong(),date=t.start,fileFormat=com.mantz_it.rfanalyzer.ui.composable.FilesourceFileFormat.CI8,
+                        sizeInBytes=file.length(),filePath=file.absolutePath,favorite=false))
+                } }.onFailure { storageError=true }
+            }
             encoder.close()
             getSharedPreferences("bt_rx_limit",0).edit().putLong("upper_hz",initialBtLimit).commit();BtRxLimit.reload()
         }

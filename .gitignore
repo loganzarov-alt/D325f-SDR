@@ -13,3 +13,9 @@ local.properties
 build_site/
 
 native/from-source/reference/lg_stream-rxfix3
+
+# Private distribution signing material must never be committed.
+*.p12
+*.pfx
+*signing-key-PRIVATE*
+credentials.json

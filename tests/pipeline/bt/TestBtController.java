@@ -7,7 +7,7 @@ public class TestBtController {
   BtCwController c=BtCwController.get(new android.content.Context());
   try {
    if(c.getChannel()!=30)throw new AssertionError("Default channel must be 30");
-   if(c.getPower()!=9)throw new AssertionError("Default power must be max");
+   if(c.getPower()!=7)throw new AssertionError("Default power must be 7");
    long begin=System.nanoTime();
    c.configure(true);
    if((System.nanoTime()-begin)/1000000<550)throw new AssertionError("CW started before Bluetooth OFF");
@@ -30,6 +30,12 @@ public class TestBtController {
    ctor.setAccessible(true);
    BtCwController restored=ctor.newInstance(new android.content.Context());
    if(restored.getPower()!=3||restored.getChannel()!=78)throw new AssertionError("TX settings not persisted");
+   restored.enforceChannelForRf(100_000_000L);
+   if(restored.getChannel()!=78)throw new AssertionError("100 MHz is not below the limit");
+   restored.enforceChannelForRf(99_999_999L);
+   if(restored.getChannel()!=0)throw new AssertionError("Below 100 MHz must reset channels above 30");
+   restored.setChannel(30);restored.enforceChannelForRf(1);
+   if(restored.getChannel()!=30)throw new AssertionError("Channel 30 must remain allowed");
    System.out.println("PASS: actual Java controller tolerates slow startup, sustains IQ, stops on loss and restarts cleanly");
   } finally {c.stop();}
  }

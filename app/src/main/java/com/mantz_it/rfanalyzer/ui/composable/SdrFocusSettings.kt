@@ -6,6 +6,7 @@ package com.mantz_it.rfanalyzer.ui.composable
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
+import com.mantz_it.rfanalyzer.automation.LocalizedText as Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext

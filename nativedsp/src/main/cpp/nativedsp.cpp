@@ -11,6 +11,7 @@
 #include "pffft.h"
 #include "spectrum_math.h"
 #include "ci8_unpack.h"
+#include "ci8_inversion.h"
 #include "ci8_mixer.h"
 
 #include <android/log.h>
@@ -325,6 +326,6 @@ Java_com_mantz_1it_nativedsp_NativeDsp_invertCi8(JNIEnv* env, jobject, jbyteArra
     const jsize n = env->GetArrayLength(raw);
     jbyte* bytes = env->GetByteArrayElements(raw, nullptr);
     if (!bytes) return;
-    for (jsize i=0; i+1<n; i+=2) std::swap(bytes[i],bytes[i+1]);
+    invertCi8Spectrum(reinterpret_cast<int8_t*>(bytes), static_cast<size_t>(n));
     env->ReleaseByteArrayElements(raw, bytes, 0);
 }

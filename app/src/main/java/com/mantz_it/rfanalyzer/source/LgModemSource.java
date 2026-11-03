@@ -334,7 +334,7 @@ public final class LgModemSource implements IQSourceInterface {
     }
 
     private String runRoot(File executable) throws IOException, InterruptedException {
-        return runRootCommand(executable.getAbsolutePath());
+        return runRootCommand("exec timeout -k 1 -s TERM 10 '" + executable.getAbsolutePath().replace("'", "'\\''") + "'");
     }
 
     private String runRootCommand(String command) throws IOException, InterruptedException {
@@ -375,7 +375,7 @@ public final class LgModemSource implements IQSourceInterface {
 
     @Override public synchronized boolean close() {
         stopSampling();
-        if (factoryHeld) restoreOnline();
+        if (online != null) { factoryHeld = true; restoreOnline(); }
         try { runRootCommand("start mpdecision 2>/dev/null; true"); } catch (Exception ignored) {}
         opened = false;
         return !factoryHeld;
