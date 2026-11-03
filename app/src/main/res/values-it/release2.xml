@@ -27,4 +27,5 @@
     <string name="v2_delete">Elimina</string>
     <string name="v2_listening">In attesa del PC</string>
     <string name="v2_bt_warning">Secondo le misure su questo dispositivo, i livelli 8–9 superano 10 mW. Uso sotto la propria responsabilità.</string>
+    <string name="v2_background">Consenti attività a schermo spento</string>
 </resources>

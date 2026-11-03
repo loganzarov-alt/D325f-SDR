@@ -27,4 +27,5 @@
     <string name="v2_delete">削除</string>
     <string name="v2_listening">PC の接続待ち</string>
     <string name="v2_bt_warning">この端末での測定ではレベル 8–9 は 10 mW を超えます。自己責任で使用してください。</string>
+    <string name="v2_background">画面オフ時の動作を許可</string>
 </resources>

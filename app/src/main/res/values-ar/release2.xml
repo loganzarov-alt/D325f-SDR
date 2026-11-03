@@ -27,4 +27,5 @@
     <string name="v2_delete">حذف</string>
     <string name="v2_listening">بانتظار الحاسوب</string>
     <string name="v2_bt_warning">وفق القياسات على هذا الجهاز، يتجاوز المستويان 8–9 قدرة 10 mW. الاستخدام على مسؤوليتك.</string>
+    <string name="v2_background">السماح بالعمل عند إطفاء الشاشة</string>
 </resources>

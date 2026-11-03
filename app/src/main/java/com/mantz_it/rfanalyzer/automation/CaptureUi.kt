@@ -55,6 +55,23 @@ object AppLanguage {
     } else Text(stringResource(R.string.v2_system_language))
 }
 
+@Composable fun BackgroundAccess() {
+    val c=LocalContext.current
+    var allowed by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
+        while(true) {
+            allowed=(c.getSystemService(Context.POWER_SERVICE) as android.os.PowerManager).isIgnoringBatteryOptimizations(c.packageName)
+            delay(1000)
+        }
+    }
+    if(!allowed) OutlinedButton(onClick={
+        runCatching {
+            c.startActivity(Intent(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+                android.net.Uri.parse("package:${c.packageName}")))
+        }.onFailure { c.startActivity(Intent(android.provider.Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)) }
+    }) { Text(stringResource(R.string.v2_background)) }
+}
+
 @Composable fun CaptureSourceControls(a: AppStateRepository) {
     val c=LocalContext.current;val p=CaptureSettings.prefs(c);val scope=rememberCoroutineScope()
     val running by a.analyzerRunning.stateFlow.collectAsState();val pending by a.analyzerStartPending.stateFlow.collectAsState()
@@ -69,6 +86,7 @@ object AppLanguage {
         Row { Checkbox(invert,{invert=it;p.edit().putBoolean("invert",it).commit()},enabled=!locked);Text(stringResource(R.string.v2_invert)) }
         Row { Checkbox(streaming,{streaming=it;p.edit().putBoolean("stream",it).commit()},enabled=!locked);Text(stringResource(R.string.v2_stream)) }
         if(streaming) {
+            BackgroundAccess()
             Text(stringResource(R.string.v2_stream_info))
             OutlinedTextField(port,{if(it.length<=5 && it.all(Char::isDigit))port=it},label={Text(stringResource(R.string.v2_port))},enabled=!locked)
             val addresses=remember { runCatching { Collections.list(java.net.NetworkInterface.getNetworkInterfaces()).flatMap { Collections.list(it.inetAddresses) }.filter { it is java.net.Inet4Address && !it.isLoopbackAddress }.joinToString { it.hostAddress ?: "" } }.getOrDefault("") }
@@ -104,6 +122,7 @@ object AppLanguage {
     var error by remember { mutableStateOf("") }
     LaunchedEffect(Unit) { while(true) { tasks=TaskStore.all(c);delay(1000) } }
     ScrollableColumnWithFadingEdge {
+        BackgroundAccess()
         Text(stringResource(R.string.v2_task_settings))
         OutlinedTextField(start,{start=it},label={Text(stringResource(R.string.v2_start_time))})
         Text(TimeZone.getDefault().id)

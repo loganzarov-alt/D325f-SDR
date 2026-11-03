@@ -304,11 +304,17 @@ class AnalyzerService : Service() {
         ReceiverFocus.resume()
         if (source != null && sourceKind != appStateRepository.sourceType.value) {
             stopAnalyzer(releaseSource = true)
+            if (!com.mantz_it.rfanalyzer.automation.CaptureSettings.acquire(this)) return false
         }
         startRequested = true
         Log.d(TAG, "startAnalyzer")
         if (source == null) {
-            if (!this.createSource()) return false
+            if (!this.createSource()) {
+                com.mantz_it.rfanalyzer.automation.CaptureSettings.release(this)
+                startRequested = false
+                appStateRepository.analyzerStartPending.set(false)
+                return false
+            }
         }
 
         // check if the source is open. if not, open it!
@@ -316,6 +322,8 @@ class AnalyzerService : Service() {
             if (!openSource()) {
                 Toast.makeText(this, "Source not available (${source?.getName()})", Toast.LENGTH_LONG).show()
                 source = null
+                startRequested = false
+                com.mantz_it.rfanalyzer.automation.CaptureSettings.release(this)
                 appStateRepository.analyzerStartPending.set(false)
                 return false
             }

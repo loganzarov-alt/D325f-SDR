@@ -27,4 +27,5 @@
     <string name="v2_delete">删除</string>
     <string name="v2_listening">等待电脑连接</string>
     <string name="v2_bt_warning">根据此设备的测量结果，8–9 档超过 10 mW。使用风险由您自行承担。</string>
+    <string name="v2_background">允许息屏运行</string>
 </resources>

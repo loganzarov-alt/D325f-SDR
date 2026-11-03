@@ -27,4 +27,5 @@
     <string name="v2_delete">Supprimer</string>
     <string name="v2_listening">En attente du PC</string>
     <string name="v2_bt_warning">Selon les mesures sur cet appareil, les niveaux 8–9 dépassent 10 mW. Utilisation sous votre responsabilité.</string>
+    <string name="v2_background">Autoriser le fonctionnement écran éteint</string>
 </resources>

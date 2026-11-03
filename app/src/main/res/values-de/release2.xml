@@ -27,4 +27,5 @@
     <string name="v2_delete">Löschen</string>
     <string name="v2_listening">Warten auf PC</string>
     <string name="v2_bt_warning">Messungen an diesem Gerät: Stufen 8–9 überschreiten 10 mW. Nutzung auf eigene Verantwortung.</string>
+    <string name="v2_background">Betrieb bei ausgeschaltetem Bildschirm erlauben</string>
 </resources>

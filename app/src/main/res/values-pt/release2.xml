@@ -27,4 +27,5 @@
     <string name="v2_delete">Excluir</string>
     <string name="v2_listening">Aguardando PC</string>
     <string name="v2_bt_warning">Conforme medições neste dispositivo, os níveis 8–9 excedem 10 mW. Uso sob sua responsabilidade.</string>
+    <string name="v2_background">Permitir atividade com a tela apagada</string>
 </resources>

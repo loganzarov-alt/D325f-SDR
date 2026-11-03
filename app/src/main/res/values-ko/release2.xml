@@ -27,4 +27,5 @@
     <string name="v2_delete">삭제</string>
     <string name="v2_listening">PC 연결 대기 중</string>
     <string name="v2_bt_warning">이 기기의 측정 결과 레벨 8–9는 10 mW를 초과합니다. 사용자 책임하에 사용하세요.</string>
+    <string name="v2_background">화면이 꺼진 상태에서 작동 허용</string>
 </resources>

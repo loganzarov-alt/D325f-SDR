@@ -27,4 +27,5 @@
     <string name="v2_delete">Удалить</string>
     <string name="v2_listening">Ожидание ПК</string>
     <string name="v2_bt_warning">По измерениям на этом устройстве уровни 8–9 превышают 10 мВт. Использование — под вашу ответственность.</string>
+    <string name="v2_background">Разрешить работу с выключенным экраном</string>
 </resources>

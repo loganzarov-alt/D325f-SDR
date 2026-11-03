@@ -27,4 +27,5 @@
     <string name="v2_delete">刪除</string>
     <string name="v2_listening">等待電腦連線</string>
     <string name="v2_bt_warning">根據此裝置的測量結果，8–9 檔超過 10 mW。使用風險由您自行承擔。</string>
+    <string name="v2_background">允許螢幕關閉時執行</string>
 </resources>

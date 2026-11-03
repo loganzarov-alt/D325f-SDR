@@ -27,4 +27,5 @@
     <string name="v2_delete">Delete</string>
     <string name="v2_listening">Waiting for PC</string>
     <string name="v2_bt_warning">Levels 8–9 exceed 10 mW according to measurements on this device. Use at your own responsibility.</string>
+    <string name="v2_background">Allow work with screen off</string>
 </resources>

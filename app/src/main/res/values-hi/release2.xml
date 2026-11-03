@@ -27,4 +27,5 @@
     <string name="v2_delete">हटाएँ</string>
     <string name="v2_listening">PC का इंतज़ार</string>
     <string name="v2_bt_warning">इस उपकरण पर माप के अनुसार स्तर 8–9 पर शक्ति 10 mW से अधिक है। अपने उत्तरदायित्व पर उपयोग करें।</string>
+    <string name="v2_background">स्क्रीन बंद होने पर काम करने दें</string>
 </resources>
