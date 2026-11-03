@@ -57,7 +57,7 @@ Layout of the published `boot.img`, for repacking with `mkbootimg`:
 - The kernel contains the strings added by this patch (`LG D325 IQ SMEM ready id=471`, `D325 IQ assign_mem unavailable`, `D325 modem IQ extent` and others).
 - The configuration embedded in the kernel (IKCONFIG) is **byte-identical** to
   [`d325f-kernel.config`](d325f-kernel.config).
-- The test phone runs the same build: identical `/proc/version`, the kernel log
+- My phone runs the same build: identical `/proc/version`, the kernel log
   line `pil-q6v5-mss fc880000.qcom,mss: D325 IQ assign_mem unavailable: 0`, and
   SMEM item 471 `allocated=1 size=131072` during reception.
 
@@ -77,7 +77,7 @@ attached to the
 [`kernel-6-source`](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/kernel-6-source)
 release next to `boot.img`.
 
-The ramdisk in `boot.img` is the LineageOS 14.1 userspace of the tested phone
+The ramdisk in `boot.img` is the LineageOS 14.1 userspace of my phone
 (init, adbd, healthd, SELinux policy, init scripts). It contains no D325f-specific
 scripts or root tools. These components are under Apache-2.0 and other AOSP
 licenses; their source is in the LineageOS cm-14.1 repositories. See

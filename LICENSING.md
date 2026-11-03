@@ -2,11 +2,11 @@
 
 The combined D325f SDR Android application is distributed under **GPL-3.0-or-later**;
 see `LICENSE`. RF Analyzer code remains available under its original
-**GPL-2.0-or-later** notices, preserved in source files and `COPYING`. We exercise
+**GPL-2.0-or-later** notices, preserved in source files and `COPYING`. I exercise
 that later-version option for the combined build, including Apache-2.0 dependencies.
 This is not a claim of ownership over upstream code.
 
-Project-specific additions and modifications supplied by Logan Zarov, including
+My project-specific additions and modifications, including
 custom userspace modem helpers and the new icon, are distributed under
 GPL-3.0-or-later unless a file states different terms. Reconstructed source is
 identified as such; it is not claimed to be the original missing source text.
@@ -15,7 +15,7 @@ This license does not grant rights over proprietary vendor firmware or libraries
 | Component | License / treatment | Provenance |
 | --- | --- | --- |
 | RF Analyzer-derived app and DSP code | GPL-2.0-or-later; combined build uses GPLv3+ | Dennis Mantz and contributors; original notices retained |
-| Project-specific app changes, helper code and original vector icon | GPL-3.0-or-later | Logan Zarov project; recovered native code identified in `docs/PROVENANCE.md` |
+| Project-specific app changes, helper code and original vector icon | GPL-3.0-or-later | My project (Logan Zarov); recovered native code identified in `docs/PROVENANCE.md` |
 | pffft / FFTPACK | permissive FFTPACK terms; full text in `LICENSES/PFFFT-FFTPACK.txt` | Julien Pommier; Paul Swarztrauber; UCAR/NCAR |
 | Maven runtime dependencies | component-specific terms, exact versions and notices inventoried | `docs/runtime-dependencies.json`, `LICENSES/runtime-notices/` |
 | NDK C++/compiler runtime portions linked into native code | LLVM Apache-2.0 WITH LLVM-exception; legacy MIT/NCSA and other notices preserved in `LICENSES/Android-NDK-LLVM-NOTICE.txt` | Exact NOTICE shipped with NDK 27.2.12479018; full toolchain notice retained, including components not necessarily linked |
@@ -25,8 +25,8 @@ This license does not grant rights over proprietary vendor firmware or libraries
 | Modem Patcher static musl/GCC runtime | MIT/BSD notices and GPLv3 with GCC Runtime Library Exception, as applicable | `modem-patcher/licenses/`; original musl source archive included |
 | Kernel patch and configuration in `kernel/` | GPL-2.0-only, as the Linux kernel | Patch against LineageOS android_kernel_lge_msm8226; full text in `LICENSES/GPL-2.0.txt` |
 | `boot.img` in release `kernel-6-source`: kernel and device tree | GPL-2.0-only | Built from `kernel/`; the patched source tree is attached to the same release (`D325f-SDR-kernel-6-full-source.tar.xz`) |
-| `boot.img`: ramdisk | Apache-2.0 and other AOSP/LineageOS licenses; text in `LICENSES/Apache-2.0.txt` | LineageOS 14.1 userspace of the tested phone (init, adbd, healthd, SELinux policy); source in the LineageOS cm-14.1 repositories |
-| Photographs, IQ plots and demo video in `docs/images/` and `docs/media/` | GPL-3.0-or-later, as part of the project documentation | Logan Zarov; recorded with the app on the test phone |
+| `boot.img`: ramdisk | Apache-2.0 and other AOSP/LineageOS licenses; text in `LICENSES/Apache-2.0.txt` | LineageOS 14.1 userspace of my phone (init, adbd, healthd, SELinux policy); source in the LineageOS cm-14.1 repositories |
+| Photographs, IQ plots and demo video in `docs/images/` and `docs/media/` | GPL-3.0-or-later, as part of the project documentation | Mine (Logan Zarov); recorded with the app on my test phone |
 | Qualcomm/LG firmware and system QMI libraries | proprietary/system components; not distributed here | supplied by the prepared phone |
 
 ## Redistribution
@@ -53,7 +53,7 @@ No libhackrf or libusb binary is packaged. Legacy file
 format identifiers remain solely to read existing recordings.
 
 The old `lg_stream` ELF is not distributed in the public tree: its exact original
-C source is unavailable. It may be extracted locally from the owner's reference
+C source is unavailable. It may be extracted locally from my reference
 APK for differential tests. Production helpers build from the provided C/ASM.
 The kernel changes are published as a patch with the full configuration in
 `kernel/`; the kernel binary is distributed only as `boot.img` in a release, with
@@ -63,8 +63,8 @@ key is included.
 ## Audit limits
 
 Dependency license declarations, embedded notices, source headers, asset hashes
-and the supplied provenance archive were inspected. The owner's authorship
-statements and supplied archives establish the project's claimed provenance;
+and the supplied provenance archive were inspected. My authorship
+statements and the archives I supplied establish the project's claimed provenance;
 this review cannot independently prove authorship of every recovered line or
 provide trademark/patent clearance. No full vendor firmware source is claimed.
 

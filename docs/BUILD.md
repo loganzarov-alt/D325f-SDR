@@ -33,7 +33,7 @@ to signed 8-bit samples.
 
 ## Optional reference-based native test
 
-The original reference ELF is deliberately not distributed. Supply the owner's
+The original reference ELF is deliberately not distributed. Supply my
 original APK locally:
 
 ```sh

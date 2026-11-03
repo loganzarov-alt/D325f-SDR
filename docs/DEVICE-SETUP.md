@@ -2,10 +2,10 @@
 
 [Русский](#по-русски)
 
-Tested setup: one LG D325 (`w5ds`) with LineageOS 14.1, TWRP and root, stock
-baseband **M8610B-AAAANAZM-1.0.6047**. Logan Zarov confirmed on
+My tested setup: one LG D325 (`w5ds`) with LineageOS 14.1, TWRP and root, stock
+baseband **M8610B-AAAANAZM-1.0.6047**. I confirmed on
 **24 October 2026** that D325f SDR 1.0.0 and Modem Patcher 1.1.0 work on it.
-The procedure has not yet been repeated on a second phone.
+I have not yet repeated the procedure on a second phone.
 
 The steps below are in order.
 
@@ -25,7 +25,7 @@ The kernel must allocate SMEM item 471 for the modem's IQ ring.
 d0c827f232e613bff481fcc5405cb962aaca30effc50ba21277453ab1f35ced0  boot.img
 ```
 
-It is the complete boot image of the tested phone: kernel build #6
+It is the complete boot image of my phone: kernel build #6
 (Linux 3.4.0+, GCC 16.1.0, 13 September 2026 12:36:46 UTC) with the
 LineageOS 14.1 ramdisk. The kernel contains the D325 IQ/SMEM 471 patch strings,
 and its embedded configuration is byte-identical to
@@ -85,10 +85,10 @@ partition or flash TWRP; the device confirmation above is separate.
 
 ## По-русски
 
-Проверенная установка: один LG D325 (`w5ds`) с LineageOS 14.1, TWRP и root,
+Моя проверенная установка: один LG D325 (`w5ds`) с LineageOS 14.1, TWRP и root,
 стоковый baseband **M8610B-AAAANAZM-1.0.6047**. **24 октября 2026 года**
-Logan Zarov подтвердил работу D325f SDR 1.0.0 и Modem Patcher 1.1.0.
-На втором телефоне процедура пока не повторялась.
+я подтвердил работу D325f SDR 1.0.0 и Modem Patcher 1.1.0.
+На втором телефоне я процедуру пока не повторял.
 
 Шаги выполняются по порядку.
 
@@ -103,7 +103,7 @@ Logan Zarov подтвердил работу D325f SDR 1.0.0 и Modem Patcher 1
 [Скачать boot.img](https://github.com/loganzarov-alt/D325f-SDR/releases/download/kernel-6-source/boot.img)
 (релиз `kernel-6-source`, 23 068 672 байта, SHA-256 выше).
 
-Это полный boot-образ проверенного телефона: ядро сборки #6 (Linux 3.4.0+,
+Это полный boot-образ моего телефона: ядро сборки #6 (Linux 3.4.0+,
 GCC 16.1.0, 13.09.2026 12:36:46 UTC) и ramdisk LineageOS 14.1. В ядре есть строки
 патча D325 IQ/SMEM 471, а встроенный в него конфиг побайтно совпадает с
 [`kernel/d325f-kernel.config`](../kernel/d325f-kernel.config). Исходники —

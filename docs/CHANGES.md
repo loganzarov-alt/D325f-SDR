@@ -11,9 +11,9 @@
 - Include the NDK LLVM runtime notice for statically linked C++ runtime portions.
 - Native helper processing source is unchanged from the working reconstructed
   baseline. DSP code differs only by its dated modification notice.
-- Published APK tested on the modified LG D325 by Logan Zarov; working operation
-  confirmed on 2026-10-24.
-- Hardware photographs and the author's B8/B1 wire identification documented in
+- I tested the published APK on my modified LG D325 and confirmed it works
+  on 2026-10-24.
+- My hardware photographs and B8/B1 wire identification documented in
   [HARDWARE.md](HARDWARE.md).
 
 Modified upstream-derived source files (including changes carried over from the

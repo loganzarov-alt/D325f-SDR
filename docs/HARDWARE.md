@@ -1,6 +1,6 @@
 # Hardware modification — B8 / B1
 
-Modified LG D325 used with D325f SDR. Photographs: **Logan Zarov**.
+My modified LG D325 used with D325f SDR. Photographs are mine (**Logan Zarov**).
 
 ## Обозначения / Identification
 

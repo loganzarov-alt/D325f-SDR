@@ -46,8 +46,8 @@ baseband M8610B-AAAANAZM-1.0.6047. Step-by-step guide:
 4. **App**: install [D325f SDR 1.0.0](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/v1.0.0) (versionCode 1, ARMv7,
    Android 7.1+) and grant root.
 
-Logan Zarov confirmed on 24 October 2026 that the app and the modem tools work
-on the tested phone. The procedure has not yet been repeated on a second phone.
+I confirmed on 24 October 2026 that the app and the modem tools work
+on my phone. I have not yet repeated the procedure on a second phone.
 The software steps are reversible: Boot backup, Restore stock or the saved modem dump.
 
 ## Build
