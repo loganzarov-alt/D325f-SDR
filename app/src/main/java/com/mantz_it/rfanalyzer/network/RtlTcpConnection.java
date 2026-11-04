@@ -7,7 +7,8 @@ import java.net.*;
 public final class RtlTcpConnection implements Closeable {
  private final Socket socket=new Socket();private DataInputStream input;private DataOutputStream output;
  public void connect(String host,int port,long frequency,int rate,int gain,boolean agc)throws IOException {
-  socket.connect(new InetSocketAddress(host,port),8000);socket.setTcpNoDelay(true);socket.setSoTimeout(60000);
+  if(host==null||host.trim().isEmpty()||port<1||port>65535)throw new IOException("Enter a valid server address and port");
+  socket.connect(new InetSocketAddress(host,port),8000);socket.setTcpNoDelay(true);socket.setSoTimeout(90000);
   input=new DataInputStream(new BufferedInputStream(socket.getInputStream(),65536));output=new DataOutputStream(socket.getOutputStream());
   if(input.readInt()!=0x52544c30)throw new IOException("Not an rtl_tcp server (RTL0 greeting missing)");
   input.readInt();input.readInt();

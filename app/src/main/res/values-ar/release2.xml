@@ -11,7 +11,7 @@
     <string name="v2_system_language">استخدام لغة النظام</string>
     <string name="v2_invert">عكس طيف IQ</string>
     <string name="v2_stream">بث IQ عبر Wi-Fi</string>
-    <string name="v2_stream_info">rtl_tcp • CU8 • 1.28 / 2.56 / 7.68 MS/s. التسجيل والطيف المحليان معطلان.</string>
+    <string name="v2_stream_info">rtl_tcp • CU8 • 0.25–7.68 MS/s. التسجيل والطيف المحليان معطلان.</string>
     <string name="v2_port">منفذ TCP</string>
     <string name="v2_start_stream">بدء البث</string>
     <string name="v2_task_settings">مهام لمرة واحدة. تُنسخ إعدادات الكسب وعرض النطاق والعكس وBT من Source.</string>

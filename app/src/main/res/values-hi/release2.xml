@@ -11,7 +11,7 @@
     <string name="v2_system_language">सिस्टम की भाषा इस्तेमाल करें</string>
     <string name="v2_invert">IQ स्पेक्ट्रम उलटें</string>
     <string name="v2_stream">Wi-Fi पर IQ स्ट्रीमिंग</string>
-    <string name="v2_stream_info">rtl_tcp • CU8 • 1.28 / 2.56 / 7.68 MS/s. स्थानीय रिकॉर्डिंग और स्पेक्ट्रम बंद हैं।</string>
+    <string name="v2_stream_info">rtl_tcp • CU8 • 0.25–7.68 MS/s. स्थानीय रिकॉर्डिंग और स्पेक्ट्रम बंद हैं।</string>
     <string name="v2_port">TCP पोर्ट</string>
     <string name="v2_start_stream">स्ट्रीमिंग शुरू करें</string>
     <string name="v2_task_settings">एक बार के कार्य। गेन, बैंडविड्थ, इन्वर्ज़न और BT सेटिंग Source से कॉपी होती हैं।</string>

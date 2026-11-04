@@ -19,9 +19,10 @@ public class TestRtlTcp {
   try(ServerSocket listener=new ServerSocket(0)) {
    ExecutorService exec=Executors.newSingleThreadExecutor();
    Future<?> server=exec.submit(()->{try{for(int iteration=0;iteration<2;iteration++)try(Socket socket=listener.accept()){
+    socket.setSoTimeout(5000);
     ByteArrayOutputStream hello=new ByteArrayOutputStream();RtlTcpControl.greeting(hello);for(byte b:hello.toByteArray()){socket.getOutputStream().write(b);socket.getOutputStream().flush();}
     DataInputStream input=new DataInputStream(socket.getInputStream());RtlTcpControl commands=new RtlTcpControl(1,1280000);
-    for(int i=0;i<6;i++)commands.apply(input.readUnsignedByte(),Integer.toUnsignedLong(input.readInt()));
+    for(int i=0;i<5;i++)commands.apply(input.readUnsignedByte(),Integer.toUnsignedLong(input.readInt()));
     check(commands.snapshot().rate==2400000);check(commands.snapshot().frequency==145800000);check(commands.snapshot().agc);
     byte[] bytes={0,127,(byte)128,(byte)255,42,99};for(byte b:bytes){socket.getOutputStream().write(b);socket.getOutputStream().flush();}
    }}catch(Exception e){throw new RuntimeException(e);}});

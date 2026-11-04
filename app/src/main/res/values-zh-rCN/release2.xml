@@ -11,7 +11,7 @@
     <string name="v2_system_language">使用系统语言</string>
     <string name="v2_invert">反转 IQ 频谱</string>
     <string name="v2_stream">Wi-Fi IQ 串流</string>
-    <string name="v2_stream_info">rtl_tcp • CU8 • 1.28 / 2.56 / 7.68 MS/s。本地录制和频谱显示已禁用。</string>
+    <string name="v2_stream_info">rtl_tcp • CU8 • 0.25–7.68 MS/s。本地录制和频谱显示已禁用。</string>
     <string name="v2_port">TCP 端口</string>
     <string name="v2_start_stream">开始串流</string>
     <string name="v2_task_settings">单次任务。增益、带宽、反转和 BT 设置从 Source 复制。</string>

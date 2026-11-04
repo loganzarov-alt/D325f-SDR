@@ -11,7 +11,7 @@
     <string name="v2_system_language">Usar idioma do sistema</string>
     <string name="v2_invert">Inverter espectro IQ</string>
     <string name="v2_stream">Transmissão IQ por Wi-Fi</string>
-    <string name="v2_stream_info">rtl_tcp • CU8 • 1,28 / 2,56 / 7,68 MS/s. Gravação e espectro locais desativados.</string>
+    <string name="v2_stream_info">rtl_tcp • CU8 • 0,25–7,68 MS/s. Gravação e espectro locais desativados.</string>
     <string name="v2_port">Porta TCP</string>
     <string name="v2_start_stream">Iniciar transmissão</string>
     <string name="v2_task_settings">Tarefas únicas. Ganho, largura de banda, inversão e BT são copiados de Source.</string>

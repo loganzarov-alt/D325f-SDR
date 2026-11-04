@@ -11,7 +11,7 @@
     <string name="v2_system_language">시스템 언어 사용</string>
     <string name="v2_invert">IQ 스펙트럼 반전</string>
     <string name="v2_stream">Wi-Fi IQ 스트리밍</string>
-    <string name="v2_stream_info">rtl_tcp • CU8 • 1.28 / 2.56 / 7.68 MS/s. 로컬 녹음과 스펙트럼 표시가 비활성화됩니다.</string>
+    <string name="v2_stream_info">rtl_tcp • CU8 • 0.25–7.68 MS/s. 로컬 녹음과 스펙트럼 표시가 비활성화됩니다.</string>
     <string name="v2_port">TCP 포트</string>
     <string name="v2_start_stream">스트리밍 시작</string>
     <string name="v2_task_settings">일회성 작업. 이득, 대역폭, 반전 및 BT 설정은 Source에서 복사됩니다.</string>

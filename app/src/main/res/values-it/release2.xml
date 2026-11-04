@@ -11,7 +11,7 @@
     <string name="v2_system_language">Usa lingua di sistema</string>
     <string name="v2_invert">Inverti spettro IQ</string>
     <string name="v2_stream">Streaming IQ via Wi-Fi</string>
-    <string name="v2_stream_info">rtl_tcp • CU8 • 1,28 / 2,56 / 7,68 MS/s. Registrazione e spettro locali disattivati.</string>
+    <string name="v2_stream_info">rtl_tcp • CU8 • 0,25–7,68 MS/s. Registrazione e spettro locali disattivati.</string>
     <string name="v2_port">Porta TCP</string>
     <string name="v2_start_stream">Avvia streaming</string>
     <string name="v2_task_settings">Attività singole. Guadagno, banda, inversione e BT vengono copiati da Source.</string>

@@ -11,7 +11,7 @@
     <string name="v2_system_language">Use system language</string>
     <string name="v2_invert">Invert IQ spectrum</string>
     <string name="v2_stream">Wi-Fi IQ streaming</string>
-    <string name="v2_stream_info">rtl_tcp • CU8 • 1.28 / 2.56 / 7.68 MS/s. Local recording and spectrum are disabled.</string>
+    <string name="v2_stream_info">rtl_tcp • CU8 • 0.25–7.68 MS/s. Local recording and spectrum are disabled.</string>
     <string name="v2_port">TCP port</string>
     <string name="v2_start_stream">Start streaming</string>
     <string name="v2_task_settings">One-time tasks. Gain, bandwidth, inversion and BT settings are copied from Source.</string>

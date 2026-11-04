@@ -277,7 +277,7 @@ class CaptureService : Service() {
             while(!stopped()) {
                 CaptureSettings.status.value="${getString(R.string.v2_listening)} :${socket.localPort} $lastError"
                 val c=try { socket.accept() } catch(e: SocketTimeoutException) { continue }
-                client=c;c.tcpNoDelay=true;c.sendBufferSize=262144
+                lastError="";client=c;c.tcpNoDelay=true;c.sendBufferSize=262144
                 val controls=com.mantz_it.rfanalyzer.network.RtlTcpControl(t.frequency,t.rate)
                 var reader: Thread?=null;var s: LgModemSource?=null
                 val dsp=NativeDsp();var handle=0L;var rate=0

@@ -16,7 +16,7 @@ import com.mantz_it.rfanalyzer.R
  var gain by remember { mutableStateOf((prefs.getInt("gain",0)/10.0).toString()) }
  var agc by remember { mutableStateOf(prefs.getBoolean("agc",false)) }
  OutlinedTextField(value=host,onValueChange={host=it;prefs.edit().putString("host",it.trim()).apply()},label={Text(stringResource(R.string.net_host))},singleLine=true,enabled=enabled,modifier=Modifier.fillMaxWidth())
- OutlinedTextField(value=port,onValueChange={port=it;it.toIntOrNull()?.takeIf { n->n in 1..65535 }?.let { n->prefs.edit().putInt("port",n).apply() }},label={Text(stringResource(R.string.net_port))},isError=port.toIntOrNull() !in 1..65535,singleLine=true,enabled=enabled)
+ OutlinedTextField(value=port,onValueChange={port=it;prefs.edit().putInt("port",it.toIntOrNull()?.takeIf { n->n in 1..65535 } ?: -1).apply()},label={Text(stringResource(R.string.net_port))},isError=port.toIntOrNull()?.let { it in 1..65535 } != true,singleLine=true,enabled=enabled)
  OutlinedTextField(value=gain,onValueChange={gain=it;it.toDoubleOrNull()?.takeIf { n->n in -60.0..60.0 }?.let { n->prefs.edit().putInt("gain",(n*10).toInt()).apply() }},label={Text(stringResource(R.string.net_gain))},singleLine=true,enabled=enabled&&!agc)
  Row { Checkbox(checked=agc,onCheckedChange={agc=it;prefs.edit().putBoolean("agc",it).apply()},enabled=enabled);Text(stringResource(R.string.net_agc)) }
  Text(stringResource(R.string.net_help))

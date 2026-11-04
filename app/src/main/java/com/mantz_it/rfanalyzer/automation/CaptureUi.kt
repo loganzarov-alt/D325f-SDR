@@ -89,6 +89,7 @@ object AppLanguage {
         if(streaming) {
             BackgroundAccess()
             Text(stringResource(R.string.v2_stream_info))
+            Text("SDR++: RTL-TCP · SDR#: RTL-SDR TCP · SDRangel: Remote TCP · SatDump: RTL-TCP")
             OutlinedTextField(port,{if(it.length<=5 && it.all(Char::isDigit))port=it},label={Text(stringResource(R.string.v2_port))},enabled=!locked)
             val addresses=remember { runCatching { Collections.list(java.net.NetworkInterface.getNetworkInterfaces()).flatMap { Collections.list(it.inetAddresses) }.filter { it is java.net.Inet4Address && !it.isLoopbackAddress }.joinToString { it.hostAddress ?: "" } }.getOrDefault("") }
             Text("IP: $addresses")

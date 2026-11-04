@@ -11,7 +11,7 @@
     <string name="v2_system_language">Как в системе</string>
     <string name="v2_invert">Инверсия спектра IQ</string>
     <string name="v2_stream">Стриминг IQ по Wi-Fi</string>
-    <string name="v2_stream_info">rtl_tcp • CU8 • 1,28 / 2,56 / 7,68 MS/s. Запись и спектр на LG отключены.</string>
+    <string name="v2_stream_info">rtl_tcp • CU8 • 0,25–7,68 MS/s. Запись и спектр на LG отключены.</string>
     <string name="v2_port">TCP-порт</string>
     <string name="v2_start_stream">Запустить стриминг</string>
     <string name="v2_task_settings">Однократные задачи. Усиление, полоса, инверсия и настройки BT копируются из Source.</string>

@@ -28,7 +28,7 @@ code+='    )\n}\n'
 # Reuse translated UI and feature descriptions in the manual to prevent stale duplicate text.
 pages={
 'index.html':('app_name',['l10n_intro','l10n_about_desc']),
-'sdr-source.html':('ui_7',['l10n_intro','l10n_formats','l10n_auto_help','l10n_bt_limit_help','l10n_bt_formula','v2_invert','v2_stream_info','l10n_rate_select','l10n_bands']),
+'sdr-source.html':('ui_7',['l10n_intro','l10n_formats','l10n_auto_help','l10n_bt_limit_help','l10n_bt_formula','v2_invert','v2_stream_info','net_help','l10n_rate_select','l10n_bands']),
 'demodulation.html':('ui_1',['l10n_about_desc','l10n_squelch_help','l10n_center_help','l10n_frozen']),
 'fft.html':('ui_3',['l10n_average_help','l10n_peak_help','l10n_relative_help','l10n_dc_help','l10n_bands']),
 'recording.html':('ui_2',['l10n_bands','l10n_record_squelch_help','l10n_formats','v2_task_settings','v2_thermal_info','v2_background']),

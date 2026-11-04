@@ -11,7 +11,7 @@
     <string name="v2_system_language">Systemsprache verwenden</string>
     <string name="v2_invert">IQ-Spektrum invertieren</string>
     <string name="v2_stream">IQ-Streaming über WLAN</string>
-    <string name="v2_stream_info">rtl_tcp • CU8 • 1,28 / 2,56 / 7,68 MS/s. Lokale Aufnahme und Spektrum sind deaktiviert.</string>
+    <string name="v2_stream_info">rtl_tcp • CU8 • 0,25–7,68 MS/s. Lokale Aufnahme und Spektrum sind deaktiviert.</string>
     <string name="v2_port">TCP-Port</string>
     <string name="v2_start_stream">Streaming starten</string>
     <string name="v2_task_settings">Einmalige Aufgaben. Verstärkung, Bandbreite, Invertierung und BT werden aus Source übernommen.</string>
