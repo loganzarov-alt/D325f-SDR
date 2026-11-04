@@ -1,0 +1,7 @@
+<resources>
+    <string name="net_host">Endereço LG / servidor</string>
+    <string name="net_port">Porta</string>
+    <string name="net_gain">Ganho por software (dB)</string>
+    <string name="net_agc">AGC por software</string>
+    <string name="net_help">Ative a transmissão no LG. Introduza o IP Wi-Fi e a porta. Comece com 1,024 MSps. O ganho por software não melhora a sensibilidade RF.</string>
+</resources>

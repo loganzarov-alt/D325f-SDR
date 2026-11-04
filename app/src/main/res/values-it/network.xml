@@ -1,0 +1,7 @@
+<resources>
+    <string name="net_host">Indirizzo LG / server</string>
+    <string name="net_port">Porta</string>
+    <string name="net_gain">Guadagno software (dB)</string>
+    <string name="net_agc">AGC software</string>
+    <string name="net_help">Attivare lo streaming su LG. Inserire IP Wi-Fi e porta. Iniziare con 1,024 MSps. Il guadagno software non migliora la sensibilità RF.</string>
+</resources>

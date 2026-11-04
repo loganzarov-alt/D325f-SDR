@@ -1,0 +1,7 @@
+<resources>
+    <string name="net_host">LG 地址 / 主机名</string>
+    <string name="net_port">端口</string>
+    <string name="net_gain">软件增益 (dB)</string>
+    <string name="net_agc">软件自动增益</string>
+    <string name="net_help">在 LG 上启用流传输。输入其 Wi-Fi IP 和端口。从 1.024 MSps 开始。软件增益不会提高射频灵敏度。</string>
+</resources>

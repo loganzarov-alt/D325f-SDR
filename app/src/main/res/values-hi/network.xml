@@ -1,0 +1,7 @@
+<resources>
+    <string name="net_host">LG पता / होस्ट नाम</string>
+    <string name="net_port">पोर्ट</string>
+    <string name="net_gain">सॉफ़्टवेयर गेन (dB)</string>
+    <string name="net_agc">सॉफ़्टवेयर AGC</string>
+    <string name="net_help">LG पर स्ट्रीमिंग चालू करें। उसका Wi-Fi IP और पोर्ट दर्ज करें। 1.024 MSps से शुरू करें। सॉफ़्टवेयर गेन RF संवेदनशीलता नहीं बढ़ाता।</string>
+</resources>

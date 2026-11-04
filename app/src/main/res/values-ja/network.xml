@@ -1,0 +1,7 @@
+<resources>
+    <string name="net_host">LG アドレス / ホスト名</string>
+    <string name="net_port">ポート</string>
+    <string name="net_gain">ソフトウェアゲイン (dB)</string>
+    <string name="net_agc">ソフトウェア AGC</string>
+    <string name="net_help">LG でストリーミングを有効にし、Wi-Fi IP とポートを入力します。1.024 MSps から開始してください。ソフトウェアゲインで RF 感度は改善しません。</string>
+</resources>

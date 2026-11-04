@@ -66,7 +66,8 @@ import com.mantz_it.rfanalyzer.source.LgModemSource
 
 enum class SourceType(val displayName: String, val availableSampleRates: List<Long>) {
     LGMODEM("LG D325 · SDR", listOf(7680000, 2560000, 1280000)),
-    FILESOURCE("IQ File", emptyList());
+    FILESOURCE("IQ File", emptyList()),
+    RTLTCP("RTL-TCP", com.mantz_it.rfanalyzer.source.NetworkIQSource.RATES.map { it.toLong() });
 
     companion object {
         // v20058 stored LG=0, HackRF=1, RTL-SDR=2, File=3.
@@ -137,12 +138,12 @@ fun SourceTabComposable(
     appState: com.mantz_it.rfanalyzer.database.AppStateRepository? = null
 ) {
     ScrollableColumnWithFadingEdge {
-        appState?.let { com.mantz_it.rfanalyzer.automation.CaptureSourceControls(it) }
+        if(!com.mantz_it.rfanalyzer.BuildConfig.NETWORK_CLIENT && sourceType==SourceType.LGMODEM) appState?.let { com.mantz_it.rfanalyzer.automation.CaptureSourceControls(it) }
         Row(modifier = Modifier.fillMaxWidth()) {
-            OutlinedEnumDropDown(
+            OutlinedListDropDown(
                 label = "Signal Source",
-                selectedEnum = sourceType,
-                enumClass = SourceType::class,
+                selectedItem = sourceType,
+                items = SourceType.entries.filter { !com.mantz_it.rfanalyzer.BuildConfig.NETWORK_CLIENT || it!=SourceType.LGMODEM },
                 getDisplayName = { it.displayName },
                 onSelectionChanged = sourceTabActions.onSourceTypeChanged,
                 enabled = !analyzerRunning && !analyzerStartPending,
@@ -262,6 +263,15 @@ fun SourceTabComposable(
             }
             
             
+            SourceType.RTLTCP -> {
+                FrequencyChooser(label="Tune-Frequency",unit="Hz",currentFrequency=frequency,
+                    onFrequencyChanged=sourceTabActions.onFrequencyChanged,minFrequency=1L,maxFrequency=4294967295L,
+                    enabled=!analyzerStartPending)
+                com.mantz_it.rfanalyzer.network.NetworkSourceControls(!analyzerRunning && !analyzerStartPending)
+                OutlinedListDropDown(items=SourceType.RTLTCP.availableSampleRates, selectedItem=sampleRate,
+                    getDisplayName={ "$it Sps" }, onSelectionChanged=sourceTabActions.onSampleRateChanged,
+                    label="Sample Rate", enabled=!analyzerRunning && !analyzerStartPending)
+            }
             SourceType.FILESOURCE -> {
                 Text(localString(R.string.l10n_file, filesourceFilename.ifEmpty { localString(R.string.l10n_none_file) }), fontSize = 12.sp, lineHeight = 13.sp)
                 Row {

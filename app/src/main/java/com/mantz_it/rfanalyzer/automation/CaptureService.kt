@@ -31,6 +31,7 @@ class CaptureService : Service() {
     @Volatile private var client: Socket? = null
     override fun onBind(i: Intent?) = null
     override fun onStartCommand(i: Intent?, flags: Int, id: Int): Int {
+        if(com.mantz_it.rfanalyzer.BuildConfig.NETWORK_CLIENT) { stopSelf();return START_NOT_STICKY }
         if(i?.action==STOP) {
             cancelled=true; CaptureSettings.cancelRequested=true
             runCatching { client?.close() };runCatching { server?.close() }
@@ -260,45 +261,79 @@ class CaptureService : Service() {
     private class VolatileBox { @Volatile var done=false; @Volatile var closed=true; @Volatile var outage=true; var gap=false }
     private fun rawDurationMs(raw: ByteArray)=raw.size.toLong()*1000/(2*LgModemSource.SAMPLE_RATE)
 
-    /** rtl_tcp framing: 12-byte RTL0 greeting, CU8 IQ and 5-byte big-endian commands. */
+    /** Standard RTL0/CU8 server; commands arrive before potentially slow modem setup. */
     private fun stream(t: CaptureTask) {
         val socket=ServerSocket().apply { reuseAddress=true;bind(InetSocketAddress(CaptureSettings.prefs(this@CaptureService).getInt("port",1234)));soTimeout=1000 }
         server=socket
         val wifi=getSystemService(WIFI_SERVICE) as android.net.wifi.WifiManager
         val wifiLock=wifi.createWifiLock(android.net.wifi.WifiManager.WIFI_MODE_FULL_HIGH_PERF,"D325f:IQ").apply { acquire() }
+        val initialLimit=getSharedPreferences("bt_rx_limit",0).getLong("upper_hz",BtRxLimit.DEFAULT_HZ)
+        var lastError=""
+        fun diagnostic(message: String) {
+            val f=File(filesDir,"network.log")
+            runCatching { if(f.length()>256000)f.writeText("");f.appendText("${System.currentTimeMillis()} $message\n") }
+        }
         try {
             while(!stopped()) {
-                CaptureSettings.status.value="${getString(R.string.v2_listening)} :${socket.localPort}"
+                CaptureSettings.status.value="${getString(R.string.v2_listening)} :${socket.localPort} $lastError"
                 val c=try { socket.accept() } catch(e: SocketTimeoutException) { continue }
-                client=c;c.tcpNoDelay=true;c.sendBufferSize=1024*1024
-                val s=createSource(t);var encoder=Encoder(t.rate)
-                val out=BufferedOutputStream(c.getOutputStream(),65536)
-                DataOutputStream(out).apply { writeBytes("RTL0");writeInt(0);writeInt(0);flush() }
-                val commands=ConcurrentLinkedQueue<Pair<Int,Long>>()
-                val commandReader=Thread({
-                    try { val input=DataInputStream(c.getInputStream());while(!c.isClosed)commands.add(input.readUnsignedByte() to (input.readInt().toLong() and 0xffffffffL)) }
-                    catch(_:IOException) { runCatching { c.close() } }
-                },"rtl_tcp-control").apply { start() }
+                client=c;c.tcpNoDelay=true;c.sendBufferSize=262144
+                val controls=com.mantz_it.rfanalyzer.network.RtlTcpControl(t.frequency,t.rate)
+                var reader: Thread?=null;var s: LgModemSource?=null
+                val dsp=NativeDsp();var handle=0L;var rate=0
+                val controlError=java.util.concurrent.atomic.AtomicReference<String?>(null)
                 try {
-                    s.setLosslessConsumerMode(true);s.startSampling()
-                    while(!stopped() && !c.isClosed) {
-                        var command=commands.poll()
-                        while(command!=null) {
-                            when(command.first) {
-                                1 -> if(command.second in LgModemSource.MIN_FREQUENCY..LgModemSource.MAX_FREQUENCY)s.frequency=command.second
-                                2 -> {
-                                    require(command.second.toInt() in listOf(7_680_000,2_560_000,1_280_000)) { getString(R.string.l10n_rate_select) }
-                                    encoder.close();encoder=Encoder(command.second.toInt())
-                                }
-                            }
-                            command=commands.poll()
-                        }
-                        val raw=s.getPacket(1000) ?: throw IOException(getString(R.string.l10n_modem_stopped))
-                        try { out.write(encoder.bytes(raw,true)) } finally { s.returnPacket(raw) }
+                    val out=BufferedOutputStream(c.getOutputStream(),65536)
+                    com.mantz_it.rfanalyzer.network.RtlTcpControl.greeting(out)
+                    reader=Thread({
+                        try { controls.read(c.getInputStream()) }
+                        catch(e: Exception) { controlError.set(e.message);runCatching { c.close() } }
+                    },"rtl_tcp-control").apply { start() }
+                    // Clients send their initial tuning/rate immediately after RTL0.
+                    val until=SystemClock.elapsedRealtime()+1000
+                    var previous=-1L;var quiet=SystemClock.elapsedRealtime()
+                    while(!stopped() && !c.isClosed && SystemClock.elapsedRealtime()<until) {
+                        val now=SystemClock.elapsedRealtime();val rev=controls.snapshot().revision
+                        if(rev!=previous){previous=rev;quiet=now}
+                        if(rev>=2 && now-quiet>=150)break
+                        Thread.sleep(20)
                     }
-                } catch(e: Exception) { if(!stopped())CaptureSettings.status.value=UiTranslations.text(this,e.message ?: "Error") }
-                finally { encoder.close();c.close();s.close();source=null;commandReader.join(1000) }
+                    if(stopped() || c.isClosed)continue
+                    val first=controls.snapshot()
+                    CaptureSettings.status.value="RTL-TCP · ${c.inetAddress.hostAddress} · FTM"
+                    s=createSource(t.copy(frequency=first.correctedFrequency().coerceIn(LgModemSource.MIN_FREQUENCY,LgModemSource.MAX_FREQUENCY)))
+                    s.setLosslessConsumerMode(true);s.startSampling()
+                    val output=ByteArray(32768)
+                    var appliedFrequency=first.correctedFrequency();var lastPacket=SystemClock.elapsedRealtime()
+                    var lastDiagnostic=""
+                    while(!stopped() && !c.isClosed) {
+                        val state=controls.snapshot()
+                        if(rate!=state.rate) { if(handle!=0L)dsp.destroyNetworkResampler(handle);handle=0;handle=dsp.createNetworkResampler(state.rate);rate=state.rate }
+                        val frequency=state.correctedFrequency().coerceIn(LgModemSource.MIN_FREQUENCY,LgModemSource.MAX_FREQUENCY)
+                        if(frequency!=appliedFrequency){s.frequency=frequency;appliedFrequency=frequency}
+                        if(state.diagnostic!=lastDiagnostic){lastDiagnostic=state.diagnostic;diagnostic(lastDiagnostic)}
+                        val raw=s.getPacket(1000)
+                        if(raw==null) {
+                            if(SystemClock.elapsedRealtime()-lastPacket>60000)throw IOException("No modem IQ for 60 seconds")
+                            CaptureSettings.status.value=getString(R.string.v2_recovering)
+                            s.stopSampling();if(!stopped()&&!c.isClosed){Thread.sleep(500);s.startSampling()}
+                            continue
+                        }
+                        try { val n=dsp.resampleNetwork(handle,raw,output,state.linearGain(),state.agc);out.write(output,0,n);out.flush() }
+                        finally { s.returnPacket(raw) }
+                        lastPacket=SystemClock.elapsedRealtime()
+                        CaptureSettings.status.value="RTL-TCP · ${c.inetAddress.hostAddress} · $rate Sps · software gain ${state.gain/10.0} dB"
+                    }
+                    controlError.get()?.let { lastError=it }
+                } catch(e: Exception) { if(!stopped()){lastError=controlError.get() ?: e.message ?: "Network error";diagnostic(lastError)} }
+                finally {
+                    if(handle!=0L)dsp.destroyNetworkResampler(handle)
+                    runCatching { c.close() };s?.close();source?.close();source=null;reader?.join(1000)
+                }
             }
-        } finally { socket.close();if(wifiLock.isHeld)wifiLock.release() }
+        } finally {
+            socket.close();if(wifiLock.isHeld)wifiLock.release()
+            getSharedPreferences("bt_rx_limit",0).edit().putLong("upper_hz",initialLimit).commit();BtRxLimit.reload()
+        }
     }
 }

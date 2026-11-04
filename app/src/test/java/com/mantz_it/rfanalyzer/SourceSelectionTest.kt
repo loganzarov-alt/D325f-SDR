@@ -9,8 +9,8 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class SourceSelectionTest {
-    @Test fun onlyModemAndFileSourcesRemain() {
-        assertEquals(listOf(SourceType.LGMODEM, SourceType.FILESOURCE), SourceType.entries.toList())
+    @Test fun networkAppendsWithoutChangingExistingOrdinals() {
+        assertEquals(listOf(SourceType.LGMODEM, SourceType.FILESOURCE, SourceType.RTLTCP), SourceType.entries.toList())
     }
     @Test fun legacyDeviceSelectionsFallBackToModemAndFileStaysFile() {
         for (old in listOf(-1, 0, 1, 2, 4, 99)) assertEquals(0, SourceType.migrateLegacyOrdinal(old))
