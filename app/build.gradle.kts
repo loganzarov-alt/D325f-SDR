@@ -14,7 +14,7 @@ android {
         applicationId = "io.github.loganzarov_alt.d325fsdr"
         minSdk = 25
         targetSdk = 34
-        versionCode = 20005
+        versionCode = 20000
         versionName = "2.0"
 
         ndk {

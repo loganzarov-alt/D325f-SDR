@@ -87,4 +87,4 @@ for reproducibility in CI. Manual language selection also controls the manual.
 
 ## Local-only 2.0 build
 
-Version name is exactly 2.0; version code 20005 permits updating previous 2.0.x LG builds. The network server/client, digital network gain and network permissions are removed. Local reception, file playback, recordings, automations, inversion, BT settings and translations remain. Old streaming preferences no longer block local reception. Saved network source selection falls back to LG.
+Release version name is exactly 2.0 and version code is 20000. This is not an update over higher-code 2.0.x test builds; Android requires removing those builds first, which deletes their app settings and automations. The network server/client, digital network gain and network permissions are removed. Local reception, file playback, recordings, automations, inversion, BT settings and translations remain. Old streaming preferences no longer block local reception. Saved network source selection falls back to LG.
