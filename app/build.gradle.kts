@@ -19,8 +19,8 @@ android {
         manifestPlaceholders["applicationLabel"] = if(networkClient) "D325f SDR Client" else "D325f SDR"
         minSdk = 25
         targetSdk = 34
-        versionCode = 20003
-        versionName = "2.0.3"
+        versionCode = 20004
+        versionName = "2.0.4"
 
         ndk {
             abiFilters += listOf(if(networkClient) "arm64-v8a" else "armeabi-v7a")

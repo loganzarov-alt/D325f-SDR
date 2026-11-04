@@ -12,16 +12,25 @@ public final class NetworkIQSource implements IQSourceInterface {
  private final String host;private final int port,gain;private final boolean agc;
  private volatile long frequency;private volatile int rate;private volatile boolean closed=false,running=false;
  private final RtlTcpConnection connection=new RtlTcpConnection();private Callback callback;
- private final ArrayBlockingQueue<byte[]> filled=new ArrayBlockingQueue<>(32),pool=new ArrayBlockingQueue<>(32);
+ private final ArrayBlockingQueue<byte[]> filled=new ArrayBlockingQueue<>(4),pool=new ArrayBlockingQueue<>(4);
  private final NetworkIQConverter converter=new NetworkIQConverter();
- public NetworkIQSource(String host,int port,long frequency,int rate,int gain,boolean agc){this.host=host;this.port=port;this.frequency=frequency;this.rate=rate;this.gain=gain;this.agc=agc;converter.setFrequency(frequency);converter.setSampleRate(rate);for(int i=0;i<32;i++)pool.add(new byte[getPacketSize()]);}
+ public NetworkIQSource(String host,int port,long frequency,int rate,int gain,boolean agc){this.host=host;this.port=port;this.frequency=frequency;this.rate=rate;this.gain=gain;this.agc=agc;converter.setFrequency(frequency);converter.setSampleRate(rate);for(int i=0;i<4;i++)pool.add(new byte[getPacketSize()]);}
  private volatile Thread worker;
+ private volatile com.mantz_it.rfanalyzer.network.LatestFrequency tuner;
  public boolean open(Context context,Callback cb){callback=cb;
   worker=new Thread(()->{
    try {
     acquireLocks(context);
     connection.setProgress((stage,bytes)->com.mantz_it.rfanalyzer.network.NetworkClientStatus.update(stage,bytes));
-    connection.connect(host,port,frequency,rate,gain,agc);
+    long initialFrequency=frequency;
+    connection.connect(host,port,initialFrequency,rate,gain,agc);
+    synchronized(this){
+     if(closed)return;
+     tuner=new com.mantz_it.rfanalyzer.network.LatestFrequency(initialFrequency,
+      value->{connection.command(1,value);converter.setFrequency(value);},
+      error->{if(!closed)cb.onIQSourceError(this,"RTL-TCP tune: "+error.getMessage());});
+     tuner.request(frequency);
+    }
     byte[] first=pool.take();connection.read(first);filled.put(first);
     if(!closed)cb.onIQSourceReady(this);
     // The same reader owns the socket from handshake through the entire stream.
@@ -45,7 +54,7 @@ public final class NetworkIQSource implements IQSourceInterface {
   if(wm!=null){wifi=wm.createWifiLock(android.net.wifi.WifiManager.WIFI_MODE_FULL_HIGH_PERF,"D325f:NetworkClient");wifi.acquire();}
  }
  public boolean isOpen(){return !closed&&connection.isOpen();}
- public synchronized boolean close(){closed=true;running=false;try{connection.close();}catch(Exception ignored){}
+ public synchronized boolean close(){closed=true;running=false;if(tuner!=null)tuner.close();try{connection.close();}catch(Exception ignored){}
   Thread t=worker;if(t!=null&&t!=Thread.currentThread())t.interrupt();
   filled.clear();if(wake!=null&&wake.isHeld())wake.release();if(wifi!=null&&wifi.isHeld())wifi.release();return true;
  }
@@ -54,13 +63,13 @@ public final class NetworkIQSource implements IQSourceInterface {
  public void setSampleRate(int value){if(value==rate)return;if(running){callback.onIQSourceError(this,"Stop reception before changing network sample rate");return;}rate=value;converter.setSampleRate(value);send(2,value);}
  private void send(int cmd,long value){try{connection.command(cmd,value);}catch(Exception e){if(!closed&&callback!=null)callback.onIQSourceError(this,e.getMessage());}}
  public long getFrequency(){return frequency;}
- public void setFrequency(long value){frequency=value;converter.setFrequency(value);send(1,value);}
+ public void setFrequency(long value){if(value==frequency)return;frequency=value;com.mantz_it.rfanalyzer.network.LatestFrequency t=tuner;if(t!=null)t.request(value);else converter.setFrequency(value);}
  public long getMinFrequency(){return 1L;}public long getMaxFrequency(){return 4294967295L;}
  public int getMinSampleRate(){return RATES[0];}public int getMaxSampleRate(){return RATES[RATES.length-1];}
  public int[] getSupportedSampleRates(){return RATES.clone();}
  public int getNextHigherOptimalSampleRate(int value){for(int r:RATES)if(r>value)return r;return getMaxSampleRate();}
  public int getNextLowerOptimalSampleRate(int value){for(int i=RATES.length-1;i>=0;i--)if(RATES[i]<value)return RATES[i];return getMinSampleRate();}
- public int getPacketSize(){return 32768;}public int getBytesPerSample(){return 2;}
+ public int getPacketSize(){return 8192;}public int getBytesPerSample(){return 2;}
  public byte[] getPacket(int timeout){try{long deadline=System.nanoTime()+TimeUnit.SECONDS.toNanos(65);while(!closed&&System.nanoTime()<deadline){byte[] b=filled.poll(Math.min(200,Math.max(1,timeout)),TimeUnit.MILLISECONDS);if(b!=null)return b;}return null;}catch(InterruptedException e){Thread.currentThread().interrupt();return null;}}
  public void returnPacket(byte[] packet){pool.offer(packet);}
  public void startSampling(){if(!closed)running=true;}

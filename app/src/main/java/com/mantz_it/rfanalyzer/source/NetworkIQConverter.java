@@ -1,131 +1,39 @@
-// D325f SDR changes, Logan Zarov, 2026-10-23. See docs/CHANGES.md.
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Logan Zarov
 package com.mantz_it.rfanalyzer.source;
-
-/**
- * <h1>RF Analyzer - unsigned 8-bit IQ Converter</h1>
- *
- * Module:      NetworkIQConverter.java
- * Description: This class implements methods to convert the raw input data of IQ sources (8 bit unsigned)
- *              to SamplePackets. It has also methods to do converting and down-mixing at the same
- *              time.
- *
- * @author Dennis Mantz
- *
- * Copyright (C) 2025 Dennis Mantz
- * License: http://www.gnu.org/licenses/gpl.html GPL version 2 or higher
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- *
- * You should have received a copy of the GNU General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- */
-public class NetworkIQConverter extends IQConverter {
-
-	public NetworkIQConverter() {
-		super();
-	}
-
-	@Override
-	protected void generateLookupTable() {
-		/**
-		 * The rtl_sdr delivers samples in the following format:
-		 * The bytes are interleaved, 8-bit, unsigned IQ samples (in-phase
-		 *  component first, followed by the quadrature component):
-		 *
-		 *  [--------- first sample ----------]   [-------- second sample --------]
-		 *         I                  Q                  I                Q ...
-		 *  receivedBytes[0]   receivedBytes[1]   receivedBytes[2]       ...
-		 */
-
-		lookupTable = new float[256];
-		for (int i = 0; i < 256; i++)
-			lookupTable[i] = (i-128.0f) / 128.0f;
-	}
-
-	@Override
-	protected void generateMixerLookupTable(int mixFrequency) {
-		// If mix frequency is too low, just add the sample rate (sampled spectrum is periodic):
-		if(mixFrequency == 0 || (sampleRate / Math.abs(mixFrequency) > MAX_COSINE_LENGTH))
-			mixFrequency += sampleRate;
-
-		// Only generate lookupTable if null or invalid:
-		if(cosineRealLookupTable == null || mixFrequency != cosineFrequency) {
-			cosineFrequency = mixFrequency;
-			int bestLength = calcOptimalCosineLength();
-			cosineRealLookupTable = new float[bestLength][256];
-			cosineImagLookupTable = new float[bestLength][256];
-			float cosineAtT;
-			float sineAtT;
-			for (int t = 0; t < bestLength; t++) {
-				cosineAtT = (float) Math.cos(2 * Math.PI * cosineFrequency * t / (float) sampleRate);
-				sineAtT = (float) Math.sin(2 * Math.PI * cosineFrequency * t / (float) sampleRate);
-				for (int i = 0; i < 256; i++) {
-					cosineRealLookupTable[t][i] = (i-128.0f)/128.0f * cosineAtT;
-					cosineImagLookupTable[t][i] = (i-128.0f)/128.0f * sineAtT;
-				}
-			}
-			cosineIndex = 0;
-		}
-	}
-
-	@Override
-	public int fillPacketIntoSamplePacket(byte[] packet, SamplePacket samplePacket) {
-		int capacity = samplePacket.capacity();
-		int count = 0;
-		int startIndex = samplePacket.size();
-		if(startIndex >= capacity)
-			return 0; // SamplePacket is already full
-		float[] re = samplePacket.re();
-		float[] im = samplePacket.im();
-		for (int i = 0; i < packet.length; i+=2) {
-			re[startIndex+count] = lookupTable[packet[i] & 0xff];
-			im[startIndex+count] = lookupTable[packet[i+1] & 0xff];
-			count++;
-			if(startIndex+count >= capacity)
-				break;
-		}
-		samplePacket.setSize(samplePacket.size()+count);	// update the size of the sample packet
-		samplePacket.setSampleRate(sampleRate);				// update the sample rate
-		samplePacket.setFrequency(frequency);				// update the frequency
-		return count;
-	}
-
-	@Override
-	public int mixPacketIntoSamplePacket(byte[] packet, SamplePacket samplePacket, long channelFrequency) {
-		int mixFrequency = (int)(frequency - channelFrequency);
-
-		generateMixerLookupTable(mixFrequency);	// will only generate table if really necessary
-
-		// Mix the samples from packet and store the results in the samplePacket
-		int capacity = samplePacket.capacity();
-		int count = 0;
-		int startIndex = samplePacket.size();
-		if(startIndex >= capacity)
-			return 0; // SamplePacket is already full
-		if(cosineIndex >= cosineRealLookupTable.length)
-			cosineIndex = 0; // Potentially reset cosine index if table was altered and now is smaller
-		float[] re = samplePacket.re();
-		float[] im = samplePacket.im();
-		for (int i = 0; i < packet.length; i+=2) {
-			re[startIndex+count] = cosineRealLookupTable[cosineIndex][packet[i] & 0xff] - cosineImagLookupTable[cosineIndex][packet[i+1] & 0xff];
-			im[startIndex+count] = cosineRealLookupTable[cosineIndex][packet[i+1] & 0xff] + cosineImagLookupTable[cosineIndex][packet[i] & 0xff];
-			cosineIndex = (cosineIndex + 1) % cosineRealLookupTable.length;
-			count++;
-			if(startIndex+count >= capacity)
-				break;
-		}
-		samplePacket.setSize(samplePacket.size()+count);	// update the size of the sample packet
-		samplePacket.setSampleRate(sampleRate);				// update the sample rate
-		samplePacket.setFrequency(channelFrequency);		// update the frequency
-		return count;
-	}
+/** CU8 conversion with a continuous oscillator: no per-retune lookup-table allocation. */
+public final class NetworkIQConverter extends IQConverter {
+ private volatile long center;
+ private volatile int rate;
+ private double oscillatorReal=1,oscillatorImag=0;
+ private int normalizationCounter;
+ @Override protected void generateLookupTable(){}
+ @Override protected void generateMixerLookupTable(int ignored){}
+ @Override public void setFrequency(long value){center=value;}
+ @Override public long getFrequency(){return center;}
+ @Override public void setSampleRate(int value){if(value<=0)throw new IllegalArgumentException("Sample rate must be positive");rate=value;}
+ @Override public int getSampleRate(){return rate;}
+ @Override public int fillPacketIntoSamplePacket(byte[] packet,SamplePacket target){
+  int start=target.size(),n=Math.min(packet.length/2,target.capacity()-start);
+  float[] re=target.re(),im=target.im();
+  for(int i=0;i<n;i++){re[start+i]=((packet[2*i]&255)-128)/128f;im[start+i]=((packet[2*i+1]&255)-128)/128f;}
+  target.setSize(start+n);target.setSampleRate(rate);target.setFrequency(center);return n;
+ }
+ @Override public int mixPacketIntoSamplePacket(byte[] packet,SamplePacket target,long channel){
+  final int sampleRate=rate;if(sampleRate<=0)throw new IllegalStateException("Sample rate not set");
+  // Modulo keeps large drag offsets and frequencies above 2 GHz numerically bounded.
+  double step=2*Math.PI*((center-channel)%sampleRate)/sampleRate;
+  double stepReal=Math.cos(step),stepImag=Math.sin(step);
+  double cr=oscillatorReal,ci=oscillatorImag;
+  int start=target.size(),n=Math.min(packet.length/2,target.capacity()-start);
+  float[] re=target.re(),im=target.im();
+  for(int i=0;i<n;i++){
+   double a=((packet[2*i]&255)-128)/128.0,b=((packet[2*i+1]&255)-128)/128.0;
+   re[start+i]=(float)(a*cr-b*ci);im[start+i]=(float)(b*cr+a*ci);
+   double next=cr*stepReal-ci*stepImag;ci=ci*stepReal+cr*stepImag;cr=next;
+   if(++normalizationCounter==1024){double norm=1/Math.hypot(cr,ci);cr*=norm;ci*=norm;normalizationCounter=0;}
+  }
+  oscillatorReal=cr;oscillatorImag=ci;
+  target.setSize(start+n);target.setSampleRate(sampleRate);target.setFrequency(channel);return n;
+ }
 }
