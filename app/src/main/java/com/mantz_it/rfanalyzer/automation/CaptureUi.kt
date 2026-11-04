@@ -8,6 +8,7 @@ import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
+import com.mantz_it.rfanalyzer.automation.LocalizedText as Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -100,7 +101,7 @@ object AppLanguage {
                         val task=withContext(Dispatchers.IO) { CaptureTask.snapshot(c,a,System.currentTimeMillis(),86_400_000,a.sourceFrequency.value,false,false) }
                         val intent=Intent(c,CaptureService::class.java).putExtra("task",task.json().toString()).putExtra("stream",true)
                         if(Build.VERSION.SDK_INT>=26)c.startForegroundService(intent) else c.startService(intent)
-                    }.onFailure { error=it.message ?: "Error" }
+                    }.onFailure { error=if(it is IllegalArgumentException && it.message != "Tasks overlap") c.getString(R.string.l10n_invalid_task) else UiTranslations.text(c,it.message ?: "Error") }
                 }
             },enabled=!running && !pending) { Text(stringResource(if(busy)R.string.v2_stop else R.string.v2_start_stream)) }
         }
@@ -137,13 +138,13 @@ object AppLanguage {
         }
         Button(onClick={scope.launch {
             runCatching {
-                val whenMs=format.parse(start)?.time ?: throw IllegalArgumentException("Date")
+                val whenMs=format.parse(start)?.time ?: throw IllegalArgumentException(c.getString(R.string.l10n_invalid_task))
                 val seconds=duration.toLong();require(seconds in 1..604800)
                 val mhz=frequency.replace(',','.').toDouble();require(mhz.isFinite())
                 p.edit().putString("folder",folder).commit()
                 val task=withContext(Dispatchers.IO) { CaptureTask.snapshot(c,a,whenMs,seconds*1000,(mhz*1e6).toLong(),reboot,thermal) }
                 TaskStore.add(c,task);tasks=TaskStore.all(c);error=""
-            }.onFailure { error=it.message ?: "Error" }
+            }.onFailure { error=if(it is IllegalArgumentException && it.message != "Tasks overlap") c.getString(R.string.l10n_invalid_task) else UiTranslations.text(c,it.message ?: "Error") }
         }}) { Text(stringResource(R.string.v2_add)) }
         if(error.isNotBlank())Text(error,color=MaterialTheme.colorScheme.error)
         if(status.isNotBlank())Text(status)
@@ -151,7 +152,7 @@ object AppLanguage {
         tasks.sortedBy { it.start }.forEach { task ->
             HorizontalDivider()
             Text("${format.format(Date(task.start))} · ${task.frequency/1e6} MHz · ${task.duration/1000} s")
-            Text("${task.rate} S/s · BT ${task.btChannel}/${task.btPower} · ${task.state}")
+            Text("${task.rate} S/s · BT ${task.btChannel}/${task.btPower} · ${UiTranslations.text(c,task.state)}")
             if(task.state!="running")TextButton({TaskStore.delete(c,task.id);tasks=TaskStore.all(c)}) { Text(stringResource(R.string.v2_delete)) }
         }
     }

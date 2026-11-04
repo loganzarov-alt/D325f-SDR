@@ -33,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mantz_it.rfanalyzer.R
+import com.mantz_it.rfanalyzer.automation.localString
 import com.mantz_it.rfanalyzer.source.LgModemSource
 
 /**
@@ -161,7 +162,7 @@ fun SourceTabComposable(
                 if(analyzerRunning) {
                     Icon(
                         painter = painterResource(R.drawable.stop_circle),
-                        contentDescription = "Stop",
+                        contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "Stop"),
                         modifier = Modifier.size(40.dp)
                     )
                 } else if (analyzerStartPending) {
@@ -169,7 +170,7 @@ fun SourceTabComposable(
                 } else {
                     Icon(
                         painter = painterResource(R.drawable.play_circle),
-                        contentDescription = "Start",
+                        contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "Start"),
                         modifier = Modifier.size(40.dp)
                     )
                 }
@@ -262,7 +263,7 @@ fun SourceTabComposable(
             
             
             SourceType.FILESOURCE -> {
-                Text("File: " + filesourceFilename.ifEmpty { "(no File selected)" }, fontSize = 12.sp, lineHeight = 13.sp)
+                Text(localString(R.string.l10n_file, filesourceFilename.ifEmpty { localString(R.string.l10n_none_file) }), fontSize = 12.sp, lineHeight = 13.sp)
                 Row {
                     Button(
                         onClick = sourceTabActions.onOpenFileClicked,
@@ -284,7 +285,7 @@ fun SourceTabComposable(
                     ) {
                         Row {
                             Text("View Recordings", modifier = Modifier.padding(horizontal = 16.dp))
-                            Icon(imageVector = Icons.Default.Menu, contentDescription = "View Recordings")
+                            Icon(imageVector = Icons.Default.Menu, contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "View Recordings"))
                         }
                     }
                 }

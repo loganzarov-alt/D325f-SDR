@@ -1180,7 +1180,7 @@ class AnalyzerSurface(context: Context,
 
             if (demodulationEnabled.value) {
                 // Draw the channel frequency if demodulation is enabled:
-                text = String.format("demod at %4.6f MHz", channelFrequency.value / 1000000f)
+                text = context.getString(com.mantz_it.rfanalyzer.R.string.l10n_demod_at, String.format("%.6f", channelFrequency.value / 1000000f))
                 textSmallPaint.getTextBounds(text, 0, text.length, bounds)
                 c.drawText(text, rightBorder - bounds.width(), yPos + bounds.height(), textSmallPaint)
 
@@ -1346,7 +1346,7 @@ class AnalyzerSurface(context: Context,
                         val titlePaint = Paint().apply { color = text; textSize = (width * 0.047f).coerceIn(34f, 52f); isAntiAlias = true; isFakeBoldText = true; textAlign = Paint.Align.CENTER }
                         val captionPaint = Paint().apply { color = muted; textSize = (width * 0.022f).coerceIn(17f, 25f); isAntiAlias = true; textAlign = Paint.Align.CENTER }
                         canvas.drawText("RF DECODER", width / 2f, height * 0.58f, titlePaint)
-                        canvas.drawText("READY · SELECT A SOURCE AND START", width / 2f, height * 0.635f, captionPaint)
+                        canvas.drawText(context.getString(com.mantz_it.rfanalyzer.R.string.l10n_ready), width / 2f, height * 0.635f, captionPaint)
                     } else Log.d(LOGTAG, "drawWatermark: Canvas is null.")
                 }
             } catch (e: Exception) {

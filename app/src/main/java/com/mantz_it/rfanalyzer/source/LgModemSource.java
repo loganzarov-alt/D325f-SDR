@@ -55,9 +55,9 @@ public final class LgModemSource implements IQSourceInterface {
     private final float[] bandwidthIm = new float[PACKET_BYTES / 2];
     private int bandwidthCount;
     public static String bandwidthLabel(long rate) {
-        if (rate == 2560000) return "2 МГц · 2,56 MS/s";
-        if (rate == 1280000) return "1 МГц · 1,28 MS/s";
-        return "5 МГц · 7,68 MS/s (штатная)";
+        if (rate == 2560000) return "2 MHz · 2.56 MS/s";
+        if (rate == 1280000) return "1 MHz · 1.28 MS/s";
+        return "5 MHz · 7.68 MS/s";
     }
     // Called by Scheduler exactly once per raw packet, shared by FFT and audio.
     public void prepareBandwidth(byte[] packet) {

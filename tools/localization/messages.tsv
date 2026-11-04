@@ -1,0 +1,92 @@
+bt_limit_hint	Upper limit, MHz	Верхняя граница, МГц
+bt_limit_title	BT receive limit	Граница приёма с BT-гетеродином
+bt_limit_help	Enter 1–2402 MHz (default 1000). Below this limit reception uses the BT oscillator; at or above it reception is direct. Stop and restart RX after saving.	Введите 1–2402 МГц (по умолчанию 1000). Ниже границы приём идёт с BT-гетеродином, на границе и выше — напрямую. После сохранения остановите и снова запустите RX.
+bt_invalid	Enter a number from 1 to 2402 MHz. The setting was not changed.	Введите число от 1 до 2402 МГц. Значение не изменено.
+bt_saved	Saved. Stop and restart RX.	Сохранено. Остановите и снова запустите RX.
+save_failed	Could not save the setting.	Не удалось сохранить настройку.
+resume	Resume waterfall	Продолжить водопад
+freeze	Freeze waterfall · listen	Заморозить водопад · слушать
+frozen	FFT and waterfall paused. Reception and audio continue; squelch is open.	Спектр и водопад приостановлены. Приём и звук продолжаются; шумоподавитель открыт.
+squelch_help	Enable Squelch to set a threshold for the signal level and cut out noise. Signals below the squelch threshold are muted.	Шумоподавитель заглушает сигналы ниже заданного порога уровня.
+center_help	Always center the viewport around the channel selector	Удерживать выбранный канал в центре экрана
+context_help	If enabled, long pressing on the label of a UI element navigates to the user manual	Долгое нажатие на название элемента открывает соответствующий раздел справки
+wheel_help	If enabled, the tuning wheel direction is reversed. This might feel more natural for some users	Изменить направление вращения колеса настройки
+dc_help	Removes the center-bin source DC spike from the display. Raw IQ recordings remain byte-for-byte untouched.	Убрать центральный пик постоянной составляющей с экрана. Эта настройка не меняет данные записи IQ.
+repeat_help	Automatically rewind file after reaching the end	После конца файла автоматически начать сначала
+peak_help	Show dot indicators for the highest signal strength	Показывать отметки максимального уровня сигнала
+relative_help	Display frequencies relative to the center frequency	Показывать частоты относительно центральной частоты
+record_squelch_help	Samples are only recorded when the signal level is above the squelch threshold.	Записывать отсчёты только при уровне сигнала выше порога шумоподавителя.
+average_help	Display only. Raw IQ, demodulation and recordings are unchanged.	Только отображение. Исходные IQ, демодуляция и записи не изменяются.
+stop_question	Stop Recording?	Остановить запись?
+stop_frequency	The recording is still running? Stop recording to change frequency?	Запись продолжается. Остановить её для изменения частоты?
+stop_rate	The recording is still running? Stop recording to change sample rate?	Запись продолжается. Остановить её для изменения частоты дискретизации?
+yes_stop	Yes, stop recording!	Да, остановить запись
+no	No	Нет
+reset_question	Full modem reset?	Полностью перезапустить модем?
+reset_help	Use only after a PLL lock error. Cellular radio, Wi-Fi and USB can restart for about a minute.	Используйте только после ошибки захвата PLL. Сотовый модем, Wi-Fi и USB могут перезапускаться около минуты.
+reset_modem	Reset modem	Перезапустить модем
+reset_sent	Full modem reset requested	Запрошен полный перезапуск модема
+delete_question	Delete ALL Recordings?	Удалить ВСЕ записи?
+delete_help	Do you really want to delete all recordings (cannot be un-done)?	Удалить все записи? Это действие нельзя отменить.
+yes_delete	Yes, delete all!	Да, удалить все
+recording_running	Recording Running	Идёт запись
+range_recording	Frequency out of range for the current recording. Stop Recording?	Частота вне диапазона текущей записи. Остановить запись?
+log_deleted	Log file deleted	Журнал удалён
+loaded	File loaded. Press PLAY to start Analyzer!	Файл открыт. Нажмите «Воспроизвести», чтобы начать.
+edit_name	Edit Recording Name	Изменить название записи
+auto_stop	Automatic Recording Stop	Автоматическая остановка записи
+stop_after	Stop Recording after	Остановить запись через
+manual	D325f SDR Manual	Справка D325f SDR
+log	RF Decoder Log	Журнал RF Decoder
+licenses	Open-source notices	Уведомления об открытом ПО
+licenses_offline	Licenses and notices · offline	Лицензии и уведомления · без интернета
+slow	Slow	Медленно
+fast	Fast	Быстро
+bar	BAR	Столбцы
+line	LINE	Линия
+off	Off	Выключено
+medium	Medium	Среднее
+none_file	(no File selected)	(файл не выбран)
+tune_frequency	Tune-Frequency	Частота настройки
+open_controls	Open controls	Открыть управление
+home	Go to Start	На главную
+bottom	Scroll to Bottom	Прокрутить вниз
+favorite	Is Favorite	В избранном
+toggle_favorite	Toggle Favorite	Добавить в избранное или убрать
+filter_favorite	Filter Favorites	Показать избранное
+mute	Mute toggle	Включить или выключить звук
+ready	READY · SELECT A SOURCE AND START	ГОТОВО · ВЫБЕРИТЕ ИСТОЧНИК И ЗАПУСТИТЕ ПРИЁМ
+invalid_task	Check the date, duration, frequency and port.	Проверьте дату, длительность, частоту и порт.
+overlap	Tasks overlap	Время заданий пересекается
+exact_alarm	Allow exact alarms in system settings	Разрешите точные будильники в настройках системы
+error	Error	Ошибка
+bt_channel_error	Channel must be between 0 and 78	Канал должен быть от 0 до 78
+bt_stop	Stop reception before changing the BT channel	Остановите приём перед изменением BT-канала
+power_timeout	Power command timed out	Истекло время ожидания команды питания
+modem_timeout	Opening modem timed out	Истекло время ожидания открытия модема
+modem_stopped	Modem data stopped	Данные от модема перестали поступать
+rate_select	Select 1.28, 2.56 or 7.68 MS/s	Выберите 1,28, 2,56 или 7,68 Мвыб/с
+bt_channel_prompt	Enter a channel from 0 to %1$s	Введите канал от 0 до %1$s
+bt_tx_frequency	TX frequency: %1$s MHz	Частота TX: %1$s МГц
+bt_channel_saved	Channel %1$s saved · %2$s MHz	Сохранён канал %1$s · %2$s МГц
+bt_power	TX power: level %1$s / 9	Мощность TX: уровень %1$s / 9
+version	Version %1$s	Версия %1$s
+file	File: %1$s	Файл: %1$s
+storage_used	Recordings occupy %1$s of device storage	Записи занимают %1$s в памяти устройства
+stop_elapsed	Stop Recording (%1$s s)	Остановить запись (%1$s с)
+duration	%1$s (%2$s s)	%1$s (%2$s с)
+reset_failed	Modem reset failed: %1$s	Не удалось перезапустить модем: %1$s
+deleted_recording	Recording %1$s deleted (%2$s)	Запись %1$s удалена (%2$s)
+finished_recording	Recording %1$s finished (%2$s)	Запись %1$s завершена (%2$s)
+frequency_range	Frequency %1$s is out of range for the current source	Частота %1$s вне диапазона текущего источника
+save_file_failed	Failed to save file: %1$s	Не удалось сохранить файл: %1$s
+demod_at	Demodulation: %1$s MHz	Демодуляция: %1$s МГц
+undo	Undo	Отменить
+delete_recording	Delete Recording	Удалить запись
+load_file	Load File	Загрузить файл
+load_question	Load incoming file into File Source? (Analyzer will stop!)	Открыть входящий файл как источник? Приём будет остановлен.
+source_unavailable	Source not available: %1$s	Источник недоступен: %1$s
+demod_rate	Sample rate is not supported by the demodulator	Демодулятор не поддерживает эту частоту дискретизации
+open_licenses	Open-source licenses	Лицензии открытого ПО
+capture_metadata	Frequency: %1$s · Sample rate: %2$s	Частота: %1$s · Частота дискретизации: %2$s
+light_average	Light averaging	Слабое

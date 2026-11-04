@@ -320,7 +320,7 @@ class AnalyzerService : Service() {
         // check if the source is open. if not, open it!
         if (!source!!.isOpen()) {
             if (!openSource()) {
-                Toast.makeText(this, "Source not available (${source?.getName()})", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, com.mantz_it.rfanalyzer.automation.AppLanguage.wrap(this).getString(R.string.l10n_source_unavailable, source?.getName() ?: "LG"), Toast.LENGTH_LONG).show()
                 source = null
                 startRequested = false
                 com.mantz_it.rfanalyzer.automation.CaptureSettings.release(this)
@@ -480,7 +480,7 @@ class AnalyzerService : Service() {
 
         if(!demodulator!!.supportsInputSampleRate(source!!.sampleRate)) {
             Log.i(TAG, "Source sample rate (${source!!.sampleRate} Sps) is not compatible with demodulator rate ${demodulator!!.requiredInputRate}.")
-            Toast.makeText(this, "Sample rate is not supported by the demodulator", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, com.mantz_it.rfanalyzer.automation.AppLanguage.wrap(this).getString(R.string.l10n_demod_rate), Toast.LENGTH_LONG).show()
             return false
         }
         demodulator!!.demodulationMode = newDemodulationMode

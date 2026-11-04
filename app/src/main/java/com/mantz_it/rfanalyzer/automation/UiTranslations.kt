@@ -116,9 +116,19 @@ object UiTranslations {
         "failed" to R.string.ui_68,
         "storage-error" to R.string.ui_69,
         "sensor-error" to R.string.ui_70
+    ) + ExtraTranslations.ids
+    private val formatted = listOf(
+        Regex("""Modem reset failed: (.*)""") to R.string.l10n_reset_failed,
+        Regex("""Recording (.*) deleted \((.*)\)""") to R.string.l10n_deleted_recording,
+        Regex("""Recording '(.*)' finished \((.*)\)""") to R.string.l10n_finished_recording,
+        Regex("""Frequency (.*) is out of range for the current source""") to R.string.l10n_frequency_range,
+        Regex("""Failed to save file \((.*)\)""") to R.string.l10n_save_file_failed
     )
-    fun text(c: Context,s: String): String {
+    @JvmStatic fun text(c: Context,s: String): String {
         ids[s.trim()]?.let { return c.getString(it) }
+        formatted.forEach { (pattern, id) ->
+            pattern.matchEntire(s)?.let { return c.getString(id, *it.groupValues.drop(1).toTypedArray()) }
+        }
         // Legacy controls append units outside their translated label.
         ids.keys.sortedByDescending { it.length }.firstOrNull { s.startsWith(it + " (") }?.let {
             return c.getString(ids.getValue(it)) + s.substring(it.length)

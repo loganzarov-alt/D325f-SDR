@@ -48,7 +48,7 @@ class CaptureService : Service() {
         val stop=PendingIntent.getService(this,0,Intent(this,CaptureService::class.java).setAction(STOP),PendingIntent.FLAG_IMMUTABLE)
         startForeground(2,NotificationCompat.Builder(this,"SERVICE_CHANNEL")
             .setSmallIcon(R.drawable.stop_circle).setContentTitle("D325f SDR 2.0")
-            .setContentText(if(streaming) "IQ TCP" else "Automatizations")
+            .setContentText(if(streaming) "IQ TCP" else getString(R.string.ui_6))
             .setOngoing(true).addAction(R.drawable.stop_circle,getString(R.string.v2_stop),stop).build())
         if(!CaptureSettings.acquire(this)) { CaptureSettings.status.value=getString(R.string.v2_busy); if(!streaming)TaskStore.mark(this,task.id,"skipped"); stopSelf(); return START_NOT_STICKY }
         cancelled=false; CaptureSettings.cancelRequested=false; CaptureSettings.busy.value=true
@@ -57,7 +57,7 @@ class CaptureService : Service() {
             try { if(streaming) stream(task) else automate(task) }
             catch(e: Exception) {
                 if(!streaming)runCatching { TaskStore.mark(this,task.id,if(stopped())"cancelled" else "failed") }
-                CaptureSettings.status.value="${getString(R.string.v2_error)}: ${e.message}"
+                CaptureSettings.status.value="${getString(R.string.v2_error)}: ${UiTranslations.text(this,e.message ?: "Error")}"
             }
             finally {
                 source?.close(); source=null
@@ -82,7 +82,7 @@ class CaptureService : Service() {
         while(true) {
             val code=try { p.exitValue() } catch(_: IllegalThreadStateException) { null }
             if(code!=null) { check(code==0) { "Power command failed" };break }
-            if(SystemClock.elapsedRealtime()>=deadline) { p.destroy();throw IOException("Power command timed out") }
+            if(SystemClock.elapsedRealtime()>=deadline) { p.destroy();throw IOException(getString(R.string.l10n_power_timeout)) }
             Thread.sleep(100)
         }
     }
@@ -114,7 +114,7 @@ class CaptureService : Service() {
             override fun onIQSourceError(source: IQSourceInterface,message: String) { error=message; ready.countDown() }
         })
         if(!ready.await(20,TimeUnit.SECONDS) || !s.isOpen) {
-            s.close(); throw IOException(error ?: "Opening modem timed out")
+            s.close(); throw IOException(error ?: getString(R.string.l10n_modem_timeout))
         }
         val bt=BtCwController.get(this)
         bt.stop(); bt.setChannel(if(t.frequency<100_000_000 && t.btChannel>30)0 else t.btChannel); bt.setPower(t.btPower)
@@ -150,7 +150,7 @@ class CaptureService : Service() {
         TaskStore.mark(this,t.id,"running")
         val initialBt=BtCwController.get(this)
         val initialChannel=BtCwController.getChannel();val initialPower=initialBt.power
-        val initialBtLimit=getSharedPreferences("bt_rx_limit",0).getLong("upper_hz",800_000_000)
+        val initialBtLimit=getSharedPreferences("bt_rx_limit",0).getLong("upper_hz",BtRxLimit.DEFAULT_HZ)
         val start=SystemClock.elapsedRealtime(); val end=start+max(0,t.end-System.currentTimeMillis())
         val queue=ArrayBlockingQueue<Packet>(128)
         val policy=CapturePolicy(start)
@@ -178,7 +178,7 @@ class CaptureService : Service() {
                             val copy=raw.copyOf();s.returnPacket(raw)
                             while(!varFlag.done && !stopped() && !queue.offer(Packet(copy,now),200,TimeUnit.MILLISECONDS)) { }
                         }
-                    } catch(e: Exception) { varFlag.outage=true;CaptureSettings.status.value="${getString(R.string.v2_recovering)}: ${e.message}" }
+                    } catch(e: Exception) { varFlag.outage=true;CaptureSettings.status.value="${getString(R.string.v2_recovering)}: ${UiTranslations.text(this,e.message ?: "Error")}" }
                     s?.stopSampling()
                     if(!varFlag.done && !stopped())Thread.sleep(500)
                 }
@@ -221,7 +221,7 @@ class CaptureService : Service() {
                     break
                 }
             }
-        } catch(e: Exception) { storageError=true;CaptureSettings.status.value="${getString(R.string.v2_error)}: ${e.message}" }
+        } catch(e: Exception) { storageError=true;CaptureSettings.status.value="${getString(R.string.v2_error)}: ${UiTranslations.text(this,e.message ?: "Error")}" }
         finally {
             varFlag.done=true
             capture.join(30_000)
@@ -287,16 +287,16 @@ class CaptureService : Service() {
                             when(command.first) {
                                 1 -> if(command.second in LgModemSource.MIN_FREQUENCY..LgModemSource.MAX_FREQUENCY)s.frequency=command.second
                                 2 -> {
-                                    require(command.second.toInt() in listOf(7_680_000,2_560_000,1_280_000)) { "Select 1.28, 2.56 or 7.68 MS/s" }
+                                    require(command.second.toInt() in listOf(7_680_000,2_560_000,1_280_000)) { getString(R.string.l10n_rate_select) }
                                     encoder.close();encoder=Encoder(command.second.toInt())
                                 }
                             }
                             command=commands.poll()
                         }
-                        val raw=s.getPacket(1000) ?: throw IOException("Modem data stopped")
+                        val raw=s.getPacket(1000) ?: throw IOException(getString(R.string.l10n_modem_stopped))
                         try { out.write(encoder.bytes(raw,true)) } finally { s.returnPacket(raw) }
                     }
-                } catch(e: Exception) { if(!stopped())CaptureSettings.status.value=e.message ?: "TCP error" }
+                } catch(e: Exception) { if(!stopped())CaptureSettings.status.value=UiTranslations.text(this,e.message ?: "Error") }
                 finally { encoder.close();c.close();s.close();source=null;commandReader.join(1000) }
             }
         } finally { socket.close();if(wifiLock.isHeld)wifiLock.release() }

@@ -76,7 +76,7 @@ fun LogFileScreen(navController: NavController, logContent: StateFlow<List<Strin
                 title = { Text("RF Decoder Log") },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "Back"))
                     }
                 },
                 actions = {
@@ -85,7 +85,7 @@ fun LogFileScreen(navController: NavController, logContent: StateFlow<List<Strin
                             lazyListState.animateScrollToItem(logLines.size)
                         }
                     }) {
-                        Icon(Icons.Filled.South, contentDescription = "Scroll to Bottom")
+                        Icon(Icons.Filled.South, contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "Scroll to Bottom"))
                     }
                 }
             )

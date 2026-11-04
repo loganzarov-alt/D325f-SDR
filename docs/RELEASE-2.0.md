@@ -89,3 +89,14 @@ Technical identifiers and original third-party license texts are retained.
 - Five-minute failure power-off, one-packet timer reset, manual cancellation,
   post-stop cooling and reboot behavior with real sensor readings.
 - RTL-TCP connections, tuning and sustained rates in each target PC program.
+
+## 2.0.1 personal update
+
+Version code 20001. BT RX defaults to 1000 MHz; an explicitly saved upper_hz
+value is retained. Automation restores the same shared default. The remaining
+controls, dialogs, parameterized messages, accessibility labels and offline manual
+are localized for all 13 selectable languages. Technical identifiers, user file
+names, original license texts and low-level diagnostic output are not translated.
+The localization catalog in tools/localization generates Android resources and
+offline pages, checks locale row counts and format parameters, and is verified
+for reproducibility in CI. Manual language selection also controls the manual.

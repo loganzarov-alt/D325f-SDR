@@ -4,6 +4,7 @@
 package com.mantz_it.rfanalyzer.source;
 
 import android.content.Context;
+import com.mantz_it.rfanalyzer.automation.UiTranslations;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.widget.EditText;
@@ -30,13 +31,13 @@ public final class BtRxLimitSave implements DialogInterface.OnClickListener {
         } catch (NumberFormatException e) {
         }
         if (d < 1.0d || d > 2402.0d || Double.isNaN(d)) {
-            str = "Введите число от 1 до 2402 МГц. Значение не изменено.";
+            str = "Enter a number from 1 to 2402 MHz. The setting was not changed.";
         } else {
             long jRound = Math.round(d * 1000000.0d);
             SharedPreferences.Editor editorEdit = this.prefs.edit();
             editorEdit.putLong("upper_hz", jRound);
-            str = editorEdit.commit() ? "Сохранено. Остановите и снова запустите RX." : "Не удалось сохранить настройку.";
+            str = editorEdit.commit() ? "Saved. Stop and restart RX." : "Could not save the setting.";
         }
-        Toast.makeText(this.context, str, 1).show();
+        Toast.makeText(this.context, UiTranslations.text(this.context, str), 1).show();
     }
 }

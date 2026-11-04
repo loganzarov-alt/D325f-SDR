@@ -27,11 +27,11 @@ fun SdrFocusSettings() {
                 }
             }
             Text(when (mode) {
-                2 -> "Приостанавливает фоновые приложения, лаунчер, Google-службы и шторку. Службы экрана, звука и приёма продолжают работать. Заморозка не освобождает RAM. Этот режим может вернуть чёрные экраны."
-                1 -> "Освобождает RAM фоновых приложений. Шторка работает; Android может запускать службы снова."
-                else -> "Без очистки, заморозки и изменения режима CPU."
+                2 -> "Pauses background apps, launcher, Google services and the notification shade. Display, audio and reception services continue. Freezing does not free RAM and may cause black screens."
+                1 -> "Frees RAM used by background apps. The notification shade works; Android may restart services."
+                else -> "No memory cleanup, freezing or CPU mode change."
             }, style = MaterialTheme.typography.bodySmall)
-            Text("Выбранный режим применяется при следующем запуске приёма. Выключение действует сразу. Стоп, уход из приложения или потеря связи с ним снимают заморозку и возвращают режим CPU.", style = MaterialTheme.typography.bodySmall)
+            Text("The selected mode applies at the next reception start. Disabling takes effect immediately. Stopping, leaving the app or losing its connection releases frozen processes and restores CPU mode.", style = MaterialTheme.typography.bodySmall)
         }
     }
 }

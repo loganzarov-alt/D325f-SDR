@@ -157,7 +157,7 @@ fun DemodulationTabComposable(
                         Icon(
                             imageVector = if (audioMuted) Icons.AutoMirrored.Filled.VolumeOff else Icons.AutoMirrored.Filled.VolumeUp,
                             tint = MaterialTheme.colorScheme.primary,
-                            contentDescription = "Mute toggle"
+                            contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "Mute toggle")
                         )
                     }
                     Row(
@@ -182,7 +182,7 @@ fun DemodulationTabComposable(
                         )
                         Icon(
                             imageVector = Icons.Filled.ArrowDropDown,
-                            contentDescription = "Show volume slider",
+                            contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "Show volume slider"),
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }

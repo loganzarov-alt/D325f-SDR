@@ -1,0 +1,92 @@
+Límite superior, MHz
+Límite de recepción BT
+Introduzca 1–2402 MHz (predeterminado: 1000). Por debajo del límite se usa el oscilador BT; a partir del límite, recepción directa. Detenga y reinicie RX después de guardar.
+Introduzca un número entre 1 y 2402 MHz. No se cambió el ajuste.
+Guardado. Detenga y reinicie RX.
+No se pudo guardar el ajuste.
+Reanudar cascada
+Congelar cascada · escuchar
+FFT y cascada en pausa. La recepción y el audio continúan; el silenciador está abierto.
+El silenciador elimina las señales por debajo del umbral de nivel seleccionado.
+Mantener el canal seleccionado en el centro de la pantalla
+Mantenga pulsada una etiqueta para abrir la ayuda correspondiente
+Invertir la dirección de la rueda de sintonización
+Quitar el pico de continua central de la pantalla. Este ajuste no cambia la grabación IQ.
+Volver al principio al llegar al final del archivo
+Mostrar marcas del nivel máximo de señal
+Mostrar frecuencias relativas a la frecuencia central
+Grabar muestras solo cuando la señal supere el umbral del silenciador.
+Solo visualización. No modifica IQ, demodulación ni grabaciones.
+¿Detener grabación?
+La grabación continúa. ¿Detenerla para cambiar la frecuencia?
+La grabación continúa. ¿Detenerla para cambiar la tasa de muestreo?
+Sí, detener grabación
+No
+¿Reiniciar completamente el módem?
+Úselo solo tras un error de enganche PLL. El módem, Wi-Fi y USB pueden reiniciarse durante aproximadamente un minuto.
+Reiniciar módem
+Reinicio completo del módem solicitado
+¿Eliminar TODAS las grabaciones?
+¿Eliminar todas las grabaciones? Esta acción no se puede deshacer.
+Sí, eliminar todas
+Grabación en curso
+Frecuencia fuera del rango de la grabación actual. ¿Detener grabación?
+Registro eliminado
+Archivo abierto. Pulse Reproducir para iniciar.
+Editar nombre de grabación
+Parada automática de grabación
+Detener grabación después de
+Manual de D325f SDR
+Registro de RF Decoder
+Avisos de código abierto
+Licencias y avisos · sin conexión
+Lento
+Rápido
+Barras
+Línea
+Desactivado
+Medio
+(ningún archivo seleccionado)
+Frecuencia de sintonización
+Abrir controles
+Ir al inicio
+Ir al final
+En favoritos
+Añadir o quitar de favoritos
+Mostrar favoritos
+Activar o silenciar audio
+LISTO · SELECCIONE UNA FUENTE E INICIE
+Compruebe fecha, duración, frecuencia y puerto.
+Los horarios se solapan
+Permita alarmas exactas en los ajustes del sistema
+Error
+El canal debe estar entre 0 y 78
+Detenga la recepción antes de cambiar el canal BT
+Tiempo de espera del comando de alimentación agotado
+Tiempo de espera de apertura del módem agotado
+Se interrumpieron los datos del módem
+Seleccione 1,28, 2,56 o 7,68 MS/s
+Introduzca un canal de 0 a %1$s
+Frecuencia TX: %1$s MHz
+Canal %1$s guardado · %2$s MHz
+Potencia TX: nivel %1$s / 9
+Versión %1$s
+Archivo: %1$s
+Las grabaciones ocupan %1$s de almacenamiento
+Detener grabación (%1$s s)
+%1$s (%2$s s)
+Error al reiniciar el módem: %1$s
+Grabación %1$s eliminada (%2$s)
+Grabación %1$s finalizada (%2$s)
+La frecuencia %1$s está fuera del rango de la fuente actual
+No se pudo guardar el archivo: %1$s
+Demodulación: %1$s MHz
+Deshacer
+Eliminar grabación
+Cargar archivo
+¿Abrir el archivo recibido como fuente? Se detendrá la recepción.
+Fuente no disponible: %1$s
+El demodulador no admite esta tasa de muestreo
+Licencias de código abierto
+Frecuencia: %1$s · Muestreo: %2$s
+Suave

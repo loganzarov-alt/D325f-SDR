@@ -3,6 +3,8 @@
 // Part of D325f SDR: https://github.com/loganzarov-alt/D325f-SDR
 // D325f SDR changes, Logan Zarov, 2026-10-23. See docs/CHANGES.md.
 package com.mantz_it.rfanalyzer.ui.composable
+import com.mantz_it.rfanalyzer.R
+import com.mantz_it.rfanalyzer.automation.localString
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -51,7 +53,7 @@ fun BtTxSettings(frequency: Long = Long.MAX_VALUE) {
             )
             val selectedChannel = channelText.toIntOrNull()
             Text(if (selectedChannel != null && selectedChannel in 0..maximumChannel)
-                "Частота TX: ${2402 + selectedChannel} МГц" else "Введите канал 0–78")
+                localString(R.string.l10n_bt_tx_frequency, 2402 + selectedChannel) else localString(R.string.l10n_bt_channel_prompt, maximumChannel))
             Text("Смена канала — при остановленном приёме.", style = MaterialTheme.typography.bodySmall)
             Button(enabled = !busy && !captureBusy && selectedChannel != null && selectedChannel in 0..maximumChannel, onClick = {
                 val next = selectedChannel ?: return@Button
@@ -59,12 +61,12 @@ fun BtTxSettings(frequency: Long = Long.MAX_VALUE) {
                 scope.launch {
                     status = try {
                         withContext(Dispatchers.IO) { BtCwController.get(context).setChannel(next) }
-                        "Сохранён канал $next · ${2402 + next} МГц"
-                    } catch (e: Exception) { e.message ?: "Ошибка изменения канала" }
+                        context.getString(R.string.l10n_bt_channel_saved, next, 2402 + next)
+                    } catch (e: Exception) { e.message ?: context.getString(R.string.l10n_error) }
                     busy = false
                 }
             }) { Text("Применить канал") }
-            Text("Мощность TX: уровень $power / 9")
+            Text(localString(R.string.l10n_bt_power, power))
 
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Button(enabled = power > 0 && !busy && !captureBusy, onClick = {

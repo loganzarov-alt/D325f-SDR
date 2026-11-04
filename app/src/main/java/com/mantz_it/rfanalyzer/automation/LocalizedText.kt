@@ -28,3 +28,5 @@ import androidx.compose.material3.LocalTextStyle
         fontStyle,fontWeight,fontFamily,letterSpacing,textDecoration,textAlign,lineHeight,
         overflow,softWrap,maxLines,minLines,onTextLayout,style)
 }
+
+@Composable fun localString(id: Int, vararg args: Any): String = LocalContext.current.getString(id, *args)

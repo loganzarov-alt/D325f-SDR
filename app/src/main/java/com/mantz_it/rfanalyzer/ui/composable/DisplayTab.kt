@@ -168,7 +168,7 @@ fun DisplayTabComposable(
                         shape = MaterialTheme.shapes.small,
                         modifier = Modifier.padding(start = 10.dp, end = 3.dp).weight(1f)
                     ) {
-                        Icon(painter = painterResource(R.drawable.settings_overscan), contentDescription = "Vertical Autoscale")
+                        Icon(painter = painterResource(R.drawable.settings_overscan), contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "Vertical Autoscale"))
                         Text("Autoscale", modifier = Modifier.padding(horizontal = 10.dp))
                     }
                     Button(
@@ -210,7 +210,7 @@ fun DisplayTabComposable(
                     modifier = Modifier.padding(start = 6.dp, end = 6.dp, bottom = 8.dp)
                 )
                 Row(modifier = Modifier.fillMaxWidth()) {
-                    val presets = listOf("Off" to 0, "Light" to 4, "Medium" to 12)
+                    val presets = listOf("Off" to 0, "Light averaging" to 4, "Medium" to 12)
                     presets.forEachIndexed { index, preset ->
                         val selected = when (preset.second) {
                             0 -> averageLength == 0

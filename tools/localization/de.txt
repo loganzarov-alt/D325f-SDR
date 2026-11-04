@@ -1,0 +1,92 @@
+Obergrenze, MHz
+BT-Empfangsgrenze
+1–2402 MHz eingeben (Standard: 1000). Unterhalb der Grenze erfolgt der Empfang mit BT-Oszillator, ab der Grenze direkt. RX nach dem Speichern stoppen und neu starten.
+Eine Zahl zwischen 1 und 2402 MHz eingeben. Die Einstellung wurde nicht geändert.
+Gespeichert. RX stoppen und neu starten.
+Einstellung konnte nicht gespeichert werden.
+Wasserfall fortsetzen
+Wasserfall einfrieren · hören
+FFT und Wasserfall pausiert. Empfang und Audio laufen weiter; die Rauschsperre ist offen.
+Die Rauschsperre unterdrückt Signale unter dem eingestellten Pegel.
+Den gewählten Kanal in der Bildschirmmitte halten
+Langes Drücken auf eine Beschriftung öffnet die zugehörige Hilfe
+Drehrichtung des Abstimmrads umkehren
+Den mittleren Gleichspannungspeak ausblenden. Diese Einstellung ändert keine IQ-Aufnahmen.
+Am Dateiende automatisch zum Anfang zurückkehren
+Markierungen für den höchsten Signalpegel anzeigen
+Frequenzen relativ zur Mittenfrequenz anzeigen
+Nur aufnehmen, wenn der Signalpegel über der Rauschsperrenschwelle liegt.
+Nur Anzeige. IQ, Demodulation und Aufnahmen bleiben unverändert.
+Aufnahme stoppen?
+Die Aufnahme läuft. Zum Ändern der Frequenz stoppen?
+Die Aufnahme läuft. Zum Ändern der Abtastrate stoppen?
+Ja, Aufnahme stoppen
+Nein
+Modem vollständig neu starten?
+Nur nach einem PLL-Einrastfehler verwenden. Mobilfunk, WLAN und USB können etwa eine Minute lang neu starten.
+Modem neu starten
+Vollständiger Modemneustart angefordert
+ALLE Aufnahmen löschen?
+Alle Aufnahmen löschen? Dies lässt sich nicht rückgängig machen.
+Ja, alle löschen
+Aufnahme läuft
+Frequenz außerhalb des Bereichs der aktuellen Aufnahme. Aufnahme stoppen?
+Protokoll gelöscht
+Datei geöffnet. Zum Starten auf Wiedergabe drücken.
+Aufnahmenamen bearbeiten
+Automatischer Aufnahmestopp
+Aufnahme stoppen nach
+D325f SDR-Handbuch
+RF Decoder-Protokoll
+Hinweise zu Open-Source-Software
+Lizenzen und Hinweise · offline
+Langsam
+Schnell
+Balken
+Linie
+Aus
+Mittel
+(keine Datei gewählt)
+Abstimmfrequenz
+Steuerung öffnen
+Zur Startseite
+Nach unten scrollen
+In Favoriten
+Zu Favoriten hinzufügen oder entfernen
+Favoriten anzeigen
+Ton ein- oder ausschalten
+BEREIT · QUELLE WÄHLEN UND STARTEN
+Datum, Dauer, Frequenz und Port prüfen.
+Aufgabenzeiten überschneiden sich
+Exakte Alarme in den Systemeinstellungen erlauben
+Fehler
+Der Kanal muss zwischen 0 und 78 liegen
+Empfang vor dem Ändern des BT-Kanals stoppen
+Zeitüberschreitung beim Stromversorgungsbefehl
+Zeitüberschreitung beim Öffnen des Modems
+Der Modemdatenstrom wurde unterbrochen
+1,28, 2,56 oder 7,68 MS/s wählen
+Einen Kanal von 0 bis %1$s eingeben
+TX-Frequenz: %1$s MHz
+Kanal %1$s gespeichert · %2$s MHz
+TX-Leistung: Stufe %1$s / 9
+Version %1$s
+Datei: %1$s
+Aufnahmen belegen %1$s Speicher
+Aufnahme stoppen (%1$s s)
+%1$s (%2$s s)
+Modemneustart fehlgeschlagen: %1$s
+Aufnahme %1$s gelöscht (%2$s)
+Aufnahme %1$s abgeschlossen (%2$s)
+Frequenz %1$s außerhalb des Bereichs der aktuellen Quelle
+Datei konnte nicht gespeichert werden: %1$s
+Demodulation: %1$s MHz
+Rückgängig
+Aufnahme löschen
+Datei laden
+Eingehende Datei als Quelle öffnen? Der Empfang wird gestoppt.
+Quelle nicht verfügbar: %1$s
+Der Demodulator unterstützt diese Abtastrate nicht
+Open-Source-Lizenzen
+Frequenz: %1$s · Abtastrate: %2$s
+Schwach
