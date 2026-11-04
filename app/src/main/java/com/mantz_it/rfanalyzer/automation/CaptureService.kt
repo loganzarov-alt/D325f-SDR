@@ -328,7 +328,7 @@ class CaptureService : Service() {
                 } catch(e: Exception) { if(!stopped()){lastError=controlError.get() ?: e.message ?: "Network error";diagnostic(lastError)} }
                 finally {
                     if(handle!=0L)dsp.destroyNetworkResampler(handle)
-                    runCatching { c.close() };s?.close();source?.close();source=null;reader?.join(1000)
+                    runCatching { c.close() };(s ?: source)?.close();source=null;reader?.join(1000)
                 }
             }
         } finally {
