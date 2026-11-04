@@ -152,7 +152,7 @@ fun SourceTabComposable(
             )
             Button(
                 onClick = sourceTabActions.onStartStopClicked,
-                enabled = !analyzerStartPending,
+                enabled = true,
                 shape = MaterialTheme.shapes.small,
                 modifier = Modifier
                     .padding(start = 8.dp, end = 2.dp, top = 11.dp)
@@ -160,7 +160,7 @@ fun SourceTabComposable(
                     .align(Alignment.CenterVertically)
                     .weight(0.382f)
             ) {
-                if(analyzerRunning) {
+                if(analyzerRunning || analyzerStartPending) {
                     Icon(
                         painter = painterResource(R.drawable.stop_circle),
                         contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "Stop"),

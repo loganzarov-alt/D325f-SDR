@@ -89,6 +89,12 @@ fun MainScreen(analyzerSurface: AnalyzerSurface, viewModel: MainViewModel, appSt
                     modifier = Modifier.fillMaxSize()
                 )
 
+                if (com.mantz_it.rfanalyzer.BuildConfig.NETWORK_CLIENT) {
+                    val networkStatus by com.mantz_it.rfanalyzer.network.NetworkClientStatus.text.collectAsState()
+                    Text(networkStatus, modifier=Modifier.align(Alignment.TopStart).padding(top=68.dp, start=16.dp, end=16.dp),
+                        color=MaterialTheme.colorScheme.onSurface)
+                }
+
                 val stateLabel = when {
                     exclusiveCapture -> "RUNNING"
                     analyzerRunning -> "RUNNING"
