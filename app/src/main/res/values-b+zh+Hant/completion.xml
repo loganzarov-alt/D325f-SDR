@@ -67,7 +67,6 @@
     <string name="l10n_power_timeout">電源命令逾時</string>
     <string name="l10n_modem_timeout">開啟數據機逾時</string>
     <string name="l10n_modem_stopped">數據機資料已中斷</string>
-    <string name="l10n_rate_select">請選擇 1.28、2.56 或 7.68 MS/s</string>
     <string name="l10n_bt_channel_prompt">輸入 0 到 %1$s 之間的通道</string>
     <string name="l10n_bt_tx_frequency">TX 頻率：%1$s MHz</string>
     <string name="l10n_bt_channel_saved">已儲存通道 %1$s · %2$s MHz</string>

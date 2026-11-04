@@ -6,24 +6,19 @@ plugins {
     alias(libs.plugins.dagger.hilt)
 }
 
-val networkClient = providers.gradleProperty("networkClient").orNull == "true"
-
 android {
     namespace = "com.mantz_it.rfanalyzer"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "io.github.loganzarov_alt.d325fsdr" + if(networkClient) ".client" else ""
-        buildConfigField("boolean", "NETWORK_CLIENT", networkClient.toString())
-        manifestPlaceholders["lgEnabled"] = (!networkClient).toString()
-        manifestPlaceholders["applicationLabel"] = if(networkClient) "D325f SDR Client" else "D325f SDR"
+        applicationId = "io.github.loganzarov_alt.d325fsdr"
         minSdk = 25
         targetSdk = 34
-        versionCode = 20002
-        versionName = "2.0.2"
+        versionCode = 20005
+        versionName = "2.0"
 
         ndk {
-            abiFilters += listOf(if(networkClient) "arm64-v8a" else "armeabi-v7a")
+            abiFilters += listOf("armeabi-v7a")
         }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

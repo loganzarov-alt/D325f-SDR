@@ -67,7 +67,6 @@
     <string name="l10n_power_timeout">Délai de la commande d’alimentation dépassé</string>
     <string name="l10n_modem_timeout">Délai d’ouverture du modem dépassé</string>
     <string name="l10n_modem_stopped">Les données du modem se sont interrompues</string>
-    <string name="l10n_rate_select">Sélectionnez 1,28, 2,56 ou 7,68 Méch/s</string>
     <string name="l10n_bt_channel_prompt">Saisissez un canal de 0 à %1$s</string>
     <string name="l10n_bt_tx_frequency">Fréquence TX : %1$s MHz</string>
     <string name="l10n_bt_channel_saved">Canal %1$s enregistré · %2$s MHz</string>

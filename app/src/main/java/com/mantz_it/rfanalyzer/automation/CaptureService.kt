@@ -12,7 +12,6 @@ import com.mantz_it.nativedsp.NativeDsp
 import org.json.JSONObject
 import java.io.*
 import java.util.concurrent.*
-import java.net.*
 import kotlin.math.*
 
 /** Owns the modem independently of Activities. No sticky restart or persisted thermal latch. */
@@ -27,42 +26,39 @@ class CaptureService : Service() {
     private var wake: PowerManager.WakeLock? = null
     @Volatile private var cancelled = false
     @Volatile private var source: LgModemSource? = null
-    @Volatile private var server: ServerSocket? = null
-    @Volatile private var client: Socket? = null
     override fun onBind(i: Intent?) = null
     override fun onStartCommand(i: Intent?, flags: Int, id: Int): Int {
-        if(com.mantz_it.rfanalyzer.BuildConfig.NETWORK_CLIENT) { stopSelf();return START_NOT_STICKY }
         if(i?.action==STOP) {
             cancelled=true; CaptureSettings.cancelRequested=true
-            runCatching { client?.close() };runCatching { server?.close() }
+
             if(worker?.isAlive!=true)stopSelf()
             return START_NOT_STICKY
         }
         if(worker?.isAlive==true) {
             i?.getStringExtra("task")?.let { json ->
-                if(!i.getBooleanExtra("stream",false)) TaskStore.mark(this,CaptureTask.from(JSONObject(json)).id,"skipped")
+                TaskStore.mark(this,CaptureTask.from(JSONObject(json)).id,"skipped")
             }
             return START_NOT_STICKY
         }
         val json=i?.getStringExtra("task") ?: run { stopSelf(); return START_NOT_STICKY }
-        val task=CaptureTask.from(JSONObject(json)); val streaming=i.getBooleanExtra("stream",false)
+        val task=CaptureTask.from(JSONObject(json))
         val stop=PendingIntent.getService(this,0,Intent(this,CaptureService::class.java).setAction(STOP),PendingIntent.FLAG_IMMUTABLE)
         startForeground(2,NotificationCompat.Builder(this,"SERVICE_CHANNEL")
             .setSmallIcon(R.drawable.stop_circle).setContentTitle("D325f SDR 2.0")
-            .setContentText(if(streaming) "IQ TCP" else getString(R.string.ui_6))
+            .setContentText(getString(R.string.ui_6))
             .setOngoing(true).addAction(R.drawable.stop_circle,getString(R.string.v2_stop),stop).build())
-        if(!CaptureSettings.acquire(this)) { CaptureSettings.status.value=getString(R.string.v2_busy); if(!streaming)TaskStore.mark(this,task.id,"skipped"); stopSelf(); return START_NOT_STICKY }
+        if(!CaptureSettings.acquire(this)) { CaptureSettings.status.value=getString(R.string.v2_busy); TaskStore.mark(this,task.id,"skipped"); stopSelf(); return START_NOT_STICKY }
         cancelled=false; CaptureSettings.cancelRequested=false; CaptureSettings.busy.value=true
         wake=(getSystemService(POWER_SERVICE) as PowerManager).newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,"D325f:Capture").apply { acquire() }
         worker=Thread({
-            try { if(streaming) stream(task) else automate(task) }
+            try { automate(task) }
             catch(e: Exception) {
-                if(!streaming)runCatching { TaskStore.mark(this,task.id,if(stopped())"cancelled" else "failed") }
+                runCatching { TaskStore.mark(this,task.id,if(stopped())"cancelled" else "failed") }
                 CaptureSettings.status.value="${getString(R.string.v2_error)}: ${UiTranslations.text(this,e.message ?: "Error")}"
             }
             finally {
                 source?.close(); source=null
-                runCatching { client?.close() }; runCatching { server?.close() }
+
                 CaptureSettings.busy.value=false; CaptureSettings.release(this)
                 wake?.let { if(it.isHeld)it.release() }; stopForeground(true); stopSelf()
             }
@@ -71,7 +67,7 @@ class CaptureService : Service() {
     }
     override fun onDestroy() {
         cancelled=true
-        runCatching { client?.close() }; runCatching { server?.close() }
+
         super.onDestroy()
     }
     private fun stopped()=cancelled || CaptureSettings.cancelRequested
@@ -127,12 +123,11 @@ class CaptureService : Service() {
         private val dsp=NativeDsp()
         private val handle=if(rate==LgModemSource.SAMPLE_RATE)0L else dsp.createBandwidth(rate)
         private val re=FloatArray(16384); private val im=FloatArray(16384)
-        fun bytes(raw: ByteArray, unsigned: Boolean=false): ByteArray {
+        fun bytes(raw: ByteArray): ByteArray {
             val data=if(handle==0L)raw.copyOf() else {
                 val n=dsp.filterBandwidth(handle,raw,re,im,false)
                 ByteArray(n*2).apply { for(i in 0 until n) { this[i*2]=(re[i]*128).roundToInt().coerceIn(-128,127).toByte();this[i*2+1]=(im[i]*128).roundToInt().coerceIn(-128,127).toByte() } }
             }
-            if(unsigned)for(i in data.indices)data[i]=(data[i].toInt() xor 128).toByte()
             return data
         }
         override fun close() { if(handle!=0L)dsp.destroyBandwidth(handle) }
@@ -261,79 +256,4 @@ class CaptureService : Service() {
     private class VolatileBox { @Volatile var done=false; @Volatile var closed=true; @Volatile var outage=true; var gap=false }
     private fun rawDurationMs(raw: ByteArray)=raw.size.toLong()*1000/(2*LgModemSource.SAMPLE_RATE)
 
-    /** Standard RTL0/CU8 server; commands arrive before potentially slow modem setup. */
-    private fun stream(t: CaptureTask) {
-        val socket=ServerSocket().apply { reuseAddress=true;bind(InetSocketAddress(CaptureSettings.prefs(this@CaptureService).getInt("port",1234)));soTimeout=1000 }
-        server=socket
-        val wifi=getSystemService(WIFI_SERVICE) as android.net.wifi.WifiManager
-        val wifiLock=wifi.createWifiLock(android.net.wifi.WifiManager.WIFI_MODE_FULL_HIGH_PERF,"D325f:IQ").apply { acquire() }
-        val initialLimit=getSharedPreferences("bt_rx_limit",0).getLong("upper_hz",BtRxLimit.DEFAULT_HZ)
-        var lastError=""
-        fun diagnostic(message: String) {
-            val f=File(filesDir,"network.log")
-            runCatching { if(f.length()>256000)f.writeText("");f.appendText("${System.currentTimeMillis()} $message\n") }
-        }
-        try {
-            while(!stopped()) {
-                CaptureSettings.status.value="${getString(R.string.v2_listening)} :${socket.localPort} $lastError"
-                val c=try { socket.accept() } catch(e: SocketTimeoutException) { continue }
-                lastError="";client=c;c.tcpNoDelay=true;c.sendBufferSize=262144
-                val controls=com.mantz_it.rfanalyzer.network.RtlTcpControl(t.frequency,t.rate)
-                var reader: Thread?=null;var s: LgModemSource?=null
-                val dsp=NativeDsp();var handle=0L;var rate=0
-                val controlError=java.util.concurrent.atomic.AtomicReference<String?>(null)
-                try {
-                    val out=BufferedOutputStream(c.getOutputStream(),65536)
-                    com.mantz_it.rfanalyzer.network.RtlTcpControl.greeting(out)
-                    reader=Thread({
-                        try { controls.read(c.getInputStream()) }
-                        catch(e: Exception) { controlError.set(e.message);runCatching { c.close() } }
-                    },"rtl_tcp-control").apply { start() }
-                    // Clients send their initial tuning/rate immediately after RTL0.
-                    val until=SystemClock.elapsedRealtime()+1000
-                    var previous=-1L;var quiet=SystemClock.elapsedRealtime()
-                    while(!stopped() && !c.isClosed && SystemClock.elapsedRealtime()<until) {
-                        val now=SystemClock.elapsedRealtime();val rev=controls.snapshot().revision
-                        if(rev!=previous){previous=rev;quiet=now}
-                        if(rev>=2 && now-quiet>=150)break
-                        Thread.sleep(20)
-                    }
-                    if(stopped() || c.isClosed)continue
-                    val first=controls.snapshot()
-                    CaptureSettings.status.value="RTL-TCP · ${c.inetAddress.hostAddress} · FTM"
-                    s=createSource(t.copy(frequency=first.correctedFrequency().coerceIn(LgModemSource.MIN_FREQUENCY,LgModemSource.MAX_FREQUENCY)))
-                    s.setLosslessConsumerMode(true);s.startSampling()
-                    val output=ByteArray(32768)
-                    var appliedFrequency=first.correctedFrequency();var lastPacket=SystemClock.elapsedRealtime()
-                    var lastDiagnostic=""
-                    while(!stopped() && !c.isClosed) {
-                        val state=controls.snapshot()
-                        if(rate!=state.rate) { if(handle!=0L)dsp.destroyNetworkResampler(handle);handle=0;handle=dsp.createNetworkResampler(state.rate);rate=state.rate }
-                        val frequency=state.correctedFrequency().coerceIn(LgModemSource.MIN_FREQUENCY,LgModemSource.MAX_FREQUENCY)
-                        if(frequency!=appliedFrequency){s.frequency=frequency;appliedFrequency=frequency}
-                        if(state.diagnostic!=lastDiagnostic){lastDiagnostic=state.diagnostic;diagnostic(lastDiagnostic)}
-                        val raw=s.getPacket(1000)
-                        if(raw==null) {
-                            if(SystemClock.elapsedRealtime()-lastPacket>60000)throw IOException("No modem IQ for 60 seconds")
-                            CaptureSettings.status.value=getString(R.string.v2_recovering)
-                            s.stopSampling();if(!stopped()&&!c.isClosed){Thread.sleep(500);s.startSampling()}
-                            continue
-                        }
-                        try { val n=dsp.resampleNetwork(handle,raw,output,state.linearGain(),state.agc);out.write(output,0,n);out.flush() }
-                        finally { s.returnPacket(raw) }
-                        lastPacket=SystemClock.elapsedRealtime()
-                        CaptureSettings.status.value="RTL-TCP · ${c.inetAddress.hostAddress} · $rate Sps · software gain ${state.gain/10.0} dB"
-                    }
-                    controlError.get()?.let { lastError=it }
-                } catch(e: Exception) { if(!stopped()){lastError=controlError.get() ?: e.message ?: "Network error";diagnostic(lastError)} }
-                finally {
-                    if(handle!=0L)dsp.destroyNetworkResampler(handle)
-                    runCatching { c.close() };(s ?: source)?.close();source=null;reader?.join(1000)
-                }
-            }
-        } finally {
-            socket.close();if(wifiLock.isHeld)wifiLock.release()
-            getSharedPreferences("bt_rx_limit",0).edit().putLong("upper_hz",initialLimit).commit();BtRxLimit.reload()
-        }
-    }
 }

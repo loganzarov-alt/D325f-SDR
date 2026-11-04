@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="v2_stop">रोकें</string>
-    <string name="v2_busy">रिसीवर व्यस्त है या स्ट्रीमिंग चुनी गई है</string>
+    <string name="v2_busy">रिसीवर व्यस्त है</string>
     <string name="v2_error">त्रुटि</string>
     <string name="v2_recovering">रिसेप्शन बहाल हो रहा है</string>
     <string name="v2_recording">रिकॉर्डिंग जारी है</string>
@@ -10,10 +10,10 @@
     <string name="v2_manual_language">भाषा मैन्युअल रूप से चुनें</string>
     <string name="v2_system_language">सिस्टम की भाषा इस्तेमाल करें</string>
     <string name="v2_invert">IQ स्पेक्ट्रम उलटें</string>
-    <string name="v2_stream">Wi-Fi पर IQ स्ट्रीमिंग</string>
-    <string name="v2_stream_info">rtl_tcp • CU8 • 0.25–7.68 MS/s. स्थानीय रिकॉर्डिंग और स्पेक्ट्रम बंद हैं।</string>
-    <string name="v2_port">TCP पोर्ट</string>
-    <string name="v2_start_stream">स्ट्रीमिंग शुरू करें</string>
+
+
+
+
     <string name="v2_task_settings">एक बार के कार्य। गेन, बैंडविड्थ, इन्वर्ज़न और BT सेटिंग Source से कॉपी होती हैं।</string>
     <string name="v2_start_time">शुरुआत: yyyy-MM-dd HH:mm:ss</string>
     <string name="v2_duration">रिकॉर्डिंग अवधि, सेकंड</string>

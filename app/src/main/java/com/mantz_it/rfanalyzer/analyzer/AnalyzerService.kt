@@ -20,7 +20,6 @@ import com.mantz_it.rfanalyzer.R
 import com.mantz_it.rfanalyzer.ui.RecordingStorage
 import com.mantz_it.rfanalyzer.ui.composable.DemodulationMode
 import com.mantz_it.rfanalyzer.ui.composable.FilesourceFileFormat
-import com.mantz_it.rfanalyzer.source.NetworkIQSource
 import com.mantz_it.rfanalyzer.ui.composable.SourceType
 import com.mantz_it.rfanalyzer.ui.composable.StopAfterUnit
 import kotlinx.coroutines.CoroutineScope
@@ -292,8 +291,7 @@ class AnalyzerService : Service() {
      * processing loop.
      */
     fun startAnalyzer() : Boolean {
-        if (com.mantz_it.rfanalyzer.automation.CaptureSettings.prefs(this).getBoolean("stream",false) ||
-            !com.mantz_it.rfanalyzer.automation.CaptureSettings.acquire(this)) {
+        if (!com.mantz_it.rfanalyzer.automation.CaptureSettings.acquire(this)) {
             appStateRepository.analyzerStartPending.set(false)
             Toast.makeText(this, getString(R.string.v2_busy), Toast.LENGTH_LONG).show()
             return false
@@ -360,7 +358,7 @@ class AnalyzerService : Service() {
         // 2 MHz viewport otherwise makes a 131072-point FFT look four-times zoomed
         // even though the FFT itself is correct.  Users can still pinch-zoom after
         // playback has started.  No IQ/DSP/demodulation data is changed here.
-        if (source is LgModemSource || source is FileIQSource || source is NetworkIQSource) {
+        if (source is LgModemSource || source is FileIQSource) {
             appStateRepository.viewportFrequency.set(source!!.frequency)
             appStateRepository.viewportSampleRate.set(source!!.sampleRate.toLong())
         }
@@ -514,12 +512,6 @@ class AnalyzerService : Service() {
                 appStateRepository.lgLnaState.value,
                 appStateRepository.lgDvgaOffset.value
             ).also { it.sampleRate = appStateRepository.sourceSampleRate.value.toInt() }
-            SourceType.RTLTCP -> {
-                val prefs=getSharedPreferences("network_client",0)
-                source=NetworkIQSource(prefs.getString("host", "192.168.1.69")!!, prefs.getInt("port",1234),
-                    appStateRepository.sourceFrequency.value,appStateRepository.sourceSampleRate.value.toInt(),
-                    prefs.getInt("gain",0),prefs.getBoolean("agc",false))
-            }
             SourceType.FILESOURCE -> source =
                 FileIQSource()
             
@@ -543,7 +535,6 @@ class AnalyzerService : Service() {
                 return false
             }
 
-            SourceType.RTLTCP -> return source?.open(this,iqSourceActions)==true
             SourceType.FILESOURCE -> if (source != null && source is FileIQSource) {
                 (source as FileIQSource).init(
                     appStateRepository.filesourceUri.value.toUri(),

@@ -136,14 +136,13 @@ fun AnalyzerTabsComposable(
     val analyzerStartPending by appStateRepository.analyzerStartPending.stateFlow.collectAsState()
     val totalRecordingSizeInBytes by mainViewModel.totalRecordingSizeInBytes.collectAsState()
 
-    val visibleTabs=AnalyzerTabs.entries.filter { !com.mantz_it.rfanalyzer.BuildConfig.NETWORK_CLIENT || it!=AnalyzerTabs.AUTOMATIZATIONS }
     Column {
         PrimaryScrollableTabRow(
-            selectedTabIndex = visibleTabs.indexOf(state).coerceAtLeast(0),
+            selectedTabIndex = state.ordinal,
             containerColor = MaterialTheme.colorScheme.surface,
             contentColor = MaterialTheme.colorScheme.primary
         ) {
-            visibleTabs.forEach { tab ->
+            AnalyzerTabs.entries.forEach { tab ->
                 val selected = state == tab
                 Tab(
                     selected = selected,

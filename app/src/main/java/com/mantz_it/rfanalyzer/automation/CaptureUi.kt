@@ -74,40 +74,15 @@ object AppLanguage {
 }
 
 @Composable fun CaptureSourceControls(a: AppStateRepository) {
-    val c=LocalContext.current;val p=CaptureSettings.prefs(c);val scope=rememberCoroutineScope()
+    val c=LocalContext.current;val p=CaptureSettings.prefs(c)
     val running by a.analyzerRunning.stateFlow.collectAsState();val pending by a.analyzerStartPending.stateFlow.collectAsState()
     val busy by CaptureSettings.busy.collectAsState();val status by CaptureSettings.status.collectAsState()
     var invert by remember { mutableStateOf(CaptureSettings.inverted(c)) }
-    var streaming by remember { mutableStateOf(p.getBoolean("stream",false)) }
-    var port by remember { mutableStateOf(p.getInt("port",1234).toString()) }
-    var error by remember { mutableStateOf("") }
     val recording by a.recordingRunning.stateFlow.collectAsState()
     val locked=running || pending || busy || recording
     Column {
         Row { Checkbox(invert,{invert=it;p.edit().putBoolean("invert",it).commit()},enabled=!locked);Text(stringResource(R.string.v2_invert)) }
-        Row { Checkbox(streaming,{streaming=it;p.edit().putBoolean("stream",it).commit()},enabled=!locked);Text(stringResource(R.string.v2_stream)) }
-        if(streaming) {
-            BackgroundAccess()
-            Text(stringResource(R.string.v2_stream_info))
-            Text("SDR++: RTL-TCP · SDR#: RTL-SDR TCP · SDRangel: Remote TCP · SatDump: RTL-TCP")
-            OutlinedTextField(port,{if(it.length<=5 && it.all(Char::isDigit))port=it},label={Text(stringResource(R.string.v2_port))},enabled=!locked)
-            val addresses=remember { runCatching { Collections.list(java.net.NetworkInterface.getNetworkInterfaces()).flatMap { Collections.list(it.inetAddresses) }.filter { it is java.net.Inet4Address && !it.isLoopbackAddress }.joinToString { it.hostAddress ?: "" } }.getOrDefault("") }
-            Text("IP: $addresses")
-            Button(onClick={
-                if(busy) { CaptureSettings.cancelRequested=true;c.startService(Intent(c,CaptureService::class.java).setAction(CaptureService.STOP)) }
-                else scope.launch {
-                    runCatching {
-                        val number=port.toInt();require(number in 1024..65535)
-                        p.edit().putInt("port",number).commit()
-                        val task=withContext(Dispatchers.IO) { CaptureTask.snapshot(c,a,System.currentTimeMillis(),86_400_000,a.sourceFrequency.value,false,false) }
-                        val intent=Intent(c,CaptureService::class.java).putExtra("task",task.json().toString()).putExtra("stream",true)
-                        if(Build.VERSION.SDK_INT>=26)c.startForegroundService(intent) else c.startService(intent)
-                    }.onFailure { error=if(it is IllegalArgumentException && it.message != "Tasks overlap") c.getString(R.string.l10n_invalid_task) else UiTranslations.text(c,it.message ?: "Error") }
-                }
-            },enabled=!running && !pending) { Text(stringResource(if(busy)R.string.v2_stop else R.string.v2_start_stream)) }
-        }
         if(status.isNotEmpty())Text(status)
-        if(error.isNotEmpty())Text(error,color=MaterialTheme.colorScheme.error)
     }
 }
 

@@ -67,7 +67,6 @@
     <string name="l10n_power_timeout">Zeitüberschreitung beim Stromversorgungsbefehl</string>
     <string name="l10n_modem_timeout">Zeitüberschreitung beim Öffnen des Modems</string>
     <string name="l10n_modem_stopped">Der Modemdatenstrom wurde unterbrochen</string>
-    <string name="l10n_rate_select">1,28, 2,56 oder 7,68 MS/s wählen</string>
     <string name="l10n_bt_channel_prompt">Einen Kanal von 0 bis %1$s eingeben</string>
     <string name="l10n_bt_tx_frequency">TX-Frequenz: %1$s MHz</string>
     <string name="l10n_bt_channel_saved">Kanal %1$s gespeichert · %2$s MHz</string>

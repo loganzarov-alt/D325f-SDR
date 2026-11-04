@@ -11,9 +11,6 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 
 class NativeDsp {
-    external fun createNetworkResampler(rate: Int): Long
-    external fun destroyNetworkResampler(handle: Long)
-    external fun resampleNetwork(handle: Long, raw: ByteArray, output: ByteArray, gain: Double, agc: Boolean): Int
     external fun invertCi8(raw: ByteArray)
     external fun createBandwidth(rate: Int): Long
     external fun destroyBandwidth(handle: Long)

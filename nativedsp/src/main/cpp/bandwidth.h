@@ -47,7 +47,7 @@ struct BandwidthFilter {
   int n=0;
   for(int i=0;i<count;i++) {
    if(!taps){outRe[n]=input[2*i]/128.f;outIm[n++]=input[2*i+1]*(inverted?-1.f:1.f)/128.f;continue;}
-   if(--pos<0){pos=taps-1;}re[pos]=re[pos+taps]=input[2*i];im[pos]=im[pos+taps]=input[2*i+1];++inputIndex;
+   if(--pos<0)pos=taps-1;re[pos]=re[pos+taps]=input[2*i];im[pos]=im[pos+taps]=input[2*i+1];++inputIndex;
    if(inputIndex>=nextInput) {
     outRe[n]=dot(re+pos,coeff[phase],taps)*(1.f/(128*32768));
     outIm[n++]=dot(im+pos,coeff[phase],taps)*(inverted?-1.f:1.f)/(128*32768);

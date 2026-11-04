@@ -65,7 +65,6 @@ Pare a recepção antes de alterar o canal BT
 Tempo esgotado para o comando de energia
 Tempo esgotado ao abrir o modem
 Os dados do modem foram interrompidos
-Selecione 1,28, 2,56 ou 7,68 MS/s
 Digite um canal de 0 a %1$s
 Frequência TX: %1$s MHz
 Canal %1$s salvo · %2$s MHz

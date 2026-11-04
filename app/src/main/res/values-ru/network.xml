@@ -1,7 +1,0 @@
-<resources>
-    <string name="net_host">Адрес LG / имя узла</string>
-    <string name="net_port">Порт</string>
-    <string name="net_gain">Программное усиление (дБ)</string>
-    <string name="net_agc">Программная АРУ</string>
-    <string name="net_help">Включите стриминг на LG. Здесь укажите его IP в Wi-Fi и порт. Начните с 1,024 Мвыб/с. Программное усиление не повышает чувствительность приёмника.</string>
-</resources>

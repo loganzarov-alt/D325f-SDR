@@ -1,7 +1,0 @@
-<resources>
-    <string name="net_host">LG 주소 / 호스트 이름</string>
-    <string name="net_port">포트</string>
-    <string name="net_gain">소프트웨어 이득 (dB)</string>
-    <string name="net_agc">소프트웨어 AGC</string>
-    <string name="net_help">LG에서 스트리밍을 켜고 Wi-Fi IP와 포트를 입력하세요. 1.024 MSps로 시작하세요. 소프트웨어 이득은 RF 감도를 높이지 않습니다.</string>
-</resources>

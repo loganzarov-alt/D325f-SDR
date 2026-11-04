@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="v2_stop">Detener</string>
-    <string name="v2_busy">Receptor ocupado o transmisión seleccionada</string>
+    <string name="v2_busy">Receptor ocupado</string>
     <string name="v2_error">Error</string>
     <string name="v2_recovering">Recuperando recepción</string>
     <string name="v2_recording">Grabando</string>
@@ -10,10 +10,10 @@
     <string name="v2_manual_language">Elegir idioma manualmente</string>
     <string name="v2_system_language">Usar idioma del sistema</string>
     <string name="v2_invert">Invertir espectro IQ</string>
-    <string name="v2_stream">Transmisión IQ por Wi-Fi</string>
-    <string name="v2_stream_info">rtl_tcp • CU8 • 0,25–7,68 MS/s. Grabación y espectro locales desactivados.</string>
-    <string name="v2_port">Puerto TCP</string>
-    <string name="v2_start_stream">Iniciar transmisión</string>
+
+
+
+
     <string name="v2_task_settings">Tareas únicas. Ganancia, ancho de banda, inversión y BT se copian de Source.</string>
     <string name="v2_start_time">Inicio: aaaa-MM-dd HH:mm:ss</string>
     <string name="v2_duration">Duración, segundos</string>

@@ -67,7 +67,6 @@
     <string name="l10n_power_timeout">Tempo scaduto per il comando di alimentazione</string>
     <string name="l10n_modem_timeout">Tempo scaduto per l’apertura del modem</string>
     <string name="l10n_modem_stopped">Il flusso di dati del modem si è interrotto</string>
-    <string name="l10n_rate_select">Selezionare 1,28, 2,56 o 7,68 MS/s</string>
     <string name="l10n_bt_channel_prompt">Inserire un canale da 0 a %1$s</string>
     <string name="l10n_bt_tx_frequency">Frequenza TX: %1$s MHz</string>
     <string name="l10n_bt_channel_saved">Canale %1$s salvato · %2$s MHz</string>

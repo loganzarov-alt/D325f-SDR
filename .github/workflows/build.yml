@@ -32,18 +32,6 @@ jobs:
           git diff --exit-code
       - name: Build APK and run source-selection tests
         run: ./gradlew --no-daemon :app:assembleRelease :app:testReleaseUnitTest
-      - name: Preserve LG APK
-        run: |
-          mkdir -p dist
-          cp app/build/outputs/apk/release/app-release.apk dist/D325f-SDR-LG-2.0.2-ci-test-signed.apk
-      - name: Build Pixel 4 client (ARM64)
-        run: ./gradlew --no-daemon -PnetworkClient=true :app:assembleRelease
-      - name: Test network control and resampling
-        run: |
-          javac -d /tmp/network-tests app/src/main/java/com/mantz_it/rfanalyzer/network/*.java tests/pipeline/TestRtlTcp.java
-          java -cp /tmp/network-tests TestRtlTcp
-          g++ -std=c++17 -O2 -Wall -Wextra -Werror tests/pipeline/test_network_resampler.cpp -o /tmp/network-test
-          /tmp/network-test
       - name: Test automation decisions
         run: |
           javac -d /tmp/v2-tests app/src/main/java/com/mantz_it/rfanalyzer/automation/CapturePolicy.java tests/pipeline/TestCapturePolicyV2.java app/src/main/java/com/mantz_it/rfanalyzer/automation/IqGap.java tests/pipeline/TestIqGap.java
@@ -60,14 +48,14 @@ jobs:
       - name: Upload test-signed APK, sources and checksums
         run: |
           mkdir -p dist
-          cp app/build/outputs/apk/release/app-release.apk dist/D325f-SDR-Pixel4-2.0.2-ci-test-signed.apk
+          cp app/build/outputs/apk/release/app-release.apk dist/D325f-SDR-LG-2.0-ci-test-signed.apk
           cp "$ANDROID_HOME/build-tools/35.0.0/lib/apksigner.jar" dist/
           git archive --format=tar.gz --prefix=D325f-SDR/ HEAD > dist/D325f-SDR-source.tar.gz
           cd dist
           sha256sum *.apk *.tar.gz > SHA256SUMS
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: D325f-SDR-2.0.2-LG-and-Pixel4
+          name: D325f-SDR-LG-2.0-ci-test-signed
           retention-days: 30
           if-no-files-found: error
           path: dist/

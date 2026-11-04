@@ -65,7 +65,6 @@ bt_stop	Stop reception before changing the BT channel	Остановите пр�
 power_timeout	Power command timed out	Истекло время ожидания команды питания
 modem_timeout	Opening modem timed out	Истекло время ожидания открытия модема
 modem_stopped	Modem data stopped	Данные от модема перестали поступать
-rate_select	Select 1.28, 2.56 or 7.68 MS/s	Выберите 1,28, 2,56 или 7,68 Мвыб/с
 bt_channel_prompt	Enter a channel from 0 to %1$s	Введите канал от 0 до %1$s
 bt_tx_frequency	TX frequency: %1$s MHz	Частота TX: %1$s МГц
 bt_channel_saved	Channel %1$s saved · %2$s MHz	Сохранён канал %1$s · %2$s МГц

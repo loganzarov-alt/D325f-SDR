@@ -329,16 +329,3 @@ Java_com_mantz_1it_nativedsp_NativeDsp_invertCi8(JNIEnv* env, jobject, jbyteArra
     invertCi8Spectrum(reinterpret_cast<int8_t*>(bytes), static_cast<size_t>(n));
     env->ReleaseByteArrayElements(raw, bytes, 0);
 }
-
-#include "network_resampler.h"
-extern "C" JNIEXPORT jlong JNICALL Java_com_mantz_1it_nativedsp_NativeDsp_createNetworkResampler(JNIEnv* env,jobject,jint rate) {
- if(rate<250000 || rate>7680000){env->ThrowNew(env->FindClass("java/lang/IllegalArgumentException"),"Invalid network sample rate");return 0;}
- return reinterpret_cast<jlong>(new NetworkResampler(rate));
-}
-extern "C" JNIEXPORT void JNICALL Java_com_mantz_1it_nativedsp_NativeDsp_destroyNetworkResampler(JNIEnv*,jobject,jlong handle){delete reinterpret_cast<NetworkResampler*>(handle);}
-extern "C" JNIEXPORT jint JNICALL Java_com_mantz_1it_nativedsp_NativeDsp_resampleNetwork(JNIEnv* env,jobject,jlong handle,jbyteArray raw,jbyteArray output,jdouble gain,jboolean agc){
- if(!handle || env->GetArrayLength(output)<env->GetArrayLength(raw))return 0;
- auto in=env->GetByteArrayElements(raw,nullptr);auto out=env->GetByteArrayElements(output,nullptr);
- int n=reinterpret_cast<NetworkResampler*>(handle)->process(reinterpret_cast<int8_t*>(in),env->GetArrayLength(raw)/2,reinterpret_cast<uint8_t*>(out),gain,agc);
- env->ReleaseByteArrayElements(raw,in,JNI_ABORT);env->ReleaseByteArrayElements(output,out,0);return n;
-}

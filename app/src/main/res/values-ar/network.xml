@@ -1,7 +1,0 @@
-<resources>
-    <string name="net_host">عنوان LG / اسم المضيف</string>
-    <string name="net_port">المنفذ</string>
-    <string name="net_gain">الكسب البرمجي (dB)</string>
-    <string name="net_agc">التحكم التلقائي بالكسب</string>
-    <string name="net_help">فعّل البث على LG وأدخل عنوان Wi-Fi IP والمنفذ. ابدأ بمعدل 1.024 MSps. الكسب البرمجي لا يحسن حساسية الترددات الراديوية.</string>
-</resources>

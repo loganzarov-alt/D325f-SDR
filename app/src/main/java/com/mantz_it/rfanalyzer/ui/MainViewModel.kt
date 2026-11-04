@@ -213,13 +213,6 @@ class MainViewModel @Inject constructor(
                 }
                 
                 
-                SourceType.RTLTCP -> {
-                    appStateRepository.sourceMinimumFrequency.set(1L)
-                    appStateRepository.sourceMaximumFrequency.set(4294967295L)
-                    appStateRepository.sourceMinimumSampleRate.set(250000L)
-                    appStateRepository.sourceMaximumSampleRate.set(7680000L)
-                    appStateRepository.sourceAutomaticSampleRateAdjustment.set(false)
-                }
                 SourceType.FILESOURCE -> Unit // no need to set any values
             }
         },
@@ -465,7 +458,7 @@ class MainViewModel @Inject constructor(
             appStateRepository.viewportSampleRate.set(newSampleRate)
 
             // Automatically re-adjust the sample rate of the source if we zoom too far out or in (only if not recording!)
-            if (appStateRepository.sourceType.value == SourceType.FILESOURCE && appStateRepository.sourceAutomaticSampleRateAdjustment.value && appStateRepository.analyzerRunning.value && !appStateRepository.recordingRunning.value) {
+            if (appStateRepository.sourceType.value != SourceType.LGMODEM && appStateRepository.sourceAutomaticSampleRateAdjustment.value && appStateRepository.analyzerRunning.value && !appStateRepository.recordingRunning.value) {
                 val optimalSampleRates = appStateRepository.sourceOptimalSampleRates.value
                 val bestSampleRate = optimalSampleRates.firstOrNull { it > appStateRepository.viewportSampleRate.value } ?: optimalSampleRates.last()
                 if(appStateRepository.sourceSampleRate.value != bestSampleRate) {
@@ -568,7 +561,6 @@ class MainViewModel @Inject constructor(
                             date = appStateRepository.recordingStartedTimestamp.value,
                             fileFormat = when(appStateRepository.sourceType.value) {
                                 SourceType.LGMODEM -> FilesourceFileFormat.CI8
-                                SourceType.RTLTCP -> FilesourceFileFormat.RTLSDR
 
 
                                 SourceType.FILESOURCE -> appStateRepository.filesourceFileFormat.value

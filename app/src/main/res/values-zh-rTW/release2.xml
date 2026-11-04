@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="v2_stop">停止</string>
-    <string name="v2_busy">接收器忙碌或已選擇串流模式</string>
+    <string name="v2_busy">接收器忙碌中</string>
     <string name="v2_error">錯誤</string>
     <string name="v2_recovering">正在恢復接收</string>
     <string name="v2_recording">正在錄製</string>
@@ -10,10 +10,10 @@
     <string name="v2_manual_language">手動選擇語言</string>
     <string name="v2_system_language">使用系統語言</string>
     <string name="v2_invert">反轉 IQ 頻譜</string>
-    <string name="v2_stream">Wi-Fi IQ 串流</string>
-    <string name="v2_stream_info">rtl_tcp • CU8 • 0.25–7.68 MS/s。本機錄製和頻譜顯示已停用。</string>
-    <string name="v2_port">TCP 連接埠</string>
-    <string name="v2_start_stream">開始串流</string>
+
+
+
+
     <string name="v2_task_settings">單次任務。增益、頻寬、反轉和 BT 設定從 Source 複製。</string>
     <string name="v2_start_time">開始：yyyy-MM-dd HH:mm:ss</string>
     <string name="v2_duration">錄製時長（秒）</string>

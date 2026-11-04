@@ -67,7 +67,6 @@
     <string name="l10n_power_timeout">पावर कमांड का समय समाप्त हो गया</string>
     <string name="l10n_modem_timeout">मॉडेम खोलने का समय समाप्त हो गया</string>
     <string name="l10n_modem_stopped">मॉडेम से डेटा आना बंद हो गया</string>
-    <string name="l10n_rate_select">1.28, 2.56 या 7.68 MS/s चुनें</string>
     <string name="l10n_bt_channel_prompt">0 से %1$s के बीच चैनल दर्ज करें</string>
     <string name="l10n_bt_tx_frequency">TX आवृत्ति: %1$s MHz</string>
     <string name="l10n_bt_channel_saved">चैनल %1$s सहेजा गया · %2$s MHz</string>

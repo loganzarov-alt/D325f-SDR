@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="v2_stop">Остановить</string>
-    <string name="v2_busy">Приёмник занят или выбран стриминг</string>
+    <string name="v2_busy">Приёмник занят</string>
     <string name="v2_error">Ошибка</string>
     <string name="v2_recovering">Восстановление приёма</string>
     <string name="v2_recording">Запись</string>
@@ -10,10 +10,10 @@
     <string name="v2_manual_language">Выбрать язык вручную</string>
     <string name="v2_system_language">Как в системе</string>
     <string name="v2_invert">Инверсия спектра IQ</string>
-    <string name="v2_stream">Стриминг IQ по Wi-Fi</string>
-    <string name="v2_stream_info">rtl_tcp • CU8 • 0,25–7,68 MS/s. Запись и спектр на LG отключены.</string>
-    <string name="v2_port">TCP-порт</string>
-    <string name="v2_start_stream">Запустить стриминг</string>
+
+
+
+
     <string name="v2_task_settings">Однократные задачи. Усиление, полоса, инверсия и настройки BT копируются из Source.</string>
     <string name="v2_start_time">Начало: гггг-ММ-дд ЧЧ:мм:сс</string>
     <string name="v2_duration">Длительность записи, секунды</string>

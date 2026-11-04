@@ -67,7 +67,6 @@
     <string name="l10n_power_timeout">Tiempo de espera del comando de alimentación agotado</string>
     <string name="l10n_modem_timeout">Tiempo de espera de apertura del módem agotado</string>
     <string name="l10n_modem_stopped">Se interrumpieron los datos del módem</string>
-    <string name="l10n_rate_select">Seleccione 1,28, 2,56 o 7,68 MS/s</string>
     <string name="l10n_bt_channel_prompt">Introduzca un canal de 0 a %1$s</string>
     <string name="l10n_bt_tx_frequency">Frecuencia TX: %1$s MHz</string>
     <string name="l10n_bt_channel_saved">Canal %1$s guardado · %2$s MHz</string>

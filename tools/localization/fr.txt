@@ -65,7 +65,6 @@ Arrêtez la réception avant de changer le canal BT
 Délai de la commande d’alimentation dépassé
 Délai d’ouverture du modem dépassé
 Les données du modem se sont interrompues
-Sélectionnez 1,28, 2,56 ou 7,68 Méch/s
 Saisissez un canal de 0 à %1$s
 Fréquence TX : %1$s MHz
 Canal %1$s enregistré · %2$s MHz

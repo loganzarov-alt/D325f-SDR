@@ -67,7 +67,6 @@
     <string name="l10n_power_timeout">انتهت مهلة أمر الطاقة</string>
     <string name="l10n_modem_timeout">انتهت مهلة فتح المودم</string>
     <string name="l10n_modem_stopped">انقطع تدفق بيانات المودم</string>
-    <string name="l10n_rate_select">اختر 1.28 أو 2.56 أو 7.68 MS/s</string>
     <string name="l10n_bt_channel_prompt">أدخل قناة من 0 إلى %1$s</string>
     <string name="l10n_bt_tx_frequency">تردد TX: %1$s MHz</string>
     <string name="l10n_bt_channel_saved">تم حفظ القناة %1$s · %2$s MHz</string>

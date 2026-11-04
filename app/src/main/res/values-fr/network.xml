@@ -1,7 +1,0 @@
-<resources>
-    <string name="net_host">Adresse LG / serveur</string>
-    <string name="net_port">Port</string>
-    <string name="net_gain">Gain logiciel (dB)</string>
-    <string name="net_agc">AGC logiciel</string>
-    <string name="net_help">Activez le streaming sur LG. Saisissez son IP Wi-Fi et son port. Commencez à 1,024 Méch/s. Le gain logiciel ne renforce pas la sensibilité RF.</string>
-</resources>

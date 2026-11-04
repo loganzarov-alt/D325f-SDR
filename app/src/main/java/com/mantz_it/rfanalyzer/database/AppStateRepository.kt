@@ -104,7 +104,7 @@ class AppStateRepository @Inject constructor(
     val appBuildType = MutableState("-")
 
     // Source Tab
-    val sourceType = Setting("sourceType_modem_file_v1", if(com.mantz_it.rfanalyzer.BuildConfig.NETWORK_CLIENT) SourceType.RTLTCP else SourceType.LGMODEM, scope, dataStore)
+    val sourceType = Setting("sourceType_modem_file_v1", SourceType.LGMODEM, scope, dataStore)
     val sourceName = MutableState("")
     val sourceMinimumFrequency = MutableState(0L)
     val sourceMaximumFrequency = MutableState(20000000000L)
@@ -116,7 +116,7 @@ class AppStateRepository @Inject constructor(
     }
     val sourceFrequency = DerivedEnumState(sourceType, sourceFrequencies)
     val sourceSampleRates = SourceType.entries.associateWith { type ->
-        Setting("sourceSampleRate_${type.name}", if (type == SourceType.LGMODEM) 7680000L else if(type == SourceType.RTLTCP) 1024000L else 2000000L, scope, dataStore)
+        Setting("sourceSampleRate_${type.name}", if (type == SourceType.LGMODEM) 7680000L else 2000000L, scope, dataStore)
     }
     val sourceSampleRate = DerivedEnumState(sourceType, sourceSampleRates)
     val sourceAutomaticSampleRateAdjustment = Setting("sourceAutomaticSampleRateAdjustment", true, scope, dataStore)
@@ -286,9 +286,10 @@ class AppStateRepository @Inject constructor(
                             val enumClass = default!!::class.java
                             val enumIndex = prefs[key as Preferences.Key<Int>] ?: if (keyName == "sourceType_modem_file_v1") {
                                 val old = prefs[intPreferencesKey("sourceType_no_gsm125")] ?: 0
-                                if(com.mantz_it.rfanalyzer.BuildConfig.NETWORK_CLIENT) SourceType.RTLTCP.ordinal else SourceType.migrateLegacyOrdinal(old)
+                                SourceType.migrateLegacyOrdinal(old)
                             } else default.ordinal
-                            enumClass.enumConstants[enumIndex.coerceIn(0, enumClass.enumConstants.size - 1)]
+                            if (keyName == "sourceType_modem_file_v1") SourceType.fromSavedOrdinal(enumIndex)
+                            else enumClass.enumConstants[enumIndex.coerceIn(0, enumClass.enumConstants.size - 1)]
                         }
                         is List<*> -> {
                             val stringValue = prefs[key as Preferences.Key<String>]

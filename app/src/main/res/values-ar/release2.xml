@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="v2_stop">إيقاف</string>
-    <string name="v2_busy">المستقبل مشغول أو تم اختيار البث</string>
+    <string name="v2_busy">المستقبل مشغول</string>
     <string name="v2_error">خطأ</string>
     <string name="v2_recovering">استعادة الاستقبال</string>
     <string name="v2_recording">جارٍ التسجيل</string>
@@ -10,10 +10,10 @@
     <string name="v2_manual_language">اختيار اللغة يدوياً</string>
     <string name="v2_system_language">استخدام لغة النظام</string>
     <string name="v2_invert">عكس طيف IQ</string>
-    <string name="v2_stream">بث IQ عبر Wi-Fi</string>
-    <string name="v2_stream_info">rtl_tcp • CU8 • 0.25–7.68 MS/s. التسجيل والطيف المحليان معطلان.</string>
-    <string name="v2_port">منفذ TCP</string>
-    <string name="v2_start_stream">بدء البث</string>
+
+
+
+
     <string name="v2_task_settings">مهام لمرة واحدة. تُنسخ إعدادات الكسب وعرض النطاق والعكس وBT من Source.</string>
     <string name="v2_start_time">البدء: yyyy-MM-dd HH:mm:ss</string>
     <string name="v2_duration">مدة التسجيل بالثواني</string>

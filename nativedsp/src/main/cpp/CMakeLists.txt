@@ -10,7 +10,6 @@ cmake_minimum_required(VERSION 3.22.1)
 # with ${CMAKE_PROJECT_NAME} (both CMake variables are in-sync within the top level
 # build script scope).
 project("nativedsp")
-set(CMAKE_CXX_STANDARD 17)
 
 # Important to have -O3 for pffft:
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -ffast-math")

@@ -65,7 +65,6 @@ Detenga la recepción antes de cambiar el canal BT
 Tiempo de espera del comando de alimentación agotado
 Tiempo de espera de apertura del módem agotado
 Se interrumpieron los datos del módem
-Seleccione 1,28, 2,56 o 7,68 MS/s
 Introduzca un canal de 0 a %1$s
 Frecuencia TX: %1$s MHz
 Canal %1$s guardado · %2$s MHz

@@ -1,7 +1,0 @@
-<resources>
-    <string name="net_host">LG address / hostname</string>
-    <string name="net_port">Port</string>
-    <string name="net_gain">Software gain (dB)</string>
-    <string name="net_agc">Software AGC</string>
-    <string name="net_help">Enable streaming on LG. Enter its Wi-Fi IP and port here. Start with 1.024 MSps. Software gain does not improve RF sensitivity.</string>
-</resources>

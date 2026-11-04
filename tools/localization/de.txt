@@ -65,7 +65,6 @@ Empfang vor dem Ändern des BT-Kanals stoppen
 Zeitüberschreitung beim Stromversorgungsbefehl
 Zeitüberschreitung beim Öffnen des Modems
 Der Modemdatenstrom wurde unterbrochen
-1,28, 2,56 oder 7,68 MS/s wählen
 Einen Kanal von 0 bis %1$s eingeben
 TX-Frequenz: %1$s MHz
 Kanal %1$s gespeichert · %2$s MHz

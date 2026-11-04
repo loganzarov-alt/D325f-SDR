@@ -21,7 +21,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
         ndk {
-            abiFilters += listOf(if(providers.gradleProperty("networkClient").orNull == "true") "arm64-v8a" else "armeabi-v7a")
+            abiFilters += listOf("armeabi-v7a")
         }
     }
 

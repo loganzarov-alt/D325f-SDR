@@ -67,7 +67,6 @@
     <string name="l10n_power_timeout">電源コマンドがタイムアウトしました</string>
     <string name="l10n_modem_timeout">モデムを開く処理がタイムアウトしました</string>
     <string name="l10n_modem_stopped">モデムデータが途絶えました</string>
-    <string name="l10n_rate_select">1.28、2.56、7.68 MS/s のいずれかを選択してください</string>
     <string name="l10n_bt_channel_prompt">0～%1$s のチャンネルを入力</string>
     <string name="l10n_bt_tx_frequency">TX 周波数：%1$s MHz</string>
     <string name="l10n_bt_channel_saved">チャンネル %1$s を保存 · %2$s MHz</string>

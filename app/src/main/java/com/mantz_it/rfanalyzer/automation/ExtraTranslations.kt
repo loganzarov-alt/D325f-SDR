@@ -138,8 +138,6 @@ object ExtraTranslations {
         "Истекло время ожидания открытия модема" to R.string.l10n_modem_timeout,
         "Modem data stopped" to R.string.l10n_modem_stopped,
         "Данные от модема перестали поступать" to R.string.l10n_modem_stopped,
-        "Select 1.28, 2.56 or 7.68 MS/s" to R.string.l10n_rate_select,
-        "Выберите 1,28, 2,56 или 7,68 Мвыб/с" to R.string.l10n_rate_select,
         "Undo" to R.string.l10n_undo,
         "Отменить" to R.string.l10n_undo,
         "Delete Recording" to R.string.l10n_delete_recording,

@@ -1,7 +1,0 @@
-<resources>
-    <string name="net_host">LG-Adresse / Hostname</string>
-    <string name="net_port">Port</string>
-    <string name="net_gain">Softwareverstärkung (dB)</string>
-    <string name="net_agc">Software-AGC</string>
-    <string name="net_help">Streaming auf LG aktivieren. WLAN-IP und Port eingeben. Mit 1,024 MSps beginnen. Softwareverstärkung verbessert die HF-Empfindlichkeit nicht.</string>
-</resources>

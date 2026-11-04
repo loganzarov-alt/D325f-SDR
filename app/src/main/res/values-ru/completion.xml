@@ -67,7 +67,6 @@
     <string name="l10n_power_timeout">Истекло время ожидания команды питания</string>
     <string name="l10n_modem_timeout">Истекло время ожидания открытия модема</string>
     <string name="l10n_modem_stopped">Данные от модема перестали поступать</string>
-    <string name="l10n_rate_select">Выберите 1,28, 2,56 или 7,68 Мвыб/с</string>
     <string name="l10n_bt_channel_prompt">Введите канал от 0 до %1$s</string>
     <string name="l10n_bt_tx_frequency">Частота TX: %1$s МГц</string>
     <string name="l10n_bt_channel_saved">Сохранён канал %1$s · %2$s МГц</string>
