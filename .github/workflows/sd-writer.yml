@@ -1,0 +1,92 @@
+name: Build sanitized SD writers
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'sdwriter/**'
+      - 'sdwriter-windows/**'
+      - 'sdimage/**'
+      - 'settings.gradle.kts'
+      - 'gradle/**'
+      - '.github/workflows/sd-writer.yml'
+  pull_request:
+    paths:
+      - 'sdwriter/**'
+      - 'sdwriter-windows/**'
+      - 'sdimage/**'
+      - 'settings.gradle.kts'
+      - 'gradle/**'
+      - '.github/workflows/sd-writer.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@be39fa834029ff78f1a44aa3bb0819b8fc2bd8fd # v4.0.4
+        with:
+          packages: platform-tools
+          log-accepted-android-sdk-licenses: false
+      - name: Install Android SDK
+        run: sdkmanager "platforms;android-34" "build-tools;35.0.0"
+      - name: Check source licenses and image builder syntax
+        run: |
+          python3 tools/check-license-headers.py
+          python3 -m py_compile sdimage/build_sanitized_image.py
+          python3 -m py_compile sdimage/verify_sanitized_image.py sdimage/extract_raw_image.py
+      - name: Run writer unit tests and build test-signed release APK
+        run: ./gradlew --no-daemon :sdwriter:testReleaseUnitTest :sdwriter:assembleRelease
+      - name: Verify APK identity
+        run: |
+          APK=sdwriter/build/outputs/apk/release/sdwriter-release.apk
+          test -f "$APK"
+          aapt dump badging "$APK" | grep -F "package: name='io.github.loganzarov_alt.d325fsdwriter'"
+          aapt dump badging "$APK" | grep -F "application-label:'D325 SD Writer'"
+      - name: Prepare artifact
+        run: |
+          mkdir -p dist
+          cp sdwriter/build/outputs/apk/release/sdwriter-release.apk dist/D325-SD-Writer-0.2.0-ci-test-signed.apk
+          cp sdwriter/README.md dist/README.md
+          sha256sum dist/*.apk > dist/SHA256SUMS
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: D325-SD-Writer-Android-0.2.0-ci-test-signed
+          retention-days: 30
+          if-no-files-found: error
+          path: dist/
+
+  windows:
+    runs-on: windows-2025
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '8.0.x'
+      - name: Publish self-contained Windows x64 writer
+        shell: pwsh
+        run: dotnet publish sdwriter-windows/D325SdWriter.csproj -c Release -r win-x64 --self-contained true -o dist/windows
+      - name: Prepare Windows artifact
+        shell: pwsh
+        run: |
+          Copy-Item sdwriter-windows/README.md dist/windows/README.md
+          $hash = (Get-FileHash dist/windows/D325-SD-Writer.exe -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  D325-SD-Writer.exe" | Set-Content -Encoding ascii dist/windows/SHA256SUMS
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: D325-SD-Writer-Windows-x64-0.2.0
+          retention-days: 30
+          if-no-files-found: error
+          path: |
+            dist/windows/D325-SD-Writer.exe
+            dist/windows/README.md
+            dist/windows/SHA256SUMS

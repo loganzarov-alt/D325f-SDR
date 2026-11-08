@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "D325f-SDR"
 include(":app")
 include(":nativedsp")
+include(":sdwriter")

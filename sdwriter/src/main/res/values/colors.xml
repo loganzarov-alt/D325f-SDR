@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<resources>
+    <color name="writer_background">#101B2C</color>
+    <color name="writer_surface">#0B1320</color>
+    <color name="writer_accent">#43E5C4</color>
+    <color name="writer_text">#EDF5FA</color>
+</resources>
