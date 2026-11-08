@@ -44,13 +44,13 @@ jobs:
           python3 -m py_compile sdimage/build_sanitized_image.py
           python3 -m py_compile sdimage/verify_sanitized_image.py sdimage/extract_raw_image.py
       - name: Run writer unit tests and build test-signed release APK
-        run: ./gradlew --no-daemon :sdwriter:testReleaseUnitTest :sdwriter:assembleRelease
+        run: ./gradlew --no-daemon --configure-on-demand :sdwriter:testReleaseUnitTest :sdwriter:assembleRelease
       - name: Verify APK identity
         run: |
           APK=sdwriter/build/outputs/apk/release/sdwriter-release.apk
           test -f "$APK"
-          aapt dump badging "$APK" | grep -F "package: name='io.github.loganzarov_alt.d325fsdwriter'"
-          aapt dump badging "$APK" | grep -F "application-label:'D325 SD Writer'"
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK" | grep -F "package: name='io.github.loganzarov_alt.d325fsdwriter'"
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$APK" | grep -F "application-label:'D325 SD Writer'"
       - name: Prepare artifact
         run: |
           mkdir -p dist
