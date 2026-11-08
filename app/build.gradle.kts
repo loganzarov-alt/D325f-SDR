@@ -58,6 +58,8 @@ android {
         buildConfig = true
     }
 
+    testOptions { unitTests.isReturnDefaultValues = true }
+
     useLibrary("android.test.base")
     useLibrary("android.test.runner")
     useLibrary("android.test.mock")

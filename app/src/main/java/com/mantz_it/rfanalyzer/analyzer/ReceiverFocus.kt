@@ -13,5 +13,5 @@ object ReceiverFocus {
     val frozen = frozenState.asStateFlow()
     val paused: Boolean get() = frozenState.value
     fun resume() { frozenState.value = false }
-    fun toggle() { frozenState.value = !frozenState.value }
+    fun setPaused(paused: Boolean) { frozenState.value = paused }
 }

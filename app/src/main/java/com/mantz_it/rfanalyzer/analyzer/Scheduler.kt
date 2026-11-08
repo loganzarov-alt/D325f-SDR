@@ -160,7 +160,7 @@ class Scheduler(var fftSize: Int, private val source: IQSourceInterface) : Threa
             "Thread-IQ-Recorder-" + System.currentTimeMillis())
         recordingWriterThread = writer
         writer.start()
-        Log.i(LOGTAG, "startRecording: exclusive lossless recording started; queue=$RECORDING_QUEUE_PACKETS")
+        Log.i(LOGTAG, "startRecording: recording started with live display; queue=$RECORDING_QUEUE_PACKETS")
     }
 
     @Synchronized
@@ -273,44 +273,6 @@ class Scheduler(var fftSize: Int, private val source: IQSourceInterface) : Threa
             // that were already accepted.
             if (stopRecording) finishRecordingAsync()
 
-            if (ReceiverFocus.paused && recordingAccepting) stopRecording()
-
-            ///// Recording ////////////////////////////////////////////////////////////////////////
-            var packetOwnedByRecorder = false
-            if (recordingAccepting && (squelchSatisfied || !onlyWhenSquelchIsSatisfied)) {
-                // Do not drop a recording packet.  If the SD card stalls, this blocks only the
-                // scheduler.  LG's source is simultaneously in lossless/back-pressure mode and
-                // the native helper still has its own stage ring behind us.
-                try {
-                    recordingQueue.put(packet)
-                    packetOwnedByRecorder = true
-                    recordingAcceptedSize += packet.size.toLong()
-                } catch (_: InterruptedException) {
-                    Thread.currentThread().interrupt()
-                    stopRequested = true
-                }
-
-                val now = System.currentTimeMillis()
-                if (maxRecordingTime?.let { it <= now - recordedStartTimestamp } == true) {
-                    Log.i(LOGTAG, "run: Max Recording Time reached")
-                    stopRecording = true
-                    finishRecordingAsync()
-                }
-                if (maxRecordingFileSize?.let { it <= recordingAcceptedSize } == true) {
-                    Log.i(LOGTAG, "run: Max Recording File Size reached")
-                    stopRecording = true
-                    finishRecordingAsync()
-                }
-
-                if (packetOwnedByRecorder) {
-                    // Recording is deliberately exclusive on this old device.  Do not spend CPU
-                    // on FFT, waterfall or audio while raw IQ continuity is the active job.
-                    val processingTime = System.nanoTime() - startTimestamp
-                    GlobalPerformanceData.updateLoad("Scheduler", processingTime / nsPerPacket)
-                    continue
-                }
-            }
-
             var stageStart = System.nanoTime()
             (source as? LgModemSource)?.prepareBandwidth(packet)
             bandwidthNs += System.nanoTime() - stageStart
@@ -390,7 +352,37 @@ class Scheduler(var fftSize: Int, private val source: IQSourceInterface) : Threa
             }
 
             fftFeedNs += System.nanoTime() - stageStart
-            source.returnPacket(packet)
+            // DSP must finish reading before the writer can recycle the raw packet.
+            ///// Recording ////////////////////////////////////////////////////////////////////////
+            var packetOwnedByRecorder = false
+            if (recordingAccepting && (squelchSatisfied || !onlyWhenSquelchIsSatisfied)) {
+                // Do not drop a recording packet.  If the SD card stalls, this blocks only the
+                // scheduler.  LG's source is simultaneously in lossless/back-pressure mode and
+                // the native helper still has its own stage ring behind us.
+                try {
+                    recordingQueue.put(packet)
+                    packetOwnedByRecorder = true
+                    recordingAcceptedSize += packet.size.toLong()
+                } catch (_: InterruptedException) {
+                    Thread.currentThread().interrupt()
+                    stopRequested = true
+                }
+
+                val now = System.currentTimeMillis()
+                if (maxRecordingTime?.let { it <= now - recordedStartTimestamp } == true) {
+                    Log.i(LOGTAG, "run: Max Recording Time reached")
+                    stopRecording = true
+                    finishRecordingAsync()
+                }
+                if (maxRecordingFileSize?.let { it <= recordingAcceptedSize } == true) {
+                    Log.i(LOGTAG, "run: Max Recording File Size reached")
+                    stopRecording = true
+                    finishRecordingAsync()
+                }
+
+            }
+
+            if (!packetOwnedByRecorder) source.returnPacket(packet)
             measuredPackets++
             val now = System.nanoTime()
             if (now - measureStart >= 2_000_000_000L) {

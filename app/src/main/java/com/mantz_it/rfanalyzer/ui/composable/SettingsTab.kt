@@ -6,6 +6,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.material3.Checkbox
+import com.mantz_it.rfanalyzer.analyzer.ReceiverFocus
 import androidx.compose.runtime.Composable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
@@ -99,7 +103,14 @@ fun SettingsTabComposable(
     settingsTabActions: SettingsTabActions,
     frequency: Long = Long.MAX_VALUE
 ) {
+    val frozen by ReceiverFocus.frozen.collectAsState()
     ScrollableColumnWithFadingEdge {
+        Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+            Checkbox(checked = frozen, onCheckedChange = { ReceiverFocus.setPaused(it) })
+            Text("Freeze waterfall · listen")
+        }
+        if (frozen) Text("FFT and waterfall paused. Reception and audio continue; squelch is open.",
+            style = MaterialTheme.typography.bodySmall)
         com.mantz_it.rfanalyzer.automation.LanguageSettings()
         SdrFocusSettings()
         BtTxSettings(frequency)

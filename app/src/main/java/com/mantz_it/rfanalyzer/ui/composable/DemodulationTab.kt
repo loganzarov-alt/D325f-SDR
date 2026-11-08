@@ -136,17 +136,10 @@ fun DemodulationTabComposable(
     audioMuted: Boolean,
     demodulationTabActions: DemodulationTabActions
 ) {
-    val frozen by ReceiverFocus.frozen.collectAsState()
     var showVolumeSlider by remember { mutableStateOf(false) }
     var volumeSliderTouched by remember { mutableStateOf(false) }
 
     ScrollableColumnWithFadingEdge {
-        Button(onClick = ReceiverFocus::toggle, enabled = true) {
-            Text(if (frozen) "Resume waterfall" else "Freeze waterfall · listen")
-        }
-        if (frozen) Text("FFT and waterfall paused. Reception and audio continue; squelch is open.",
-            style = MaterialTheme.typography.bodySmall)
-
         Row {
             OutlinedBox(label = "Audio Volume",
                 helpSubPath = "demodulation.html#audio-controls",

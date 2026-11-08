@@ -560,7 +560,6 @@ class AnalyzerService : Service() {
 
     fun startRecording() {
 
-        if (ReceiverFocus.paused) return
         if (appStateRepository.recordingRunning.value) {
             Log.w(TAG, "startRecording: Recording is already running. do nothing..")
             return
