@@ -29,6 +29,9 @@ IQ CI8 7,68 MS/s (около 5 МГц) прямо из baseband модема, ч
 КВ AM) — в разделе [как это работает](docs/HOW-IT-WORKS.md#recorded-examples).
 [Скачать три исходные IQ-записи](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/iq-samples-2026-10-23) (знаковый CI8, 7,68 MS/s; с SHA-256).
 
+**Полное видео на YouTube (2:53):** [youtu.be/WKFZM0AXKjU](https://youtu.be/WKFZM0AXKjU): доработка платы,
+патч модема, приём через Bluetooth-гетеродин, моя антенна на 1,7 ГГц и Meteor-M N2-3.
+
 ## Как начать
 
 Проверенная установка: LG D325 (`w5ds`) с LineageOS 14.1, TWRP и root, стоковый

@@ -31,6 +31,9 @@ an analog TV carrier at 551.25 MHz, shortwave AM) are analysed in
 [how it works](docs/HOW-IT-WORKS.md#recorded-examples).
 [Download the three original IQ recordings](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/iq-samples-2026-10-23) (signed CI8, 7.68 MS/s; SHA-256 included).
 
+**Full video on YouTube (2:53):** [youtu.be/WKFZM0AXKjU](https://youtu.be/WKFZM0AXKjU): the hardware mod,
+the modem patch, reception through the Bluetooth LO, my 1.7 GHz antenna and Meteor-M N2-3.
+
 ## Getting started
 
 Tested setup: an LG D325 (`w5ds`) with LineageOS 14.1, TWRP and root, stock
