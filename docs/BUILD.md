@@ -25,8 +25,9 @@ release or signing secret is created by the build workflow. Preserve device data
 before changing installation/signing arrangements.
 
 Package ID is `io.github.loganzarov_alt.d325fsdr`, versionName `2.0`,
-versionCode `20000`. It installs separately from the development app; there is no
-in-place upgrade or automatic settings import. Existing IQ files can be opened
+versionCode `20000`. Release 2.0 updates 1.0.0 in place (same certificate). The
+earlier development app (RF-Decoder) has another package ID: D325f SDR installs
+next to it, with no upgrade path or automatic settings import. Existing IQ files can be opened
 with the system file picker. Internal Java package names retain upstream names
 for provenance. Legacy recording-format IDs remain readable; CI8 maps explicitly
 to signed 8-bit samples.

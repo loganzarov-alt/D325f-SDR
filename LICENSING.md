@@ -24,8 +24,8 @@ This license does not grant rights over proprietary vendor firmware or libraries
 | Modem Patcher project code and scripts | GPL-3.0-or-later | Separate component in `modem-patcher/`; see its LICENSING.md |
 | Modem Patcher static musl/GCC runtime | MIT/BSD notices and GPLv3 with GCC Runtime Library Exception, as applicable | `modem-patcher/licenses/`; original musl source archive included |
 | Kernel patch and configuration in `kernel/` | GPL-2.0-only, as the Linux kernel | Patch against LineageOS android_kernel_lge_msm8226; full text in `LICENSES/GPL-2.0.txt` |
-| `boot.img` in release `kernel-6-source`: kernel and device tree | GPL-2.0-only | Built from `kernel/`; the patched source tree is attached to the same release (`D325f-SDR-kernel-6-full-source.tar.xz`) |
-| `boot.img`: ramdisk | Apache-2.0 and other AOSP/LineageOS licenses; text in `LICENSES/Apache-2.0.txt` | LineageOS 14.1 userspace of my phone (init, adbd, healthd, SELinux policy); source in the LineageOS cm-14.1 repositories |
+| `boot.img` and `boot-emmc.img` in release `kernel-6-source`: kernel and device tree | GPL-2.0-only | Built from `kernel/`; the patched source tree is attached to the same release (`D325f-SDR-kernel-6-full-source.tar.xz`) |
+| `boot.img` and `boot-emmc.img`: ramdisk | Apache-2.0 and other AOSP/LineageOS licenses; text in `LICENSES/Apache-2.0.txt` | LineageOS 14.1 userspace of my phone (init, adbd, healthd, SELinux policy); source in the LineageOS cm-14.1 repositories |
 | Photographs, drawings, IQ plots, satellite images and demo video in `docs/images/` and `docs/media/` | GPL-3.0-or-later, as part of the project documentation | Mine (Logan Zarov); recorded with the app on my test phone |
 | Qualcomm/LG firmware and system QMI libraries | proprietary/system components; not distributed here | supplied by the prepared phone |
 
@@ -56,8 +56,8 @@ The old `lg_stream` ELF is not distributed in the public tree: its exact origina
 C source is unavailable. It may be extracted locally from my reference
 APK for differential tests. Production helpers build from the provided C/ASM.
 The kernel changes are published as a patch with the full configuration in
-`kernel/`; the kernel binary is distributed only as `boot.img` in a release, with
-its corresponding source next to it. No modem firmware dump or private signing
+`kernel/`; the kernel binary is distributed only as `boot.img` and `boot-emmc.img`
+in a release, with its corresponding source next to it. No modem firmware dump or private signing
 key is included.
 
 ## Audit limits

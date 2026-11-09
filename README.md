@@ -65,7 +65,8 @@ baseband M8610B-AAAANAZM-1.0.6047, running from a microSD card (its eMMC has fai
    Android 7.1+; updates 1.0.0 in place) and grant root.
 
 I confirmed on 24 October 2026 that the app and the modem tools work
-on my phone. I have not yet repeated the procedure on a second phone.
+on my phone. SDR and live IQ worked on two LG D325f phones: my first prototype, which I later
+broke with further hardware modifications, and my current phone.
 The software steps are reversible: Boot backup, Restore stock or the saved modem dump.
 
 ## Build
