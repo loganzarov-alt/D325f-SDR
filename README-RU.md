@@ -7,7 +7,7 @@
 
 [English](README.md) · [Скачать 2.0](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/v2.0) ·
 [Сборка](docs/BUILD.md) · [Подготовка телефона](docs/DEVICE-SETUP.md) · [Аппаратная доработка: B8 и B1](docs/HARDWARE.md) ·
-[Заметки и измерения](docs/FIELD-NOTES.md#по-русски)
+[Заметки и измерения](docs/FIELD-NOTES.md#по-русски) · [Видео (YouTube)](https://youtu.be/WKFZM0AXKjU)
 
 ## Возможности
 
