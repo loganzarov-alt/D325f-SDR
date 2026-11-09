@@ -20,10 +20,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.mantz_it.rfanalyzer.automation.*
-import com.mantz_it.rfanalyzer.database.AppStateRepository
-import com.mantz_it.rfanalyzer.source.LgModemSource
-import com.mantz_it.rfanalyzer.ui.composable.SourceType
 import com.rtbishop.look4sat.core.domain.predict.*
 import com.rtbishop.look4sat.core.domain.utility.DataParser
 import kotlinx.coroutines.*
@@ -33,26 +29,26 @@ import java.util.Locale
 import kotlin.math.*
 
 @Composable
-fun SatelliteWindow(app: AppStateRepository, tune: (Long) -> Unit) {
+fun SatelliteWindow() {
     val context = LocalContext.current
     val ru = context.resources.configuration.locales[0].language == "ru"
     fun tr(r: String, e: String) = if (ru) r else e
     var opened by remember { mutableStateOf(false) }
     Column {
         Text(tr("Спутники · Look4Sat", "Satellites · Look4Sat"), style = MaterialTheme.typography.titleLarge)
-        Text(tr("Орбиты, пролёты и запись по расписанию", "Orbits, passes and scheduled recording"))
+        Text(tr("Орбиты, пролёты и наведение антенны", "Orbits, passes and antenna pointing"))
         Button(onClick = { opened = true }) { Text(tr("Открыть окно", "Open window")) }
     }
     if (!opened) return
     Dialog(onDismissRequest = { opened = false }, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-            SatelliteContent(app, tune, { opened = false }, ru)
+            SatelliteContent({ opened = false }, ru)
         }
     }
 }
 
 @Composable
-private fun SatelliteContent(app: AppStateRepository, tune: (Long) -> Unit, close: () -> Unit, ru: Boolean) {
+private fun SatelliteContent(close: () -> Unit, ru: Boolean) {
     val context = LocalContext.current
     val prefs = remember { context.getSharedPreferences("satellite_window", 0) }
     val file = remember { File(context.filesDir, "satellite_orbits.txt") }
@@ -69,11 +65,8 @@ private fun SatelliteContent(app: AppStateRepository, tune: (Long) -> Unit, clos
     var message by remember { mutableStateOf("") }
     var passes by remember { mutableStateOf(emptyList<SatellitePass>()) }
     var track by remember { mutableStateOf(emptyList<SkyPoint>()) }
-    var frequency by remember { mutableStateOf("") }
-    var review by remember { mutableStateOf<SatellitePass?>(null) }
+    var live by remember { mutableStateOf<OrbitalPos?>(null) }
     var calculation by remember { mutableStateOf<Job?>(null) }
-    val recording by app.recordingRunning.stateFlow.collectAsState()
-    val automationBusy by CaptureSettings.busy.collectAsState()
     val formatter = remember { SimpleDateFormat("dd.MM HH:mm:ss", Locale.getDefault()) }
     fun time(ms: Long) = formatter.format(java.util.Date(ms))
     fun station(): GeoPos {
@@ -84,13 +77,6 @@ private fun SatelliteContent(app: AppStateRepository, tune: (Long) -> Unit, clos
         }
         return GeoPos(lat, lon)
     }
-    fun hz(): Long {
-        val mhz = frequency.replace(',', '.').toDoubleOrNull()
-        require(mhz != null && mhz.isFinite() && mhz > 0) { tr("Укажите частоту в МГц", "Enter frequency in MHz") }
-        val value = (mhz * 1_000_000).roundToLong()
-        require(value in LgModemSource.MIN_FREQUENCY..LgModemSource.MAX_FREQUENCY) { tr("Частота вне диапазона LG", "Frequency outside LG range") }
-        return value
-    }
     suspend fun parse(text: String): List<OrbitalData> {
         val parser = DataParser(Dispatchers.Default)
         val data = if (text.lineSequence().firstOrNull()?.contains("NORAD_CAT_ID") == true)
@@ -100,7 +86,6 @@ private fun SatelliteContent(app: AppStateRepository, tune: (Long) -> Unit, clos
     }
     fun select(data: OrbitalData) {
         calculation?.cancel(); selected = data; passes = emptyList(); track = emptyList()
-        frequency = prefs.getString("freq_${data.catnum}", "") ?: ""
     }
     val importer = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         if (uri != null) scope.launch {
@@ -139,6 +124,22 @@ private fun SatelliteContent(app: AppStateRepository, tune: (Long) -> Unit, clos
             finally { busy = false }
         }
     }
+    LaunchedEffect(selected, latitude, longitude) {
+        live = null
+        val data = selected ?: return@LaunchedEffect
+        val observer = runCatching { station() }.getOrNull() ?: return@LaunchedEffect
+        prefs.edit().putString("latitude", latitude).putString("longitude", longitude).apply()
+        val sat = data.getObject()
+        while (isActive) {
+            try {
+                val position = withContext(Dispatchers.Default) { sat.getPosition(observer, System.currentTimeMillis()) }
+                check(position.azimuth.isFinite() && position.elevation.isFinite()) { "Invalid orbital position" }
+                live = position
+            } catch (e: CancellationException) { throw e }
+            catch (e: Exception) { message = e.message ?: "Invalid orbital position"; break }
+            delay(2000)
+        }
+    }
     DisposableEffect(Unit) { onDispose { calculation?.cancel() } }
     LazyColumn(Modifier.fillMaxSize().padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         item {
@@ -165,7 +166,7 @@ private fun SatelliteContent(app: AppStateRepository, tune: (Long) -> Unit, clos
             } }
             OutlinedTextField(query, { query = it }, label = { Text(tr("Название / NORAD", "Name / NORAD")) }, modifier = Modifier.fillMaxWidth())
         }
-        items(satellites.filter { (tab != 2 || it.catnum.toString() in favourites) && (it.name.contains(query, true) || it.catnum.toString().contains(query)) }.take(30), key = { it.catnum }) { data ->
+        items(satellites.filter { (tab != 2 || it.catnum.toString() in favourites) && (it.name.contains(query, true) || it.catnum.toString().contains(query)) }.take(if (query.isBlank()) 5 else 30), key = { it.catnum }) { data ->
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 TextButton(onClick = { select(data) }, modifier = Modifier.weight(1f)) { Text("${if (selected?.catnum == data.catnum) "● " else ""}${data.name} · ${data.catnum}") }
                 TextButton(onClick = {
@@ -178,9 +179,17 @@ private fun SatelliteContent(app: AppStateRepository, tune: (Long) -> Unit, clos
             if (satellites.isEmpty()) Text(tr("Импортируйте свежий файл орбит из Look4Sat или CelesTrak.", "Import a fresh orbit file from Look4Sat or CelesTrak."))
             selected?.let { data ->
                 Text(data.name, style = MaterialTheme.typography.titleLarge)
+                live?.let { pos ->
+                    val azimuth = (Math.toDegrees(pos.azimuth) + 360) % 360
+                    val elevation = Math.toDegrees(pos.elevation)
+                    Text(tr("Азимут %.1f° · Угол места %.1f°".format(azimuth, elevation),
+                        "Azimuth %.1f° · Elevation %.1f°".format(azimuth, elevation)), style = MaterialTheme.typography.titleMedium)
+                    Text(if (elevation >= 0) tr("Над горизонтом", "Above horizon") else tr("Под горизонтом", "Below horizon"))
+                    Text(tr("Азимут отсчитывается от истинного севера по часовой стрелке. GPS и компас телефона не используются.",
+                        "Azimuth is clockwise from true north. Phone GPS and compass are not used."))
+                } ?: Text(tr("Для наведения укажите координаты вручную", "Enter station coordinates manually for pointing"))
                 val age = abs(OrbitalData.timeToDaynum(System.currentTimeMillis()) - data.epochDaynum)
                 Text(tr("Возраст орбит: %.1f суток".format(age), "Orbit age: %.1f days".format(age)), color = if (age > 7) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface)
-                OutlinedTextField(frequency, { frequency = it }, label = { Text(tr("Частота приёма, МГц", "Receive frequency, MHz")) }, supportingText = { Text(tr("Задаётся вручную; TLE не содержит радиочастот", "Set manually; TLE does not contain radio frequencies")) }, modifier = Modifier.fillMaxWidth())
                 Button(enabled = !busy, onClick = {
                     try {
                         val observer = station()
@@ -199,13 +208,7 @@ private fun SatelliteContent(app: AppStateRepository, tune: (Long) -> Unit, clos
                         }
                     } catch (e: Exception) { message = e.message ?: "Invalid station" }
                 }) { Text(tr("Рассчитать 24 часа", "Predict 24 hours")) }
-                Button(enabled = !recording && !automationBusy, onClick = {
-                    try {
-                        require(app.sourceType.value == SourceType.LGMODEM) { tr("Выберите источник LG", "Select LG source") }
-                        val value = hz(); tune(value); prefs.edit().putString("freq_${data.catnum}", frequency).apply()
-                        message = tr("Частота передана приёмнику", "Frequency sent to receiver")
-                    } catch (e: Exception) { message = e.message ?: "Invalid frequency" }
-                }) { Text(tr("Настроить приёмник", "Tune receiver")) }
+
             }
         }
         if (tab == 1) item {
@@ -219,6 +222,7 @@ private fun SatelliteContent(app: AppStateRepository, tune: (Long) -> Unit, clos
                 fun point(p: SkyPoint): Offset { val distance = r * (1 - p.elevation / (PI / 2)).coerceIn(0.0, 1.0).toFloat(); return center + Offset((sin(p.azimuth) * distance).toFloat(), (-cos(p.azimuth) * distance).toFloat()) }
                 track.zipWithNext().forEach { (a,b) -> drawLine(Color(0xFF43E5C4), point(a), point(b), strokeWidth = 3f) }
                 track.firstOrNull()?.let { drawCircle(Color.Yellow, 5f, point(it)) }
+                live?.takeIf { it.elevation >= 0 }?.let { drawCircle(Color.White, 6f, point(SkyPoint(it.azimuth, it.elevation))) }
             }
         }
         items(passes) { pass ->
@@ -226,16 +230,7 @@ private fun SatelliteContent(app: AppStateRepository, tune: (Long) -> Unit, clos
                 Text("${time(pass.start)} → ${time(pass.end)}")
                 Text(tr("Максимальная высота: %.1f°".format(pass.maximum), "Maximum elevation: %.1f°".format(pass.maximum)))
                 if (pass.partial) Text(tr("Неполный интервал: уже виден или не заходит за 24 часа", "Partial interval: already visible or no set within 24 hours"))
-                Button(enabled = !pass.partial && pass.start > System.currentTimeMillis(), onClick = { review = pass }) { Text(tr("Запланировать запись", "Schedule recording")) }
             } }
         }
-    }
-    review?.let { pass ->
-        AlertDialog(onDismissRequest = { review = null }, title = { Text(tr("Проверить запись", "Review recording")) }, text = {
-            Text("${selected?.name}\n${time(pass.start)} → ${time(pass.end)}\n$frequency MHz\n" + tr("Текущие параметры LG и инверсия будут сохранены. Контроль температуры включён, перезагрузка выключена. Доплер автоматически не компенсируется.", "Current LG settings and inversion will be saved. Temperature monitoring on, reboot off. No automatic Doppler correction."))
-        }, confirmButton = { TextButton(onClick = {
-            try { val value = hz(); TaskStore.add(context, CaptureTask.snapshot(context, app, pass.start, pass.end-pass.start, value, false, true)); message = tr("Запись запланирована", "Recording scheduled"); review = null }
-            catch (e: Exception) { message = e.message ?: "Cannot schedule"; review = null }
-        }) { Text(tr("Создать задачу", "Create task")) } }, dismissButton = { TextButton(onClick = { review = null }) { Text(tr("Отмена", "Cancel")) } })
     }
 }

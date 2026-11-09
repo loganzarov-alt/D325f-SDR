@@ -163,7 +163,7 @@ fun AnalyzerTabsComposable(
         }
         Box(modifier = Modifier.padding(5.dp)) {
             when (state) {
-                AnalyzerTabs.SATELLITES -> com.mantz_it.rfanalyzer.satellites.SatelliteWindow(appStateRepository, sourceTabActions.onFrequencyChanged)
+                AnalyzerTabs.SATELLITES -> com.mantz_it.rfanalyzer.satellites.SatelliteWindow()
                 AnalyzerTabs.AUTOMATIZATIONS -> com.mantz_it.rfanalyzer.automation.AutomationTab(appStateRepository)
                 AnalyzerTabs.SOURCE
                     -> SourceTabComposable(
