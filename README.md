@@ -7,7 +7,7 @@ Project and modem integration: **Logan Zarov**.
 
 [Русский](README-RU.md) · [Download 2.0](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/v2.0) ·
 [Build](docs/BUILD.md) · [Device setup](docs/DEVICE-SETUP.md) · [Hardware / B8 and B1](docs/HARDWARE.md) ·
-[Field notes](docs/FIELD-NOTES.md)
+[Field notes](docs/FIELD-NOTES.md) · [Video (YouTube)](https://youtu.be/WKFZM0AXKjU)
 
 ## Features
 
