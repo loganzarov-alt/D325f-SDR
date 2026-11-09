@@ -1,0 +1,58 @@
+name: SatDump Android 7 compatibility build
+on:
+  workflow_dispatch:
+  push:
+    branches: ['prepare/2.0-satellites']
+    paths: ['tools/satdump/**', '.github/workflows/satdump-android7.yml']
+permissions:
+  contents: read
+jobs:
+  android7:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: SatDump/SatDump
+          ref: 9fee0793c7d42bea2d401d330422e18c33c126fa
+          path: satdump-build
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@be39fa834029ff78f1a44aa3bb0819b8fc2bd8fd
+        with:
+          packages: platform-tools
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '7.6.4'
+      - name: Install build prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-mako ninja-build
+          sdkmanager "platforms;android-34" "build-tools;30.0.3" "ndk;25.2.9519653" "cmake;3.22.1"
+          git -C satdump-build submodule update --init android/deps
+          python3 tools/satdump/android7.py satdump-build
+      - uses: actions/cache@v4
+        id: deps
+        with:
+          path: satdump-build/android/deps/output
+          key: satdump-api24-armv7-4b1f699-${{ hashFiles('tools/satdump/android7.py') }}
+      - name: Build native dependencies for API 24
+        if: steps.deps.outputs.cache-hit != 'true'
+        working-directory: satdump-build/android/deps
+        run: sh build.sh
+      - name: Build APK and check Android API usage
+        working-directory: satdump-build/android
+        run: gradle --no-daemon :app:assembleRelease :app:lintRelease
+      - name: Package exact modified sources
+        run: |
+          mkdir -p satdump-dist
+          cp satdump-build/android/app/build/outputs/apk/release/*.apk satdump-dist/SatDump-Android7-ci-test-signed.apk
+          cp "$ANDROID_HOME/build-tools/30.0.3/lib/apksigner.jar" satdump-dist/
+          tar --exclude='.git' --exclude='.gradle' --exclude='.cxx' --exclude='*/build' --exclude='android/deps/output' -czf satdump-dist/SatDump-Android7-source.tar.gz -C satdump-build .
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: SatDump-Android7-armv7
+          path: satdump-dist/
