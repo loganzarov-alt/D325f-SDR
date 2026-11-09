@@ -219,7 +219,7 @@ private fun SatelliteContent(close: () -> Unit, ru: Boolean) {
                 for (fraction in listOf(1f, 2f/3, 1f/3)) drawCircle(Color.Gray, r * fraction, center, style = Stroke(1f))
                 drawLine(Color.Gray, center - Offset(r, 0f), center + Offset(r, 0f))
                 drawLine(Color.Gray, center - Offset(0f, r), center + Offset(0f, r))
-                fun point(p: SkyPoint): Offset { val distance = r * (1 - p.elevation / (PI / 2)).coerceIn(0.0, 1.0).toFloat(); return center + Offset((sin(p.azimuth) * distance).toFloat(), (-cos(p.azimuth) * distance).toFloat()) }
+                fun point(p: SkyPoint): Offset { val distance = r * (1 - p.elevation / (kotlin.math.PI / 2)).coerceIn(0.0, 1.0).toFloat(); return center + Offset((sin(p.azimuth) * distance).toFloat(), (-cos(p.azimuth) * distance).toFloat()) }
                 track.zipWithNext().forEach { (a,b) -> drawLine(Color(0xFF43E5C4), point(a), point(b), strokeWidth = 3f) }
                 track.firstOrNull()?.let { drawCircle(Color.Yellow, 5f, point(it)) }
                 live?.takeIf { it.elevation >= 0 }?.let { drawCircle(Color.White, 6f, point(SkyPoint(it.azimuth, it.elevation))) }
