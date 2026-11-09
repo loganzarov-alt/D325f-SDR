@@ -88,8 +88,8 @@ the 11.765 MHz carrier is within 0.1 kHz of its nominal frequency.
 
 ## Limitations
 
-- I have tested it on one modified LG D325. I have not yet repeated the full
-  procedure from a stock phone on a second device.
+- SDR and live IQ worked on two modified LG D325f phones: my first prototype,
+  which I later broke with further hardware modifications, and my current phone.
 - I have not published calibrated sensitivity and frequency-accuracy figures yet.
   PLL lock confirms the synthesizer, not the RF front end.
 - Reception stops when the CPU is overloaded or the phone overheats; the ring
@@ -130,6 +130,7 @@ M8610B-AAAANAZM-1.0.6047) с трансивером семейства WTR. Об
 строчная частота 15 625 Гц в огибающей; КВ около 12,4 МГц — AM-вещание со звуком
 на 11,765 и 13,751 МГц. Все три приняты через Bluetooth-гетеродин.
 
-Ограничения: я проверил это на одном аппарате; калиброванные цифры
+Ограничения: SDR работал у меня на двух аппаратах (первый прототип я потом
+вывел из строя доработками); калиброванные цифры
 чувствительности и точности частоты я пока не опубликовал; при перегрузке процессора или перегреве приём
 останавливается.

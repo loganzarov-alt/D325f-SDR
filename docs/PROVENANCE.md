@@ -31,6 +31,15 @@ The release tag `v1.0.0` identifies the corresponding application source.
 The validation directory retains the earlier v20058 results and the 1.0.0
 build/test records. Later documentation updates do not change the published APK.
 
+The published **2.0** APK (`D325f-SDR-2.0.apk`,
+`6d10f36ede2efdb388cd5b92976eb233add9ddf2566f00b5cfbe3b30ca210eff`) is signed
+with the same certificate as 1.0.0 and records source revision
+`99ba9b1585688d398bcd4d26b6b6e347ed1b8680` in
+`META-INF/version-control-info.textproto`. The release tag `v2.0` contains that
+source plus documentation changes; the only change to a compiled source file is
+one comment line in `CaptureSettings.kt`. CI rebuilt and tested tag `v2.0`; I did
+not compare the CI-built APK byte-for-byte with the published one.
+
 The custom modem/SDR work is my project. The reconstructed
 C and its transport/ASM files were traced to the supplied recovery archive.
 The original binary test fixture is excluded from the public tree. No license

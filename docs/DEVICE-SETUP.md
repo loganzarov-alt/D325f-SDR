@@ -2,12 +2,13 @@
 
 [Русский](#по-русски)
 
-My tested setup: one LG D325 (`w5ds`) with LineageOS 14.1, TWRP and root, stock
+My current setup: an LG D325 (`w5ds`) with LineageOS 14.1, TWRP and root, stock
 baseband **M8610B-AAAANAZM-1.0.6047**. Its internal eMMC has failed, so the
 phone runs entirely from a microSD card with the same partition layout; I
 flashed boot.img and the modem patch to the SD card's partitions. I confirmed on
 **24 October 2026** that D325f SDR 1.0.0 and Modem Patcher 1.1.0 work on it.
-I have not yet repeated the procedure on a second phone.
+SDR and live IQ worked on two LG D325f phones: my first prototype, which I later
+broke with further hardware modifications, and my current phone.
 
 The steps below are in order.
 
@@ -97,12 +98,13 @@ partition or flash TWRP; the device confirmation above is separate.
 
 ## По-русски
 
-Моя проверенная установка: один LG D325 (`w5ds`) с LineageOS 14.1, TWRP и root,
+Моя нынешняя установка: LG D325 (`w5ds`) с LineageOS 14.1, TWRP и root,
 стоковый baseband **M8610B-AAAANAZM-1.0.6047**. Внутренняя eMMC у него
 неисправна, и телефон целиком работает с microSD с той же разметкой разделов;
 boot.img и патч модема я ставил на разделы SD-карты. **24 октября 2026 года**
 я подтвердил работу D325f SDR 1.0.0 и Modem Patcher 1.1.0.
-На втором телефоне я процедуру пока не повторял.
+SDR и живой поток IQ работали у меня на двух LG D325f: на первом прототипе,
+который я потом вывел из строя дальнейшими доработками, и на нынешнем телефоне.
 
 Шаги выполняются по порядку.
 
