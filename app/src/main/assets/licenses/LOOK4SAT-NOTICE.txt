@@ -1,0 +1,5 @@
+Orbital prediction code from Look4Sat, Copyright (C) 2019-2026 Arty Bishop and contributors.
+GNU GPL version 3 or later.
+https://github.com/rt-bishop/Look4Sat
+Pinned source: a471379f07eee32febc24b6824f1de304b26222a
+Integration and parser adaptation: Logan Zarov, 2026-11-09.

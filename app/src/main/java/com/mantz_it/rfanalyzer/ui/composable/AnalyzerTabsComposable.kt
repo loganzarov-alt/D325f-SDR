@@ -56,6 +56,7 @@ enum class AnalyzerTabs(val displayName: String) {
     RECORDING("Recording"),
     DISPLAY("Display"),
     AUTOMATIZATIONS("Automatizations"),
+    SATELLITES("Satellites"),
     SETTINGS("Settings"),
     ABOUT("About")
 }
@@ -153,7 +154,7 @@ fun AnalyzerTabsComposable(
                     ),
                     text = {
                         Text(
-                            tab.displayName,
+                            if (tab == AnalyzerTabs.SATELLITES && androidx.compose.ui.platform.LocalContext.current.resources.configuration.locales[0].language == "ru") "Спутники" else tab.displayName,
                             fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal
                         )
                     }
@@ -162,6 +163,7 @@ fun AnalyzerTabsComposable(
         }
         Box(modifier = Modifier.padding(5.dp)) {
             when (state) {
+                AnalyzerTabs.SATELLITES -> com.mantz_it.rfanalyzer.satellites.SatelliteWindow(appStateRepository, sourceTabActions.onFrequencyChanged)
                 AnalyzerTabs.AUTOMATIZATIONS -> com.mantz_it.rfanalyzer.automation.AutomationTab(appStateRepository)
                 AnalyzerTabs.SOURCE
                     -> SourceTabComposable(
