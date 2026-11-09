@@ -28,7 +28,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
-import androidx.compose.material3.Text
+import com.mantz_it.rfanalyzer.automation.LocalizedText as Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
@@ -136,17 +136,10 @@ fun DemodulationTabComposable(
     audioMuted: Boolean,
     demodulationTabActions: DemodulationTabActions
 ) {
-    val frozen by ReceiverFocus.frozen.collectAsState()
     var showVolumeSlider by remember { mutableStateOf(false) }
     var volumeSliderTouched by remember { mutableStateOf(false) }
 
     ScrollableColumnWithFadingEdge {
-        Button(onClick = ReceiverFocus::toggle, enabled = true) {
-            Text(if (frozen) "Resume waterfall" else "Freeze waterfall · listen")
-        }
-        if (frozen) Text("FFT and waterfall paused. Reception and audio continue; squelch is open.",
-            style = MaterialTheme.typography.bodySmall)
-
         Row {
             OutlinedBox(label = "Audio Volume",
                 helpSubPath = "demodulation.html#audio-controls",
@@ -157,7 +150,7 @@ fun DemodulationTabComposable(
                         Icon(
                             imageVector = if (audioMuted) Icons.AutoMirrored.Filled.VolumeOff else Icons.AutoMirrored.Filled.VolumeUp,
                             tint = MaterialTheme.colorScheme.primary,
-                            contentDescription = "Mute toggle"
+                            contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "Mute toggle")
                         )
                     }
                     Row(
@@ -182,7 +175,7 @@ fun DemodulationTabComposable(
                         )
                         Icon(
                             imageVector = Icons.Filled.ArrowDropDown,
-                            contentDescription = "Show volume slider",
+                            contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "Show volume slider"),
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }

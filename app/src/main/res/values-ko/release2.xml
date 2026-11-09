@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v2_stop">중지</string>
+    <string name="v2_busy">수신기가 사용 중입니다</string>
+    <string name="v2_error">오류</string>
+    <string name="v2_recovering">수신 복구 중</string>
+    <string name="v2_recording">녹음 중</string>
+    <string name="v2_cooling">냉각 감시 중</string>
+    <string name="v2_completed">완료</string>
+    <string name="v2_manual_language">언어 수동 선택</string>
+    <string name="v2_system_language">시스템 언어 사용</string>
+    <string name="v2_invert">IQ 스펙트럼 반전</string>
+
+
+
+
+    <string name="v2_task_settings">일회성 작업. 이득, 대역폭, 반전 및 BT 설정은 Source에서 복사됩니다.</string>
+    <string name="v2_start_time">시작: yyyy-MM-dd HH:mm:ss</string>
+    <string name="v2_duration">녹음 시간(초)</string>
+    <string name="v2_frequency">중심 주파수(MHz)</string>
+    <string name="v2_reboot">완료 후 재부팅</string>
+    <string name="v2_thermal">완료 후 온도 감시</string>
+    <string name="v2_thermal_info">완료 후 10분 내 3 °C 하락하지 않으면 전원을 끕니다. 70 °C에서는 즉시 끕니다. 작업 중 온도에 따른 종료는 비활성화됩니다.</string>
+    <string name="v2_folder">녹음 폴더(비워 두면 자동)</string>
+    <string name="v2_add">작업 추가</string>
+    <string name="v2_cancel">작업 및 감시 취소</string>
+    <string name="v2_delete">삭제</string>
+    <string name="v2_listening">PC 연결 대기 중</string>
+    <string name="v2_bt_warning">이 기기의 측정 결과 레벨 8–9는 10 mW를 초과합니다. 사용자 책임하에 사용하세요.</string>
+    <string name="v2_background">화면이 꺼진 상태에서 작동 허용</string>
+</resources>

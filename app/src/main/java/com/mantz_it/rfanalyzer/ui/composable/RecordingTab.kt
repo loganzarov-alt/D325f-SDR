@@ -22,7 +22,7 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
-import androidx.compose.material3.Text
+import com.mantz_it.rfanalyzer.automation.LocalizedText as Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -46,6 +46,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mantz_it.rfanalyzer.R
+import com.mantz_it.rfanalyzer.automation.localString
 import com.mantz_it.rfanalyzer.ui.RFAnalyzerTheme
 import kotlinx.coroutines.delay
 
@@ -136,11 +137,11 @@ fun RecordingTabComposable(
                 Text("View Recordings", modifier = Modifier.padding(horizontal = 16.dp))
                 Icon(
                     imageVector = Icons.Default.Menu,
-                    contentDescription = "View Recordings"
+                    contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "View Recordings")
                 )
             }
         }
-        Text("Frequency: ${frequency.asStringWithUnit("Hz")}     Bandwidth: ${sampleRate.asStringWithUnit("Sps")}",
+        Text(localString(R.string.l10n_capture_metadata, frequency.asStringWithUnit("Hz"), sampleRate.asStringWithUnit("Sps")),
             lineHeight = 13.sp,
             fontSize = 12.sp,
             textAlign = TextAlign.Center,
@@ -153,17 +154,17 @@ fun RecordingTabComposable(
                 modifier = Modifier.weight(1f).padding(end=3.dp).height(55.dp).align(Alignment.CenterVertically)
             ) {
                 if(recordingRunning) {
-                    Text("Running (${(currentTime-recordingStartedTimestamp)/1000}s)", modifier = Modifier.padding(horizontal = 6.dp))
+                    Text(localString(R.string.l10n_stop_elapsed, (currentTime-recordingStartedTimestamp)/1000), modifier = Modifier.padding(horizontal = 6.dp))
                     Icon(
                         painter = painterResource(R.drawable.stop_circle),
-                        contentDescription = "Stop",
+                        contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "Stop"),
                         modifier = Modifier.padding(vertical = 6.dp)
                     )
                 } else {
                     Text("Start Recording", modifier = Modifier.padding(horizontal = 6.dp))
                     Icon(
                         painter = painterResource(R.drawable.circle),
-                        contentDescription = "Start",
+                        contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "Start"),
                         modifier = Modifier.padding(vertical = 6.dp),
                         tint = Color.Red
                     )
@@ -206,7 +207,7 @@ fun RecordingTabComposable(
             modifier = Modifier.fillMaxWidth()
         )
         Column(modifier = Modifier.fillMaxWidth()) {
-            Text("Recordings occupy ${(recordingsTotalFileSize+currentRecordingFileSize).asSizeInBytesToString()} of Device Storage",
+            Text(localString(R.string.l10n_storage_used, (recordingsTotalFileSize+currentRecordingFileSize).asSizeInBytesToString()),
                 modifier = Modifier.align(Alignment.CenterHorizontally).padding(top=16.dp))
         }
     }

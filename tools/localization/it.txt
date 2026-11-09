@@ -1,0 +1,91 @@
+Limite superiore, MHz
+Limite di ricezione BT
+Inserire 1–2402 MHz (predefinito: 1000). Sotto il limite si usa l’oscillatore BT; dal limite in su la ricezione è diretta. Arrestare e riavviare RX dopo il salvataggio.
+Inserire un numero tra 1 e 2402 MHz. L’impostazione non è stata modificata.
+Salvato. Arrestare e riavviare RX.
+Impossibile salvare l’impostazione.
+Riprendi cascata
+Blocca cascata · ascolta
+FFT e cascata in pausa. Ricezione e audio continuano; lo squelch è aperto.
+Lo squelch silenzia i segnali sotto la soglia di livello selezionata.
+Mantenere il canale selezionato al centro dello schermo
+Tenere premuta un’etichetta per aprire la relativa guida
+Invertire il senso della rotella di sintonia
+Nascondere il picco centrale della componente continua. Questa impostazione non modifica le registrazioni IQ.
+Tornare automaticamente all’inizio alla fine del file
+Mostrare indicatori del livello massimo del segnale
+Mostrare le frequenze rispetto alla frequenza centrale
+Registrare campioni solo quando il segnale supera la soglia dello squelch.
+Solo visualizzazione. IQ, demodulazione e registrazioni restano invariati.
+Arrestare la registrazione?
+La registrazione continua. Arrestarla per cambiare frequenza?
+La registrazione continua. Arrestarla per cambiare frequenza di campionamento?
+Sì, arresta registrazione
+No
+Riavviare completamente il modem?
+Usare solo dopo un errore di aggancio PLL. Modem, Wi-Fi e USB possono riavviarsi per circa un minuto.
+Riavvia modem
+Riavvio completo del modem richiesto
+Eliminare TUTTE le registrazioni?
+Eliminare tutte le registrazioni? L’operazione non può essere annullata.
+Sì, elimina tutte
+Registrazione in corso
+Frequenza fuori dall’intervallo della registrazione corrente. Arrestare la registrazione?
+Registro eliminato
+File aperto. Premere Riproduci per iniziare.
+Modifica nome registrazione
+Arresto automatico registrazione
+Arresta registrazione dopo
+Manuale D325f SDR
+Registro RF Decoder
+Avvisi sul software libero
+Licenze e avvisi · offline
+Lento
+Veloce
+Barre
+Linea
+Disattivato
+Medio
+(nessun file selezionato)
+Frequenza di sintonia
+Apri controlli
+Vai alla pagina iniziale
+Scorri in fondo
+Nei preferiti
+Aggiungi o rimuovi dai preferiti
+Mostra preferiti
+Attiva o disattiva audio
+PRONTO · SELEZIONA UNA SORGENTE E AVVIA
+Controllare data, durata, frequenza e porta.
+Gli orari delle attività si sovrappongono
+Consentire sveglie esatte nelle impostazioni di sistema
+Errore
+Il canale deve essere compreso tra 0 e 78
+Arrestare la ricezione prima di cambiare il canale BT
+Tempo scaduto per il comando di alimentazione
+Tempo scaduto per l’apertura del modem
+Il flusso di dati del modem si è interrotto
+Inserire un canale da 0 a %1$s
+Frequenza TX: %1$s MHz
+Canale %1$s salvato · %2$s MHz
+Potenza TX: livello %1$s / 9
+Versione %1$s
+File: %1$s
+Le registrazioni occupano %1$s di memoria
+Arresta registrazione (%1$s s)
+%1$s (%2$s s)
+Riavvio del modem non riuscito: %1$s
+Registrazione %1$s eliminata (%2$s)
+Registrazione %1$s completata (%2$s)
+La frequenza %1$s è fuori dall’intervallo della sorgente corrente
+Impossibile salvare il file: %1$s
+Demodulazione: %1$s MHz
+Annulla
+Elimina registrazione
+Carica file
+Aprire il file ricevuto come sorgente? La ricezione verrà arrestata.
+Sorgente non disponibile: %1$s
+Il demodulatore non supporta questa frequenza di campionamento
+Licenze open source
+Frequenza: %1$s · Campionamento: %2$s
+Leggera

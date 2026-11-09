@@ -247,7 +247,7 @@ class AnalyzerService : Service() {
     private var recoveryEpoch = 0L
     @Volatile private var startRequested = false
 
-    fun stopAnalyzer(releaseSource: Boolean = false) {
+    fun stopAnalyzer(releaseSource: Boolean = true) {
         com.mantz_it.rfanalyzer.source.SdrFocusController.get(this).stop()
         startRequested = false
         recoveryEpoch++
@@ -282,7 +282,7 @@ class AnalyzerService : Service() {
         appStateRepository.analyzerStartPending.set(false)
         GlobalPerformanceData.reset()
 
-        if (!recoveryPending) stopForegroundService()
+        if (!recoveryPending) { com.mantz_it.rfanalyzer.automation.CaptureSettings.release(this); stopForegroundService() }
     }
 
     /**
@@ -291,6 +291,11 @@ class AnalyzerService : Service() {
      * processing loop.
      */
     fun startAnalyzer() : Boolean {
+        if (!com.mantz_it.rfanalyzer.automation.CaptureSettings.acquire(this)) {
+            appStateRepository.analyzerStartPending.set(false)
+            Toast.makeText(this, getString(R.string.v2_busy), Toast.LENGTH_LONG).show()
+            return false
+        }
         recoveryEpoch++
         if (!recoveryStarting) recoveryAttempts = 0
         if (appStateRepository.analyzerRunning.value) return true
@@ -298,18 +303,26 @@ class AnalyzerService : Service() {
         ReceiverFocus.resume()
         if (source != null && sourceKind != appStateRepository.sourceType.value) {
             stopAnalyzer(releaseSource = true)
+            if (!com.mantz_it.rfanalyzer.automation.CaptureSettings.acquire(this)) return false
         }
         startRequested = true
         Log.d(TAG, "startAnalyzer")
         if (source == null) {
-            if (!this.createSource()) return false
+            if (!this.createSource()) {
+                com.mantz_it.rfanalyzer.automation.CaptureSettings.release(this)
+                startRequested = false
+                appStateRepository.analyzerStartPending.set(false)
+                return false
+            }
         }
 
         // check if the source is open. if not, open it!
         if (!source!!.isOpen()) {
             if (!openSource()) {
-                Toast.makeText(this, "Source not available (${source?.getName()})", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, com.mantz_it.rfanalyzer.automation.AppLanguage.wrap(this).getString(R.string.l10n_source_unavailable, source?.getName() ?: "LG"), Toast.LENGTH_LONG).show()
                 source = null
+                startRequested = false
+                com.mantz_it.rfanalyzer.automation.CaptureSettings.release(this)
                 appStateRepository.analyzerStartPending.set(false)
                 return false
             }
@@ -352,6 +365,7 @@ class AnalyzerService : Service() {
         
 
         if (source is LgModemSource) {
+            (source as LgModemSource).setInvertSpectrum(com.mantz_it.rfanalyzer.automation.CaptureSettings.inverted(this))
             // One-time migration: discard pathological saved zoom/FFT settings.
             if (!appStateRepository.lgSmoothDisplayMigrated.value) {
                 appStateRepository.fftSize.set(8192)
@@ -465,7 +479,7 @@ class AnalyzerService : Service() {
 
         if(!demodulator!!.supportsInputSampleRate(source!!.sampleRate)) {
             Log.i(TAG, "Source sample rate (${source!!.sampleRate} Sps) is not compatible with demodulator rate ${demodulator!!.requiredInputRate}.")
-            Toast.makeText(this, "Sample rate is not supported by the demodulator", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, com.mantz_it.rfanalyzer.automation.AppLanguage.wrap(this).getString(R.string.l10n_demod_rate), Toast.LENGTH_LONG).show()
             return false
         }
         demodulator!!.demodulationMode = newDemodulationMode
@@ -546,7 +560,6 @@ class AnalyzerService : Service() {
 
     fun startRecording() {
 
-        if (ReceiverFocus.paused) return
         if (appStateRepository.recordingRunning.value) {
             Log.w(TAG, "startRecording: Recording is already running. do nothing..")
             return

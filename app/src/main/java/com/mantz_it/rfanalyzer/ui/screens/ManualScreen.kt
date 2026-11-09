@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.*
+import com.mantz_it.rfanalyzer.automation.LocalizedText as Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -52,7 +53,11 @@ import androidx.core.net.toUri
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ManualScreen(navController: NavController, subUrl: String = "index.html") {
-    val BASE_URL = "file:///android_asset/docs/"
+    val locale = androidx.compose.ui.platform.LocalContext.current.resources.configuration.locales[0]
+    val lang = if (locale.language == "zh") {
+        if (locale.script == "Hant" || locale.country in listOf("TW", "HK", "MO")) "zh-Hant" else "zh-Hans"
+    } else locale.language.takeIf { it in com.mantz_it.rfanalyzer.automation.AppLanguage.languages } ?: "en"
+    val BASE_URL = "file:///android_asset/docs/$lang/"
     val HOME_SUB_URL = "index.html"
     var currentUrl by rememberSaveable { mutableStateOf(BASE_URL+subUrl) }
     var webViewRef by remember { mutableStateOf<WebView?>(null) }
@@ -74,12 +79,12 @@ fun ManualScreen(navController: NavController, subUrl: String = "index.html") {
                 title = { Text("D325f SDR Manual") },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "Back"))
                     }
                 },
                 actions = {
                     IconButton(onClick = { currentUrl = BASE_URL+HOME_SUB_URL }) {
-                        Icon(Icons.Filled.Home, contentDescription = "Go to Start")
+                        Icon(Icons.Filled.Home, contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "Go to Start"))
                     }
                 }
             )

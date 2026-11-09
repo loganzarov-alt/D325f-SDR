@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v2_stop">Остановить</string>
+    <string name="v2_busy">Приёмник занят</string>
+    <string name="v2_error">Ошибка</string>
+    <string name="v2_recovering">Восстановление приёма</string>
+    <string name="v2_recording">Запись</string>
+    <string name="v2_cooling">Контроль остывания</string>
+    <string name="v2_completed">Завершено</string>
+    <string name="v2_manual_language">Выбрать язык вручную</string>
+    <string name="v2_system_language">Как в системе</string>
+    <string name="v2_invert">Инверсия спектра IQ</string>
+
+
+
+
+    <string name="v2_task_settings">Однократные задачи. Усиление, полоса, инверсия и настройки BT копируются из Source.</string>
+    <string name="v2_start_time">Начало: гггг-ММ-дд ЧЧ:мм:сс</string>
+    <string name="v2_duration">Длительность записи, секунды</string>
+    <string name="v2_frequency">Центральная частота, МГц</string>
+    <string name="v2_reboot">Перезагрузить после завершения</string>
+    <string name="v2_thermal">Контроль температуры после завершения</string>
+    <string name="v2_thermal_info">После завершения: снижение на 3 °C за 10 минут, иначе выключение. При 70 °C — сразу. Во время задачи температурное выключение отключено.</string>
+    <string name="v2_folder">Папка записи (пусто = автоматически)</string>
+    <string name="v2_add">Добавить задачу</string>
+    <string name="v2_cancel">Отменить задачу и контроль</string>
+    <string name="v2_delete">Удалить</string>
+    <string name="v2_listening">Ожидание ПК</string>
+    <string name="v2_bt_warning">По измерениям на этом устройстве уровни 8–9 превышают 10 мВт. Использование — под вашу ответственность.</string>
+    <string name="v2_background">Разрешить работу с выключенным экраном</string>
+</resources>

@@ -18,9 +18,16 @@
 
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <application
         android:name=".RFAnalyzerApplication"
         android:allowBackup="true"
+        android:supportsRtl="true"
         android:largeHeap="true"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -59,6 +66,10 @@
             android:foregroundServiceType="mediaPlayback"
             android:exported="false" />
 
+        <service android:name=".automation.CaptureService" android:exported="false" android:foregroundServiceType="mediaPlayback" />
+        <receiver android:name=".automation.TaskAlarm" android:exported="false">
+            <intent-filter><action android:name="android.intent.action.BOOT_COMPLETED" /></intent-filter>
+        </receiver>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

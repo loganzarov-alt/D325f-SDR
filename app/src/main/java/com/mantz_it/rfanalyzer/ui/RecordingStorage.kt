@@ -33,7 +33,9 @@ object RecordingStorage {
     )
 
     fun openRecording(context: Context, filename: String): OpenedRecording? {
-        for (directory in candidateDirectories(context)) {
+        val selected = com.mantz_it.rfanalyzer.automation.CaptureSettings.prefs(context).getString("folder", "") ?: ""
+        val directories = if(selected.isBlank()) candidateDirectories(context) else listOf(File(selected))
+        for (directory in directories) {
             try {
                 if (!directory.exists() && !directory.mkdirs()) {
                     Log.w(TAG, "Cannot create ${directory.absolutePath}")

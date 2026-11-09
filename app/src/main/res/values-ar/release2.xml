@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v2_stop">إيقاف</string>
+    <string name="v2_busy">المستقبل مشغول</string>
+    <string name="v2_error">خطأ</string>
+    <string name="v2_recovering">استعادة الاستقبال</string>
+    <string name="v2_recording">جارٍ التسجيل</string>
+    <string name="v2_cooling">مراقبة التبريد</string>
+    <string name="v2_completed">اكتمل</string>
+    <string name="v2_manual_language">اختيار اللغة يدوياً</string>
+    <string name="v2_system_language">استخدام لغة النظام</string>
+    <string name="v2_invert">عكس طيف IQ</string>
+
+
+
+
+    <string name="v2_task_settings">مهام لمرة واحدة. تُنسخ إعدادات الكسب وعرض النطاق والعكس وBT من Source.</string>
+    <string name="v2_start_time">البدء: yyyy-MM-dd HH:mm:ss</string>
+    <string name="v2_duration">مدة التسجيل بالثواني</string>
+    <string name="v2_frequency">التردد المركزي، MHz</string>
+    <string name="v2_reboot">إعادة التشغيل بعد الانتهاء</string>
+    <string name="v2_thermal">مراقبة الحرارة بعد الانتهاء</string>
+    <string name="v2_thermal_info">بعد الانتهاء: انخفاض 3 °C خلال 10 دقائق وإلا إيقاف التشغيل. عند 70 °C يتوقف فوراً. الإيقاف الحراري معطل أثناء المهمة.</string>
+    <string name="v2_folder">مجلد التسجيل (فارغ = تلقائي)</string>
+    <string name="v2_add">إضافة مهمة</string>
+    <string name="v2_cancel">إلغاء المهمة والمراقبة</string>
+    <string name="v2_delete">حذف</string>
+    <string name="v2_listening">بانتظار الحاسوب</string>
+    <string name="v2_bt_warning">وفق القياسات على هذا الجهاز، يتجاوز المستويان 8–9 قدرة 10 mW. الاستخدام على مسؤوليتك.</string>
+    <string name="v2_background">السماح بالعمل عند إطفاء الشاشة</string>
+</resources>

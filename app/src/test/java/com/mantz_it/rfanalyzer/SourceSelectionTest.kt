@@ -16,6 +16,11 @@ class SourceSelectionTest {
         for (old in listOf(-1, 0, 1, 2, 4, 99)) assertEquals(0, SourceType.migrateLegacyOrdinal(old))
         assertEquals(1, SourceType.migrateLegacyOrdinal(3))
     }
+    @Test fun removedNetworkSourceFallsBackToLg() {
+        assertEquals(SourceType.LGMODEM, SourceType.fromSavedOrdinal(0))
+        assertEquals(SourceType.FILESOURCE, SourceType.fromSavedOrdinal(1))
+        for (old in listOf(2, -1, 99)) assertEquals(SourceType.LGMODEM, SourceType.fromSavedOrdinal(old))
+    }
     @Test fun iqFormatDoesNotDependOnMenuOrdinal() {
         assertEquals(0, FilesourceFileFormat.CI8.nativeFormat)
         assertEquals(0, FilesourceFileFormat.HACKRF.nativeFormat)

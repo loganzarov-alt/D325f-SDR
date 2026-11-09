@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v2_stop">रोकें</string>
+    <string name="v2_busy">रिसीवर व्यस्त है</string>
+    <string name="v2_error">त्रुटि</string>
+    <string name="v2_recovering">रिसेप्शन बहाल हो रहा है</string>
+    <string name="v2_recording">रिकॉर्डिंग जारी है</string>
+    <string name="v2_cooling">ठंडा होने की निगरानी</string>
+    <string name="v2_completed">पूरा हुआ</string>
+    <string name="v2_manual_language">भाषा मैन्युअल रूप से चुनें</string>
+    <string name="v2_system_language">सिस्टम की भाषा इस्तेमाल करें</string>
+    <string name="v2_invert">IQ स्पेक्ट्रम उलटें</string>
+
+
+
+
+    <string name="v2_task_settings">एक बार के कार्य। गेन, बैंडविड्थ, इन्वर्ज़न और BT सेटिंग Source से कॉपी होती हैं।</string>
+    <string name="v2_start_time">शुरुआत: yyyy-MM-dd HH:mm:ss</string>
+    <string name="v2_duration">रिकॉर्डिंग अवधि, सेकंड</string>
+    <string name="v2_frequency">केंद्र आवृत्ति, MHz</string>
+    <string name="v2_reboot">पूरा होने पर रीबूट करें</string>
+    <string name="v2_thermal">पूरा होने पर तापमान की निगरानी</string>
+    <string name="v2_thermal_info">पूरा होने के बाद: 10 मिनट में 3 °C कमी, अन्यथा बंद। 70 °C पर तुरंत बंद। कार्य के दौरान तापमान के कारण बंद नहीं होगा।</string>
+    <string name="v2_folder">रिकॉर्डिंग फ़ोल्डर (खाली = अपने आप)</string>
+    <string name="v2_add">कार्य जोड़ें</string>
+    <string name="v2_cancel">कार्य और निगरानी रद्द करें</string>
+    <string name="v2_delete">हटाएँ</string>
+    <string name="v2_listening">PC का इंतज़ार</string>
+    <string name="v2_bt_warning">इस उपकरण पर माप के अनुसार स्तर 8–9 पर शक्ति 10 mW से अधिक है। अपने उत्तरदायित्व पर उपयोग करें।</string>
+    <string name="v2_background">स्क्रीन बंद होने पर काम करने दें</string>
+</resources>

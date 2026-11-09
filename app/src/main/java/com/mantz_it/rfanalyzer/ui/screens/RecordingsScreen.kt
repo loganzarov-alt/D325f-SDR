@@ -34,7 +34,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import com.mantz_it.rfanalyzer.automation.LocalizedText as Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -54,6 +54,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.mantz_it.rfanalyzer.database.Recording
 import com.mantz_it.rfanalyzer.R
+import com.mantz_it.rfanalyzer.automation.localString
 import com.mantz_it.rfanalyzer.database.calculateFileName
 import com.mantz_it.rfanalyzer.ui.composable.EditStringDialog
 import com.mantz_it.rfanalyzer.ui.composable.FilesourceFileFormat
@@ -130,7 +131,7 @@ fun RecordingCard(recording: Recording, recordingScreenActions: RecordingScreenA
             Row {
                 Text(text = recording.name, fontWeight = FontWeight.Bold, fontSize = 18.sp, modifier = Modifier.weight(1f))
                 if(recording.favorite)
-                    Icon(imageVector = Icons.Default.Favorite, contentDescription = "Is Favorite", tint = Color.Red)
+                    Icon(imageVector = Icons.Default.Favorite, contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "Is Favorite"), tint = Color.Red)
                 Box(
                     modifier = Modifier
                         .background(
@@ -163,7 +164,7 @@ fun RecordingCard(recording: Recording, recordingScreenActions: RecordingScreenA
                 Text(text = recording.sampleRate.asStringWithUnit("Sps"),
                     fontSize = 16.sp, modifier = Modifier.weight(1f))
                 val recordingDurationInSeconds = recording.sizeInBytes / recording.fileFormat.bytesPerSample / recording.sampleRate
-                Text(text = "${recording.sizeInBytes.asSizeInBytesToString()} ($recordingDurationInSeconds seconds)", fontSize = 16.sp)
+                Text(text = localString(R.string.l10n_duration, recording.sizeInBytes.asSizeInBytesToString(), recordingDurationInSeconds), fontSize = 16.sp)
             }
 
             if(selected) {
@@ -172,26 +173,26 @@ fun RecordingCard(recording: Recording, recordingScreenActions: RecordingScreenA
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     IconButton(onClick = { recordingScreenActions.onPlay(recording) }) {
-                        Icon(Icons.Filled.PlayArrow, contentDescription = "Play", modifier = Modifier.size(40.dp))
+                        Icon(Icons.Filled.PlayArrow, contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "Play"), modifier = Modifier.size(40.dp))
                     }
                     IconButton(onClick = { showEditDialog = true }) {
-                        Icon(Icons.Filled.Edit, contentDescription = "Edit", modifier = Modifier.size(30.dp))
+                        Icon(Icons.Filled.Edit, contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "Edit"), modifier = Modifier.size(30.dp))
                     }
                     IconButton(onClick = {
                         recordingScreenActions.onDelete(recording)
                     }) {
-                        Icon(Icons.Filled.Delete, contentDescription = "Delete", modifier = Modifier.size(30.dp))
+                        Icon(Icons.Filled.Delete, contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "Delete"), modifier = Modifier.size(30.dp))
                     }
                     IconButton(onClick = { recordingScreenActions.onShare(recording) }) {
-                        Icon(Icons.Filled.Share, contentDescription = "Share", modifier = Modifier.size(30.dp))
+                        Icon(Icons.Filled.Share, contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "Share"), modifier = Modifier.size(30.dp))
                     }
                     IconButton(onClick = destinationFileChooserForSaveTo) {
-                        Icon(painter = painterResource(R.drawable.file_save), contentDescription = "Save to Storage", modifier = Modifier.size(30.dp))
+                        Icon(painter = painterResource(R.drawable.file_save), contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "Save to Storage"), modifier = Modifier.size(30.dp))
                     }
                     IconButton(onClick = { recordingScreenActions.onToggleFavorite(recording) }) {
                         Icon(
                             imageVector = if (recording.favorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                            contentDescription = "Toggle Favorite",
+                            contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "Toggle Favorite"),
                             tint = if (recording.favorite) Color.Red else LocalContentColor.current,
                             modifier = Modifier.size(35.dp))
                     }
@@ -231,16 +232,16 @@ fun RecordingsScreen(
                 title = { Text("Recordings") },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "Back"))
                     }
                 },
                 actions = {
                     if(recordings.isNotEmpty()) {
                         IconButton(onClick = recordingsScreenActions.onDeleteAll) {
-                            Icon(Icons.Filled.Delete, contentDescription = "Delete All")
+                            Icon(Icons.Filled.Delete, contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "Delete All"))
                         }
                         IconButton(onClick = recordingsScreenActions.onToggleDisplayOnlyFavorites) {
-                            Icon(Icons.Filled.Favorite, contentDescription = "Filter Favorites",
+                            Icon(Icons.Filled.Favorite, contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "Filter Favorites"),
                                 tint = if (displayOnlyFavorites) Color.Red else LocalContentColor.current
                                 )
                         }

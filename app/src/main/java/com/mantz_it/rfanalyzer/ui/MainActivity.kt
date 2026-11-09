@@ -21,6 +21,7 @@ import android.os.Bundle
 import android.os.IBinder
 import android.provider.OpenableColumns
 import android.util.Log
+import com.mantz_it.rfanalyzer.automation.UiTranslations
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -114,6 +115,8 @@ const val RECORDINGS_DIRECTORY = "recordings"
 
 @AndroidEntryPoint
 class MainActivity: ComponentActivity() {
+    override fun attachBaseContext(base: Context) { super.attachBaseContext(com.mantz_it.rfanalyzer.automation.AppLanguage.wrap(base)) }
+
 
     @Inject lateinit var appStateRepository: AppStateRepository
     private val mainViewModel: MainViewModel by viewModels()
@@ -314,8 +317,8 @@ class MainActivity: ComponentActivity() {
                             LaunchedEffect(Unit) {
                                 mainViewModel.snackbarEvent.collect { snackbarEvent ->
                                     val result = snackbarHostState.showSnackbar(
-                                        message = snackbarEvent.message,
-                                        actionLabel = snackbarEvent.buttonText,
+                                        message = UiTranslations.text(this@MainActivity, snackbarEvent.message),
+                                        actionLabel = snackbarEvent.buttonText?.let { UiTranslations.text(this@MainActivity, it) },
                                         duration = SnackbarDuration.Short
                                     )
                                     snackbarEvent.callback?.let { it(result) }
@@ -373,12 +376,12 @@ class MainActivity: ComponentActivity() {
                     is UiAction.OnOpenIQFileClicked  -> onOpenIQFileClicked()
                     is UiAction.OnAutoscaleClicked -> analyzerSurface.autoscale()
                     is UiAction.ShowDialog -> AlertDialog.Builder(this@MainActivity)
-                        .setTitle(action.title)
-                        .setMessage(action.msg)
-                        .setPositiveButton(action.positiveButton) { _, _ ->
+                        .setTitle(UiTranslations.text(this@MainActivity, action.title))
+                        .setMessage(UiTranslations.text(this@MainActivity, action.msg))
+                        .setPositiveButton(action.positiveButton?.let { UiTranslations.text(this@MainActivity, it) }) { _, _ ->
                             action.action?.let { it() }
                         }
-                        .setNegativeButton(action.negativeButton) { dialog, _ ->
+                        .setNegativeButton(action.negativeButton?.let { UiTranslations.text(this@MainActivity, it) }) { dialog, _ ->
                             dialog.dismiss()
                         }
                         .show()
@@ -618,7 +621,7 @@ class MainActivity: ComponentActivity() {
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            Toast.makeText(context, "Failed to save file ($e)", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, UiTranslations.text(context, "Failed to save file ($e)"), Toast.LENGTH_SHORT).show()
         }
     }
 

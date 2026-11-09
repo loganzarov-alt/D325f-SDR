@@ -288,7 +288,8 @@ class AppStateRepository @Inject constructor(
                                 val old = prefs[intPreferencesKey("sourceType_no_gsm125")] ?: 0
                                 SourceType.migrateLegacyOrdinal(old)
                             } else default.ordinal
-                            enumClass.enumConstants[enumIndex.coerceIn(0, enumClass.enumConstants.size - 1)]
+                            if (keyName == "sourceType_modem_file_v1") SourceType.fromSavedOrdinal(enumIndex) as T
+                            else enumClass.enumConstants[enumIndex.coerceIn(0, enumClass.enumConstants.size - 1)]
                         }
                         is List<*> -> {
                             val stringValue = prefs[key as Preferences.Key<String>]
