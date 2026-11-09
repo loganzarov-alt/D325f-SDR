@@ -2,6 +2,7 @@
 // Copyright (C) 2026 Logan Zarov
 #pragma once
 #include "common/audio/audio_sink.h"
+#include <cstring>
 #include <oboe/Oboe.h>
 #include <mutex>
 
