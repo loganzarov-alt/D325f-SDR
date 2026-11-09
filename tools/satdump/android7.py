@@ -39,3 +39,12 @@ s=p.read_text().replace('# Build packages', 'mkdir -p dependency-sources\n# Buil
 s=re.sub(r'^rm -rf (wolfssl|curl|cpu_features|volk|zlib|libpng|fftw3|nng|sqlite|zstd|libtiff|hdf5)$',
     lambda m: 'tar --exclude=.git -czf dependency-sources/'+m[1]+'.tar.gz '+m[1]+'\n'+m[0], s, flags=re.M)
 p.write_text(s)
+
+# Android 7 has no AAudio. Oboe's OpenSL ES backend supports API 16 and newer.
+audio=root/'plugins/audio_sinks/aaudio_audio_sink'
+for extension in ('h', 'cpp'):
+    (audio/('aaudio_sink.'+extension)).write_text(Path(__file__).with_name('android7_audio.'+extension).read_text())
+p=audio/'CMakeLists.txt'
+s=p.read_text().replace('target_link_libraries(aaudio_audio_sink PUBLIC satdump_core aaudio)',
+    'add_subdirectory(${CMAKE_SOURCE_DIR}/deps/oboe ${CMAKE_BINARY_DIR}/oboe)\n    target_link_libraries(aaudio_audio_sink PUBLIC satdump_core oboe)')
+p.write_text(s)
