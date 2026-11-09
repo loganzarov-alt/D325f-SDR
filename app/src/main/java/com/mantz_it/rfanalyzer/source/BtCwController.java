@@ -44,7 +44,7 @@ public final class BtCwController {
     private volatile long lastPacket;
     private volatile boolean hasPackets;
     private long startedAt;
-    private volatile int power = 9;
+    private volatile int power = 7;
     private volatile String status = "TX idle";
     private boolean requested;
     private BtCwController(Context context) throws IOException {
@@ -69,6 +69,14 @@ public final class BtCwController {
         }
         if (!temporary.renameTo(executable)) throw new IOException("Cannot replace BT guardian");
         if (!executable.setExecutable(true, false)) throw new IOException("Cannot install BT guardian");
+    }
+    public synchronized void enforceChannelForRf(long hz) throws IOException {
+        if (hz < 100_000_000L && channel > 30) {
+            boolean restart = requested;
+            if (restart) stop();
+            setChannel(0);
+            // configure() restarts only when the receiver actually needs BT.
+        }
     }
     public int getPower() { return power; }
     public synchronized void setPower(int next) throws IOException {

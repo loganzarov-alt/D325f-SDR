@@ -1,0 +1,91 @@
+Limite superior, MHz
+Limite de recepção BT
+Digite 1–2402 MHz (padrão: 1000). Abaixo do limite usa-se o oscilador BT; no limite e acima, recepção direta. Pare e reinicie RX após salvar.
+Digite um número entre 1 e 2402 MHz. O ajuste não foi alterado.
+Salvo. Pare e reinicie RX.
+Não foi possível salvar o ajuste.
+Retomar cascata
+Congelar cascata · ouvir
+FFT e cascata pausados. A recepção e o áudio continuam; o silenciador está aberto.
+O silenciador corta sinais abaixo do limiar de nível selecionado.
+Manter o canal selecionado no centro da tela
+Mantenha uma etiqueta pressionada para abrir a ajuda correspondente
+Inverter o sentido da roda de sintonia
+Remover o pico central de componente contínua da tela. Este ajuste não altera as gravações IQ.
+Voltar automaticamente ao início ao chegar ao fim do arquivo
+Mostrar marcas do nível máximo de sinal
+Mostrar frequências em relação à frequência central
+Gravar amostras somente quando o sinal superar o limiar do silenciador.
+Somente exibição. IQ, demodulação e gravações não são alterados.
+Parar gravação?
+A gravação continua. Parar para alterar a frequência?
+A gravação continua. Parar para alterar a taxa de amostragem?
+Sim, parar gravação
+Não
+Reiniciar completamente o modem?
+Use somente após erro de sincronização PLL. Modem, Wi-Fi e USB podem reiniciar por cerca de um minuto.
+Reiniciar modem
+Reinicialização completa do modem solicitada
+Excluir TODAS as gravações?
+Excluir todas as gravações? Esta ação não pode ser desfeita.
+Sim, excluir todas
+Gravação em andamento
+Frequência fora da faixa da gravação atual. Parar gravação?
+Registro excluído
+Arquivo aberto. Pressione Reproduzir para iniciar.
+Editar nome da gravação
+Parada automática da gravação
+Parar gravação após
+Manual D325f SDR
+Registro RF Decoder
+Avisos de código aberto
+Licenças e avisos · offline
+Lento
+Rápido
+Barras
+Linha
+Desligado
+Médio
+(nenhum arquivo selecionado)
+Frequência de sintonia
+Abrir controles
+Ir ao início
+Ir ao final
+Nos favoritos
+Adicionar ou remover dos favoritos
+Mostrar favoritos
+Ativar ou silenciar áudio
+PRONTO · SELECIONE UMA FONTE E INICIE
+Verifique data, duração, frequência e porta.
+Os horários das tarefas se sobrepõem
+Permita alarmes exatos nas configurações do sistema
+Erro
+O canal deve estar entre 0 e 78
+Pare a recepção antes de alterar o canal BT
+Tempo esgotado para o comando de energia
+Tempo esgotado ao abrir o modem
+Os dados do modem foram interrompidos
+Digite um canal de 0 a %1$s
+Frequência TX: %1$s MHz
+Canal %1$s salvo · %2$s MHz
+Potência TX: nível %1$s / 9
+Versão %1$s
+Arquivo: %1$s
+As gravações ocupam %1$s do armazenamento
+Parar gravação (%1$s s)
+%1$s (%2$s s)
+Falha ao reiniciar o modem: %1$s
+Gravação %1$s excluída (%2$s)
+Gravação %1$s concluída (%2$s)
+A frequência %1$s está fora da faixa da fonte atual
+Não foi possível salvar o arquivo: %1$s
+Demodulação: %1$s MHz
+Desfazer
+Excluir gravação
+Carregar arquivo
+Abrir o arquivo recebido como fonte? A recepção será interrompida.
+Fonte indisponível: %1$s
+O demodulador não suporta esta taxa de amostragem
+Licenças de código aberto
+Frequência: %1$s · Amostragem: %2$s
+Suave

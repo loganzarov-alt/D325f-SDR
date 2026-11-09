@@ -21,6 +21,14 @@ with zipfile.ZipFile(sys.argv[1]) as z:
     assert b'Lcom/mantz_it/hackrf_android/' not in dex
     assert b'Lcom/mantz_it/rfanalyzer/source/HackrfSource;' not in dex
     assert b'Lcom/mantz_it/rfanalyzer/source/RtlsdrSource;' not in dex
+    assert b'Lcom/mantz_it/rfanalyzer/network/' not in dex
+    assert b'Lcom/mantz_it/rfanalyzer/source/NetworkIQ' not in dex
+    native = z.read('lib/armeabi-v7a/libnativedsp.so')
+    assert b'createNetworkResampler' not in native
+    assert b'resampleNetwork' not in native
+    manifest = z.read('AndroidManifest.xml')
+    for permission in ['android.permission.INTERNET', 'android.permission.ACCESS_WIFI_STATE']:
+        assert permission.encode() not in manifest and permission.encode('utf-16le') not in manifest
     assert not any('rfanalyzer2' in n or n.endswith('/ic_launcher.png') for n in names)
     assert 'assets/lg_stream_b1' not in names
 print(json.dumps(report, indent=2))

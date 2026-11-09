@@ -11,6 +11,7 @@ import kotlin.math.pow
 import kotlin.math.sqrt
 
 class NativeDsp {
+    external fun invertCi8(raw: ByteArray)
     external fun createBandwidth(rate: Int): Long
     external fun destroyBandwidth(handle: Long)
     external fun filterBandwidth(handle: Long, raw: ByteArray, re: FloatArray, im: FloatArray, inverted: Boolean): Int

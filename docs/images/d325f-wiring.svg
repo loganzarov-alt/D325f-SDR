@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" font-family="Inter, DejaVu Sans, sans-serif">
+  <defs>
+    <radialGradient id="bg" cx="45%" cy="40%" r="80%">
+      <stop offset="0" stop-color="#1a2630"/>
+      <stop offset="1" stop-color="#070a0e"/>
+    </radialGradient>
+    <linearGradient id="pcb" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#12304a"/>
+      <stop offset="1" stop-color="#0c2134"/>
+    </linearGradient>
+    <filter id="sh" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7b8a99"/>
+    </marker>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+
+  <!-- Title -->
+  <text x="60" y="78" font-size="38" font-weight="700" fill="#e6edf3">LG D325 · D325f SDR — подключение / wiring</text>
+  <text x="60" y="114" font-size="20" fill="#8b9aa8">Упрощённая схема, не в масштабе · Simplified diagram, not to scale</text>
+
+  <!-- PCB -->
+  <g filter="url(#sh)">
+    <rect x="60" y="150" width="900" height="760" rx="26" fill="url(#pcb)" stroke="#2b5a7d" stroke-width="2"/>
+  </g>
+  <text x="90" y="192" font-size="20" font-weight="600" fill="#7fb3d9">Плата / Main board</text>
+
+  <!-- Main antenna -->
+  <g stroke="#7b8a99" stroke-width="3" fill="none">
+    <path d="M140 300 v-60 M140 240 l-22 -26 M140 240 l22 -26"/>
+  </g>
+  <text x="105" y="330" font-size="16" fill="#8b9aa8">Осн. антенна</text>
+  <text x="105" y="350" font-size="16" fill="#8b9aa8">Main antenna</text>
+  <line x1="140" y1="360" x2="140" y2="430" stroke="#7b8a99" stroke-width="3"/>
+
+  <!-- U1000 -->
+  <rect x="90" y="430" width="200" height="130" rx="12" fill="#18222d" stroke="#3a4b5c" stroke-width="2"/>
+  <text x="190" y="480" font-size="22" font-weight="700" fill="#e6edf3" text-anchor="middle">U1000</text>
+  <text x="190" y="508" font-size="16" fill="#a9b6c3" text-anchor="middle">SKY77573-31</text>
+  <text x="190" y="532" font-size="15" fill="#8b9aa8" text-anchor="middle">front-end / ПА + ключ</text>
+
+  <!-- Duplexers -->
+  <rect x="380" y="380" width="150" height="90" rx="10" fill="#18222d" stroke="#3a4b5c" stroke-width="2"/>
+  <text x="455" y="418" font-size="20" font-weight="700" fill="#e6edf3" text-anchor="middle">FL2001</text>
+  <text x="455" y="444" font-size="15" fill="#8b9aa8" text-anchor="middle">DPX B1 (2100)</text>
+
+  <rect x="380" y="620" width="150" height="90" rx="10" fill="#18222d" stroke="#3a4b5c" stroke-width="2"/>
+  <text x="455" y="658" font-size="20" font-weight="700" fill="#e6edf3" text-anchor="middle">FL2002</text>
+  <text x="455" y="684" font-size="15" fill="#8b9aa8" text-anchor="middle">DPX B8 (900)</text>
+
+  <path d="M290 470 C 330 470, 340 425, 378 425" stroke="#7b8a99" stroke-width="3" fill="none"/>
+  <path d="M290 520 C 330 520, 340 665, 378 665" stroke="#7b8a99" stroke-width="3" fill="none"/>
+
+  <!-- WTR2605 -->
+  <rect x="660" y="430" width="200" height="230" rx="14" fill="#18222d" stroke="#3a4b5c" stroke-width="2"/>
+  <text x="760" y="530" font-size="24" font-weight="700" fill="#e6edf3" text-anchor="middle">U3000</text>
+  <text x="760" y="560" font-size="17" fill="#a9b6c3" text-anchor="middle">WTR2605</text>
+  <text x="760" y="586" font-size="15" fill="#8b9aa8" text-anchor="middle">трансивер / transceiver</text>
+
+  <!-- RX lines duplexer -> WTR -->
+  <path d="M530 425 H 600 C 630 425, 630 480, 658 480" stroke="#2dd4bf" stroke-width="4" fill="none"/>
+  <path d="M530 665 H 600 C 630 665, 630 610, 658 610" stroke="#f5a524" stroke-width="4" fill="none"/>
+
+  <!-- MSM -->
+  <rect x="660" y="740" width="200" height="120" rx="14" fill="#18222d" stroke="#3a4b5c" stroke-width="2"/>
+  <text x="760" y="790" font-size="22" font-weight="700" fill="#e6edf3" text-anchor="middle">MSM8210</text>
+  <text x="760" y="818" font-size="15" fill="#8b9aa8" text-anchor="middle">модем Hexagon → IQ</text>
+  <line x1="760" y1="660" x2="760" y2="736" stroke="#7b8a99" stroke-width="3" marker-end="url(#arr)"/>
+
+  <!-- WCN3620 -->
+  <rect x="660" y="200" width="200" height="110" rx="14" fill="#18222d" stroke="#3a4b5c" stroke-width="2"/>
+  <text x="760" y="245" font-size="22" font-weight="700" fill="#e6edf3" text-anchor="middle">WCN3620</text>
+  <text x="760" y="272" font-size="15" fill="#8b9aa8" text-anchor="middle">Wi-Fi / Bluetooth</text>
+
+  <!-- Tap points -->
+  <circle cx="610" cy="425" r="9" fill="#2dd4bf" filter="url(#glow)"/>
+  <circle cx="610" cy="665" r="9" fill="#f5a524" filter="url(#glow)"/>
+  <text x="560" y="398" font-size="17" font-weight="700" fill="#2dd4bf">B1</text>
+  <text x="560" y="708" font-size="17" font-weight="700" fill="#f5a524">B8</text>
+
+  <!-- 3.5 mm jack -->
+  <g filter="url(#sh)">
+    <rect x="1030" y="430" width="150" height="180" rx="16" fill="#151d26" stroke="#4a5a6a" stroke-width="2"/>
+  </g>
+  <text x="1105" y="414" font-size="18" font-weight="600" fill="#e6edf3" text-anchor="middle">Гнездо 3,5 мм</text>
+  <circle cx="1090" cy="570" r="11" fill="#f5a524"/>
+  <circle cx="1090" cy="520" r="11" fill="#2dd4bf"/>
+  <circle cx="1090" cy="470" r="11" fill="#a78bfa"/>
+  <text x="1112" y="576" font-size="16" fill="#f5a524" font-weight="700">Tip</text>
+  <text x="1112" y="526" font-size="16" fill="#2dd4bf" font-weight="700">Ring</text>
+  <text x="1108" y="476" font-size="15" fill="#a78bfa" font-weight="700">Sleeve</text>
+
+  <!-- Wires to jack -->
+  <path d="M610 425 C 620 340, 960 330, 990 470 S 1010 520, 1079 520" stroke="#2dd4bf" stroke-width="4" stroke-dasharray="10 7" fill="none"/>
+  <path d="M610 665 C 650 722, 930 718, 985 650 S 1010 570, 1079 570" stroke="#f5a524" stroke-width="4" stroke-dasharray="10 7" fill="none"/>
+  <path d="M860 255 C 960 255, 980 470, 1079 470" stroke="#a78bfa" stroke-width="4" stroke-dasharray="10 7" fill="none"/>
+
+  <!-- Adapter -->
+  <path d="M1180 520 H 1300" stroke="#2dd4bf" stroke-width="5" fill="none"/>
+  <g filter="url(#sh)">
+    <rect x="1300" y="480" width="110" height="80" rx="10" fill="#b8892e" stroke="#e0b55a" stroke-width="2"/>
+  </g>
+  <text x="1355" y="515" font-size="18" font-weight="700" fill="#1a1205" text-anchor="middle">SMA</text>
+  <text x="1355" y="538" font-size="13" fill="#2a1d08" text-anchor="middle">центр / centre</text>
+  <!-- antenna -->
+  <g stroke="#cfd8e0" stroke-width="4" fill="none">
+    <path d="M1410 520 H 1470 V 330 M1470 330 l-26 -32 M1470 330 l26 -32"/>
+  </g>
+  <text x="1470" y="280" font-size="17" fill="#e6edf3" text-anchor="middle">Антенна / Antenna</text>
+  <!-- shield not connected -->
+  <path d="M1355 560 V 610" stroke="#7b8a99" stroke-width="3" stroke-dasharray="4 5"/>
+  <g stroke="#ef4444" stroke-width="5"><path d="M1340 600 l30 30 M1370 600 l-30 30"/></g>
+  <text x="1355" y="660" font-size="15" fill="#ef9a9a" text-anchor="middle">корпус SMA не подключён</text>
+  <text x="1355" y="680" font-size="15" fill="#ef9a9a" text-anchor="middle">SMA shield not connected</text>
+
+  <!-- Legend -->
+  <g font-size="18">
+    <rect x="1000" y="730" width="540" height="190" rx="16" fill="#111922" stroke="#2a3644"/>
+    <circle cx="1030" cy="770" r="8" fill="#2dd4bf"/>
+    <text x="1050" y="776" fill="#e6edf3"><tspan font-weight="700">Ring → B1</tspan> · штатно на центр SMA / default</text>
+    <circle cx="1030" cy="815" r="8" fill="#f5a524"/>
+    <text x="1050" y="821" fill="#e6edf3"><tspan font-weight="700">Tip → B8</tspan> · для 1090 МГц: центр SMA на Tip</text>
+    <circle cx="1030" cy="860" r="8" fill="#a78bfa"/>
+    <text x="1050" y="866" fill="#e6edf3"><tspan font-weight="700">Sleeve → Wi-Fi/BT</tspan> · антенна WCN3620</text>
+    <text x="1030" y="902" font-size="15" fill="#8b9aa8">B1/B8 — линии приёма перед WTR2605 / RX into WTR2605</text>
+  </g>
+</svg>

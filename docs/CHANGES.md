@@ -1,3 +1,17 @@
+# 2.0 (2026-11-09)
+
+- App 2.0, version code 20000, signed with the same certificate as 1.0.0, so it
+  installs as an update. Full list: [RELEASE-2.0.md](RELEASE-2.0.md).
+- Recording keeps the spectrum, waterfall and audio running; Freeze moved to
+  Settings and no longer stops a recording.
+- Kernel: the published boot.img is for a phone that runs from microSD (eMMC
+  controller off in the device tree). New boot-emmc.img for a phone that runs
+  from eMMC, not tested on a phone yet. The two device-tree changes that were
+  missing from `kernel/d325f-kernel.patch` are added.
+- Documentation in the first person; [field notes](FIELD-NOTES.md) with the
+  Bluetooth channel and power level, the 10 mW limit, CW measurements,
+  satellites and other phones; new board drawings and a new demo video.
+
 # 1.0.0 — first public release (2026-10-24)
 
 - Visible name D325f SDR, original vector icon and versionCode 1.
@@ -11,9 +25,9 @@
 - Include the NDK LLVM runtime notice for statically linked C++ runtime portions.
 - Native helper processing source is unchanged from the working reconstructed
   baseline. DSP code differs only by its dated modification notice.
-- Published APK tested on the modified LG D325 by Logan Zarov; working operation
-  confirmed on 2026-10-24.
-- Hardware photographs and the author's B8/B1 wire identification documented in
+- I tested the published APK on my modified LG D325 and confirmed it works
+  on 2026-10-24.
+- My hardware photographs and B8/B1 wire identification documented in
   [HARDWARE.md](HARDWARE.md).
 
 Modified upstream-derived source files (including changes carried over from the

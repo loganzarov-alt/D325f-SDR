@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v2_stop">Stop</string>
+    <string name="v2_busy">Receiver is busy</string>
+    <string name="v2_error">Error</string>
+    <string name="v2_recovering">Recovering reception</string>
+    <string name="v2_recording">Recording</string>
+    <string name="v2_cooling">Monitoring cooling</string>
+    <string name="v2_completed">Completed</string>
+    <string name="v2_manual_language">Choose language manually</string>
+    <string name="v2_system_language">Use system language</string>
+    <string name="v2_invert">Invert IQ spectrum</string>
+
+
+
+
+    <string name="v2_task_settings">One-time tasks. Gain, bandwidth, inversion and BT settings are copied from Source.</string>
+    <string name="v2_start_time">Start: yyyy-MM-dd HH:mm:ss</string>
+    <string name="v2_duration">Recording duration, seconds</string>
+    <string name="v2_frequency">Centre frequency, MHz</string>
+    <string name="v2_reboot">Reboot after completion</string>
+    <string name="v2_thermal">Monitor temperature after completion</string>
+    <string name="v2_thermal_info">After completion: cool by 3 °C within 10 minutes or power off. 70 °C powers off immediately. During the task temperature shutdown is disabled.</string>
+    <string name="v2_folder">Recording folder (empty = automatic)</string>
+    <string name="v2_add">Add task</string>
+    <string name="v2_cancel">Cancel task and monitoring</string>
+    <string name="v2_delete">Delete</string>
+    <string name="v2_listening">Waiting for PC</string>
+    <string name="v2_bt_warning">Levels 8–9 exceed 10 mW according to measurements on this device. Use at your own responsibility.</string>
+    <string name="v2_background">Allow work with screen off</string>
+</resources>

@@ -14,8 +14,8 @@ android {
         applicationId = "io.github.loganzarov_alt.d325fsdr"
         minSdk = 25
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 20000
+        versionName = "2.0"
 
         ndk {
             abiFilters += listOf("armeabi-v7a")
@@ -57,6 +57,8 @@ android {
         compose = true
         buildConfig = true
     }
+
+    testOptions { unitTests.isReturnDefaultValues = true }
 
     useLibrary("android.test.base")
     useLibrary("android.test.runner")

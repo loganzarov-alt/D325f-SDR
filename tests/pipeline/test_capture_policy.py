@@ -14,11 +14,11 @@ stubs={
  'com/mantz_it/nativedsp/NativeDsp.java': '''package com.mantz_it.nativedsp; public class NativeDsp {
  public long createBandwidth(int n){return 1;}public void destroyBandwidth(long n){}
  public int filterBandwidth(Object... x){return 0;}public int unpackCi8(Object... x){return 0;}public int unpackCi8Conjugated(Object... x){return 0;}
- public int mixBandwidth(Object... x){return 0;}public int mixDownsampleCi8Boxcar30(Object... x){return 0;}public void conjugate(Object... x){}
+ public int mixBandwidth(Object... x){return 0;}public int mixDownsampleCi8Boxcar30(Object... x){return 0;}public void conjugate(Object... x){} public void invertCi8(Object... x){}
  }''',
  'com/mantz_it/rfanalyzer/source/BtCwController.java': '''package com.mantz_it.rfanalyzer.source; public class BtCwController {
  public static BtCwController get(android.content.Context c){return new BtCwController();}public static int getChannel(){return 30;}
- public void stop(){}public void stopAsync(){}public void packetReceived(){}public void configure(boolean b){}
+ public void stop(){}public void stopAsync(){}public void packetReceived(){}public void configure(boolean b){}public void enforceChannelForRf(long hz){}
  }''',
  'com/mantz_it/rfanalyzer/source/BtRxLimit.java': '''package com.mantz_it.rfanalyzer.source; public class BtRxLimit {public static long activeHz=800000000L;public static void reload(){}}''',
  'TestCapturePolicy.java': '''import com.mantz_it.rfanalyzer.source.LgModemSource;

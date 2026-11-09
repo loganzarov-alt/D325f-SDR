@@ -196,7 +196,7 @@ fun CustomSideDrawerOverlay(
                     .padding(16.dp)
                     .border(2.dp, Color.White, shape = RoundedCornerShape(50))
             ) {
-                Icon(Icons.Default.KeyboardArrowUp, contentDescription = "Open controls")
+                Icon(Icons.Default.KeyboardArrowUp, contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "Open controls"))
             }
 
             FloatingActionButton(
@@ -209,7 +209,7 @@ fun CustomSideDrawerOverlay(
                     .padding(16.dp)
                     .border(2.dp, Color.White, shape = RoundedCornerShape(18.dp))
             ) {
-                Icon(Icons.Default.MenuBook, contentDescription = "D325f SDR Manual")
+                Icon(Icons.Default.MenuBook, contentDescription = com.mantz_it.rfanalyzer.automation.UiTranslations.text(androidx.compose.ui.platform.LocalContext.current, "D325f SDR Manual"))
             }
         }
 

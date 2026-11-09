@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.PrimaryScrollableTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.Text
+import com.mantz_it.rfanalyzer.automation.LocalizedText as Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -55,6 +55,7 @@ enum class AnalyzerTabs(val displayName: String) {
     DEMODULATION("Demodulation"),
     RECORDING("Recording"),
     DISPLAY("Display"),
+    AUTOMATIZATIONS("Automatizations"),
     SETTINGS("Settings"),
     ABOUT("About")
 }
@@ -161,8 +162,10 @@ fun AnalyzerTabsComposable(
         }
         Box(modifier = Modifier.padding(5.dp)) {
             when (state) {
+                AnalyzerTabs.AUTOMATIZATIONS -> com.mantz_it.rfanalyzer.automation.AutomationTab(appStateRepository)
                 AnalyzerTabs.SOURCE
                     -> SourceTabComposable(
+                        appState = appStateRepository,
                         sourceType = sourceType,
                         sourceName = sourceName,
                         analyzerRunning = analyzerRunning,
@@ -239,6 +242,7 @@ fun AnalyzerTabsComposable(
                     )
                 AnalyzerTabs.SETTINGS
                     -> SettingsTabComposable(
+                        frequency = sourceFrequency,
                         screenOrientation = screenOrientation,
                         fontSize = fontSize,
                         colorTheme = colorTheme,

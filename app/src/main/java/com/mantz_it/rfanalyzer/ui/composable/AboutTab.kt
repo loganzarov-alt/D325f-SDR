@@ -26,6 +26,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 package com.mantz_it.rfanalyzer.ui.composable
+import com.mantz_it.rfanalyzer.R
+import com.mantz_it.rfanalyzer.automation.localString
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.rememberScrollState
@@ -47,7 +49,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
+import com.mantz_it.rfanalyzer.automation.LocalizedText as Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -104,8 +106,7 @@ fun AboutTabComposable(
                 modifier = Modifier.padding(top = 8.dp)
             )
             Text(
-                "SDR-приёмник со спектром и водопадом в реальном времени, " +
-                    "режимами AM/NFM/WFM/USB/LSB/CW, записью IQ и демодулированного аудио.",
+                "SDR receiver with live spectrum and waterfall, AM/NFM/WFM/USB/LSB/CW, IQ recording and demodulated audio.",
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontSize = 16.sp,
@@ -113,7 +114,7 @@ fun AboutTabComposable(
                 modifier = Modifier.padding(top = 16.dp)
             )
             Text(
-                "Версия $appVersion",
+                localString(R.string.l10n_version, appVersion),
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontSize = 15.sp,
@@ -124,7 +125,7 @@ fun AboutTabComposable(
         OutlinedBox(label = "Справка · профили приёма") {
             Column(Modifier.padding(12.dp)) {
                 Text("Диапазоны настройки PLL, МГц", fontWeight = FontWeight.SemiBold)
-                Text("Таблица прокручивается по горизонтали. Диапазоны относятся к частоте входа модема; чувствительность зависит от SAW B1/B8 и тракта.", style = MaterialTheme.typography.bodySmall)
+                Text("Scroll the table horizontally. Ranges refer to the modem input frequency; sensitivity depends on the B1/B8 SAW filter and RF path.", style = MaterialTheme.typography.bodySmall)
                 Column(Modifier.horizontalScroll(rememberScrollState()).padding(vertical = 10.dp)) {
                     Row {
                         listOf("Профиль", "×10", "×20", "×40").forEachIndexed { index, title ->
@@ -139,9 +140,9 @@ fun AboutTabComposable(
                         }
                     }
                 }
-                Text("Auto выбирает профиль по частоте. Профиль 500 не используется: устойчивый захват PLL не подтверждён.", style = MaterialTheme.typography.bodySmall)
-                Text("BT RX: верхняя граница задаётся в настройках BT-гетеродина (по умолчанию 800 МГц). Ниже границы: частота модема = (2402 + канал BT) МГц минус частота приёма. На границе и выше: прямой приём. Изменение применяется после остановки и запуска RX.", style = MaterialTheme.typography.bodySmall)
-                Text("Полосы: 5 МГц — исходные 7,68 MS/s; 2 МГц — FIR /3, 2,56 MS/s; 1 МГц — FIR /6, 1,28 MS/s. Raw IQ записывается до фильтрации, 7,68 MS/s. Freeze останавливает спектр и водопад; демодулятор остаётся доступен.", style = MaterialTheme.typography.bodySmall)
+                Text("Auto chooses the PLL profile by frequency. Profile 500 is not used because stable PLL lock has not been confirmed.", style = MaterialTheme.typography.bodySmall)
+                Text("Below the BT receive limit: modem frequency = (2402 + BT channel) MHz minus receive frequency. At or above the limit, reception is direct.", style = MaterialTheme.typography.bodySmall)
+                Text("5 MHz: native 7.68 MS/s; 2 MHz: FIR /3, 2.56 MS/s; 1 MHz: FIR /6, 1.28 MS/s. Manual raw IQ recording uses 7.68 MS/s; automated recording uses the selected rate. Freeze pauses the spectrum and waterfall while audio remains available.", style = MaterialTheme.typography.bodySmall)
             }
         }
 

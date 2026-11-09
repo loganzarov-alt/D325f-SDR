@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="v2_stop">停止</string>
+    <string name="v2_busy">接收器正忙</string>
+    <string name="v2_error">错误</string>
+    <string name="v2_recovering">正在恢复接收</string>
+    <string name="v2_recording">正在录制</string>
+    <string name="v2_cooling">监测降温</string>
+    <string name="v2_completed">已完成</string>
+    <string name="v2_manual_language">手动选择语言</string>
+    <string name="v2_system_language">使用系统语言</string>
+    <string name="v2_invert">反转 IQ 频谱</string>
+
+
+
+
+    <string name="v2_task_settings">单次任务。增益、带宽、反转和 BT 设置从 Source 复制。</string>
+    <string name="v2_start_time">开始：yyyy-MM-dd HH:mm:ss</string>
+    <string name="v2_duration">录制时长（秒）</string>
+    <string name="v2_frequency">中心频率（MHz）</string>
+    <string name="v2_reboot">完成后重启</string>
+    <string name="v2_thermal">完成后监测温度</string>
+    <string name="v2_thermal_info">完成后：10 分钟内降温 3 °C，否则关机。达到 70 °C 立即关机。任务运行期间禁用温控关机。</string>
+    <string name="v2_folder">录制文件夹（留空为自动）</string>
+    <string name="v2_add">添加任务</string>
+    <string name="v2_cancel">取消任务和监测</string>
+    <string name="v2_delete">删除</string>
+    <string name="v2_listening">等待电脑连接</string>
+    <string name="v2_bt_warning">根据此设备的测量结果，8–9 档超过 10 mW。使用风险由您自行承担。</string>
+    <string name="v2_background">允许息屏运行</string>
+</resources>

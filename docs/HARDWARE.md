@@ -1,6 +1,6 @@
 # Hardware modification — B8 / B1
 
-Modified LG D325 used with D325f SDR. Photographs: **Logan Zarov**.
+My modified LG D325 used with D325f SDR. Photographs are mine (**Logan Zarov**).
 
 ## Обозначения / Identification
 
@@ -25,11 +25,16 @@ landscape photograph above.
 
 ![Аппаратная доработка LG D325 с другого ракурса](images/lg-d325-mod-overview.jpg)
 
-Фотографии показывают существующую доработку. Полная схема и обозначения
-контактных площадок пока не опубликованы.
+## Точки подпайки / Tap points
 
-These photographs document the existing modification. A complete circuit diagram
-and identified solder pads have not yet been published.
+B8 подпаян к линии приёма у дуплексера FL2002, ближе к трансиверу WTR2605; B1 —
+к линии приёма у FL2001. Рисунок перерисован мной по фото платы, не в масштабе.
+
+B8 is tapped on the receive line at duplexer FL2002, closer to the WTR2605
+transceiver; B1 on the receive line at FL2001. I redrew the drawing from a board
+photo; it is not to scale ([SVG](images/d325f-board-taps.svg)).
+
+![LG D325 RF section: B8 tap near FL2002, B1 tap near FL2001](images/d325f-board-taps.png)
 
 ## Test setup / Тестовая установка
 
@@ -65,12 +70,14 @@ Sleeve carries the Wi-Fi/BT antenna connection; it is not a separate ground cont
 оставлен неподключённым: его подключение существенно ухудшает приём в этой
 конфигурации. Sleeve связан с антенной Wi-Fi/BT; отдельного контакта земли здесь нет.
 
-![TRS pinout: Tip to B8, Ring to B1 and SMA centre, Sleeve to Wi-Fi/BT; SMA shield unconnected](images/d325f-trs-pinout.png)
+![Wiring: Ring to B1 and SMA centre, Tip to B8, Sleeve to the Wi-Fi/BT antenna; SMA shield unconnected](images/d325f-wiring.png)
+
+For 1090 MHz I move the SMA centre to Tip (B8). / Для 1090 МГц я переношу центр SMA на Tip (B8). [SVG](images/d325f-wiring.svg)
 
 This describes the wiring of the demonstrated setup. The physical coupling path
 from the Bluetooth local oscillator into the receiver has not yet been characterised;
 the pinout alone does not establish that mechanism. See the
-[Bluetooth mode description](HOW-IT-WORKS.md#bluetooth-local-oscillator-below-800-mhz).
+[Bluetooth mode description](HOW-IT-WORKS.md#bluetooth-local-oscillator-below-1000-mhz).
 
 Здесь показана разводка демонстрируемой установки. Физический путь связи
 Bluetooth-гетеродина с приёмником ещё не определён измерениями; сама распиновка

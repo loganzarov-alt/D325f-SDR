@@ -1,0 +1,12 @@
+LG-D325-Empfang erfordert Root sowie einen kompatiblen modifizierten Kernel und ein modifiziertes Modem. Dieses APK allein bereitet kein unverändertes Telefon vor. Quelle wählen und Empfang starten.
+IQ-Dateien unterstützen CI8 (8 Bit mit Vorzeichen), CU8 (8 Bit ohne Vorzeichen) und CI16 (16 Bit mit Vorzeichen, Little Endian). Abtastrate und Mittenfrequenz der Aufnahme eingeben. CI8 legacy verwendet dasselbe vorzeichenbehaftete Format.
+Die Tabelle lässt sich horizontal scrollen. Bereiche beziehen sich auf die Modemeingangsfrequenz; die Empfindlichkeit hängt vom B1/B8-SAW-Filter und HF-Pfad ab.
+Auto wählt das PLL-Profil nach Frequenz. Profil 500 wird nicht verwendet, da stabiles PLL-Einrasten nicht bestätigt ist.
+Unter der BT-Empfangsgrenze: Modemfrequenz = (2402 + BT-Kanal) MHz minus Empfangsfrequenz. Ab der Grenze erfolgt direkter Empfang.
+5 MHz: native 7,68 MS/s; 2 MHz: FIR /3, 2,56 MS/s; 1 MHz: FIR /6, 1,28 MS/s. Manuelle IQ-Aufnahmen nutzen 7,68 MS/s, automatische die gewählte Rate. Einfrieren pausiert Spektrum und Wasserfall; Audio bleibt verfügbar.
+Pausiert Hintergrund-Apps, Launcher, Google-Dienste und Benachrichtigungsleiste. Anzeige, Audio und Empfang laufen weiter. Einfrieren gibt keinen RAM frei und kann schwarze Bildschirme verursachen.
+Gibt RAM von Hintergrund-Apps frei. Die Benachrichtigungsleiste funktioniert; Android kann Dienste neu starten.
+Keine Speicherbereinigung, kein Einfrieren und keine Änderung des CPU-Modus.
+Der gewählte Modus gilt ab dem nächsten Empfangsstart. Deaktivieren wirkt sofort. Stoppen, Verlassen der App oder Verbindungsverlust geben eingefrorene Prozesse frei und stellen den CPU-Modus wieder her.
+SDR-Empfänger mit Live-Spektrum und Wasserfall, AM/NFM/WFM/USB/LSB/CW, IQ-Aufnahme und demoduliertem Audio.
+Build: Logan Zarov

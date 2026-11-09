@@ -42,6 +42,11 @@ public final class LgModemSource implements IQSourceInterface {
     /** 2.13 ms of CI8: large enough to avoid per-block GC, small enough for low latency. */
     private static final int PACKET_BYTES = 32768;
 
+    private volatile boolean invertSpectrum = true;
+    public synchronized void setInvertSpectrum(boolean value) {
+        if (sampling) throw new IllegalStateException("Stop reception before changing IQ inversion");
+        invertSpectrum = value;
+    }
     private volatile long frequency;
     private volatile int processingRate = SAMPLE_RATE;
     private long bandwidthHandle;
@@ -50,9 +55,9 @@ public final class LgModemSource implements IQSourceInterface {
     private final float[] bandwidthIm = new float[PACKET_BYTES / 2];
     private int bandwidthCount;
     public static String bandwidthLabel(long rate) {
-        if (rate == 2560000) return "2 МГц · 2,56 MS/s";
-        if (rate == 1280000) return "1 МГц · 1,28 MS/s";
-        return "5 МГц · 7,68 MS/s (штатная)";
+        if (rate == 2560000) return "2 MHz · 2.56 MS/s";
+        if (rate == 1280000) return "1 MHz · 1.28 MS/s";
+        return "5 MHz · 7.68 MS/s";
     }
     // Called by Scheduler exactly once per raw packet, shared by FFT and audio.
     public void prepareBandwidth(byte[] packet) {
@@ -62,7 +67,7 @@ public final class LgModemSource implements IQSourceInterface {
             bandwidthHandle = nativeDsp.createBandwidth(processingRate);
             bandwidthFrequency = frequency;
         }
-        bandwidthCount = nativeDsp.filterBandwidth(bandwidthHandle, packet, bandwidthRe, bandwidthIm, frequency < BtRxLimit.activeHz);
+        bandwidthCount = nativeDsp.filterBandwidth(bandwidthHandle, packet, bandwidthRe, bandwidthIm, false);
     }
     public void releaseBandwidth() {
         if (bandwidthHandle != 0) nativeDsp.destroyBandwidth(bandwidthHandle);
@@ -329,7 +334,7 @@ public final class LgModemSource implements IQSourceInterface {
     }
 
     private String runRoot(File executable) throws IOException, InterruptedException {
-        return runRootCommand(executable.getAbsolutePath());
+        return runRootCommand("exec timeout -k 1 -s TERM 10 '" + executable.getAbsolutePath().replace("'", "'\\''") + "'");
     }
 
     private String runRootCommand(String command) throws IOException, InterruptedException {
@@ -370,10 +375,10 @@ public final class LgModemSource implements IQSourceInterface {
 
     @Override public synchronized boolean close() {
         stopSampling();
-        if (factoryHeld) restoreOnline();
+        if (online != null) { factoryHeld = true; restoreOnline(); }
         try { runRootCommand("start mpdecision 2>/dev/null; true"); } catch (Exception ignored) {}
         opened = false;
-        return true;
+        return !factoryHeld;
     }
 
     @Override public String getName() {
@@ -550,6 +555,7 @@ public final class LgModemSource implements IQSourceInterface {
 
     private void writeConfig(OutputStream output, long nextFrequency) throws IOException {
         final boolean useUarfcn = tuneMode == TUNE_MODE_UARFCN;
+        if (bt != null) bt.enforceChannelForRf(nextFrequency);
         long configuredFrequency = receiverFrequency(nextFrequency);
         if (bt != null) bt.configure(nextFrequency < BtRxLimit.activeHz);
         int selectedProfile = profileId;
@@ -620,6 +626,10 @@ public final class LgModemSource implements IQSourceInterface {
                 if (!sampling) break;
                 if (offset != packet.length) break;
 
+                // Normalize bytes ONCE, before recording, networking and all DSP consumers.
+                // BT downconversion contributes its own frequency reversal.
+                if ((frequency < BtRxLimit.activeHz) ^ invertSpectrum)
+                    nativeDsp.invertCi8(packet);
                 if (++blocks == 1) LgRxRecovery.received(this);
                 if (bt != null) bt.packetReceived();
                 if (blocks == 1 || blocks % 500 == 0)
@@ -723,7 +733,7 @@ public final class LgModemSource implements IQSourceInterface {
         } catch (Exception e) {
             sampling = false;
             error("cannot start LG capture: " + e.getMessage());
-            restoreOnline();
+            // Recovery decides when ONLINE is required; do not force it after every failure.
             try { runRootCommand("start mpdecision 2>/dev/null; setenforce 1"); }
             catch (Exception restoreError) { Log.e(TAG, "cannot restore SELinux enforcing", restoreError); }
         }
@@ -934,9 +944,7 @@ public final class LgModemSource implements IQSourceInterface {
             target.setSize(start + count); target.setSampleRate(processingRate); target.setFrequency(frequency);
             return count;
         }
-        final int count = frequency < BtRxLimit.activeHz
-                ? nativeDsp.unpackCi8Conjugated(packet, target.re(), target.im(), start)
-                : nativeDsp.unpackCi8(packet, target.re(), target.im(), start);
+        final int count = nativeDsp.unpackCi8(packet, target.re(), target.im(), start);
         target.setSize(start + count);
         target.setSampleRate(SAMPLE_RATE);
         target.setFrequency(frequency);
@@ -976,8 +984,8 @@ public final class LgModemSource implements IQSourceInterface {
         final boolean useBtMixer = sourceFrequency < BtRxLimit.activeHz;
         final int produced = nativeDsp.mixDownsampleCi8Boxcar30(
                 packet, target.re(), target.im(), start, room,
-                (double)(useBtMixer ? channel - sourceFrequency : sourceFrequency - channel), (double)SAMPLE_RATE, demodNativeState);
-        if (useBtMixer) nativeDsp.conjugate(target.im(), start, produced);
+                (double)(sourceFrequency - channel), (double)SAMPLE_RATE, demodNativeState);
+        // IQ orientation has already been applied to the source bytes.
         target.setSize(start + produced);
         target.setSampleRate(256_000);
         target.setFrequency(channel);

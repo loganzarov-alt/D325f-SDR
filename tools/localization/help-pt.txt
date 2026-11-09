@@ -1,0 +1,12 @@
+A recepção no LG D325 exige root e kernel e modem modificados compatíveis. Instalar este APK não prepara um telefone original. Selecione uma fonte e inicie a recepção.
+Arquivos IQ aceitam CI8 (8 bits com sinal), CU8 (8 bits sem sinal) e CI16 (16 bits com sinal, little-endian). Informe a taxa de amostragem e a frequência central da gravação. CI8 legacy usa o mesmo formato com sinal.
+Role a tabela horizontalmente. As faixas se referem à frequência de entrada do modem; a sensibilidade depende do filtro SAW B1/B8 e do circuito RF.
+Auto escolhe o perfil PLL pela frequência. O perfil 500 não é usado porque não foi confirmado um travamento PLL estável.
+Abaixo do limite BT RX: frequência do modem = (2402 + canal BT) MHz menos a frequência de recepção. No limite e acima, a recepção é direta.
+5 MHz: 7,68 MS/s nativos; 2 MHz: FIR /3, 2,56 MS/s; 1 MHz: FIR /6, 1,28 MS/s. A gravação IQ manual usa 7,68 MS/s; a automática usa a taxa selecionada. Congelar pausa espectro e cascata; o áudio permanece disponível.
+Pausa apps em segundo plano, iniciador, serviços Google e painel de notificações. Tela, áudio e recepção continuam. Congelar não libera RAM e pode causar telas pretas.
+Libera RAM dos apps em segundo plano. O painel de notificações funciona; Android pode reiniciar serviços.
+Sem limpeza de memória, congelamento ou alteração do modo CPU.
+O modo selecionado se aplica no próximo início de recepção. Desativar tem efeito imediato. Parar, sair do app ou perder a conexão libera processos congelados e restaura o modo CPU.
+Receptor SDR com espectro e cascata ao vivo, AM/NFM/WFM/USB/LSB/CW, gravação IQ e áudio demodulado.
+Compilação: Logan Zarov
