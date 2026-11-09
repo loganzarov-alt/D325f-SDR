@@ -3,6 +3,30 @@ base commit bf756279493c2cc4656b784afa29822b30838e98; apply with: patch -p1 < d3
 SPDX-License-Identifier: GPL-2.0-only
 Copyright (C) 2026 Logan Zarov (D325f SDR changes)
 
+--- a/arch/arm/boot/dts/msm8610-lge-common/msm8610-lge-reserve.dtsi
++++ b/arch/arm/boot/dts/msm8610-lge-common/msm8610-lge-reserve.dtsi
+@@ -10,6 +10,9 @@
+  * GNU General Public License for more details.
+  */
+ 
++/* D325f SDR: keep 0x05000000-0x096fffff out of Linux (modem range, see pil-msa.c) */
++/memreserve/ 0x05000000 0x4700000;
++
+ /* Reserve for persistent memory - ram console */
+ /memreserve/ 0x3eae0000 0x20000;
+ 
+--- a/arch/arm/boot/dts/msm8610-w5n_global_com/msm8610-w5n.dtsi
++++ b/arch/arm/boot/dts/msm8610-w5n_global_com/msm8610-w5n.dtsi
+@@ -117,7 +117,8 @@
+ 	qcom,bus-speed-mode = "HS200_1p8v", "DDR_1p8v";
+ 	qcom,nonremovable;
+ 
+-	status = "ok";
++	/* D325f SDR SD-boot kernel: eMMC slot off, the SD card becomes mmcblk0 */
++	status = "disabled";
+ };
+ 
+ &sdhc_2 {
 --- a/arch/arm/include/asm/uaccess.h
 +++ b/arch/arm/include/asm/uaccess.h
 @@ -148,17 +148,17 @@

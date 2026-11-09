@@ -10,9 +10,9 @@ public LineageOS tree, the full kernel configuration and the build settings.
 | --- | --- |
 | Base tree | [LineageOS/android_kernel_lge_msm8226](https://github.com/LineageOS/android_kernel_lge_msm8226), branch cm-14.1 |
 | Base commit | `bf756279493c2cc4656b784afa29822b30838e98` (Linux 3.4.0) |
-| Patch | [`d325f-kernel.patch`](d325f-kernel.patch), 9 files |
+| Patch | [`d325f-kernel.patch`](d325f-kernel.patch), 11 files |
 | Configuration | [`d325f-kernel.config`](d325f-kernel.config), full `.config` (machine `MSM8X10_W5`) |
-| Binary | [`boot.img`](https://github.com/loganzarov-alt/D325f-SDR/releases/download/kernel-6-source/boot.img) in release [`kernel-6-source`](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/kernel-6-source); flashing: [device setup](../docs/DEVICE-SETUP.md#2-kernel-bootimg) |
+| Binaries | [`boot.img`](https://github.com/loganzarov-alt/D325f-SDR/releases/download/kernel-6-source/boot.img) (phone running from microSD) and [`boot-emmc.img`](https://github.com/loganzarov-alt/D325f-SDR/releases/download/kernel-6-source/boot-emmc.img) (phone running from eMMC, not tested on a phone yet) in release [`kernel-6-source`](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/kernel-6-source); flashing: [device setup](../docs/DEVICE-SETUP.md#2-kernel-bootimg) |
 | License | GPL-2.0-only, as the Linux kernel |
 
 ## What the patch changes
@@ -22,6 +22,8 @@ public LineageOS tree, the full kernel configuration and the build settings.
 | `arch/arm/mach-msm/smem.c` | Allocates SMEM item **471** (128 KiB) at boot and clears it. The patched modem firmware writes its IQ ring there. This is the change D325f SDR needs. |
 | `arch/arm/mach-msm/pil-msa.c` | After the modem image is authenticated, asks TrustZone (SCM `MP_ASSIGN`) to share the physical range `0x05000000`+64 MiB between Android and the modem. On the test phone TrustZone does not offer this call (`D325 IQ assign_mem unavailable: 0`), so nothing is shared. |
 | `arch/arm/mach-msm/peripheral-loader.c` | Accepts a modem ELF segment that only describes that range (no image bytes): no memory-overlap error, no clearing, no PMI length update. Inactive with the current modem patch, whose image has no such segment. |
+| `arch/arm/boot/dts/msm8610-w5n_global_com/msm8610-w5n.dtsi` | Switches off SDC1, the eMMC slot (`sdhci@f9824900`, `status = "disabled"`). My phone's eMMC has failed and it runs from a microSD card; with SDC1 off the card becomes `mmcblk0` and the stock partition numbers in the LineageOS fstab point to it. `boot-emmc.img` is the same image with this line reverted to `"ok"`. |
+| `arch/arm/boot/dts/msm8610-lge-common/msm8610-lge-reserve.dtsi` | Adds `/memreserve/ 0x05000000 0x4700000`, keeping that range out of Linux; it belongs to the same reserved-memory experiment as `pil-msa.c`. |
 | `arch/arm/include/asm/uaccess.h`, `include/linux/compiler-gcc4.h`, new `compiler-gcc16.h`, `scripts/dtc/dtc-lexer.*`, `scripts/gcc-wrapper.py` | Build fixes for a modern GCC and Python 3. No runtime change. |
 
 The `pil-msa.c` and `peripheral-loader.c` parts come from an earlier experiment
@@ -62,9 +64,27 @@ Layout of the published `boot.img`, for repacking with `mkbootimg`:
   SMEM item 471 `allocated=1 size=131072` during reception.
 
 The patch was reconstructed from the project's work history. It applies cleanly
-to the base commit, whose eight affected files match their recorded SHA-256; CI
-repeats the check. A kernel rebuilt from this folder has not been compared
-byte-for-byte with the published image.
+to the base commit; CI repeats the check. The two device-tree changes were added
+on 9 November 2026, after I found them in the published image: the device trees
+compiled with the kernel's own `dtc` from the patched source
+(`msm8610-v1-w5n.dts`, `msm8610-v2-w5n.dts`) match both device trees in
+`boot.img` byte for byte, except one alignment padding byte. The kernel binary
+rebuilt from this folder has not been compared byte-for-byte with the published
+image.
+
+### boot-emmc.img
+
+`boot-emmc.img` is made from `boot.img` by
+[`tools/make-emmc-bootimg.py`](../tools/make-emmc-bootimg.py): the kernel and the
+ramdisk are byte-identical, and in every device tree only the SDC1 status changes
+from `"disabled"` to `"ok"`, the value in LineageOS. The script rebuilds the QCDT
+`dt.img`, updates the boot image ID and keeps the image size. I have not run this
+image on a phone yet.
+
+```text
+d0c827f232e613bff481fcc5405cb962aaca30effc50ba21277453ab1f35ced0  boot.img
+d3439492edbb9431b6ca282a954b9e1b806d6359fb04be0d1cb695395e7f5519  boot-emmc.img
+```
 
 ## Corresponding source (GPL-2.0)
 
@@ -90,9 +110,11 @@ licenses; their source is in the LineageOS cm-14.1 repositories. See
 D325f SDR работает на ядре LineageOS 14.1 для LG D325 с небольшим патчем.
 Здесь — исходник этого ядра по GPL: патч к публичному дереву LineageOS, полный
 конфиг и параметры сборки. База: `LineageOS/android_kernel_lge_msm8226`,
-ветка cm-14.1, коммит `bf756279…` (Linux 3.4.0). Готовый
+ветка cm-14.1, коммит `bf756279…` (Linux 3.4.0). Готовые
 [boot.img](https://github.com/loganzarov-alt/D325f-SDR/releases/download/kernel-6-source/boot.img)
-лежит в релизе `kernel-6-source`; прошивка — в
+(телефон работает с microSD) и
+[boot-emmc.img](https://github.com/loganzarov-alt/D325f-SDR/releases/download/kernel-6-source/boot-emmc.img)
+(телефон работает с eMMC, на телефоне пока не проверен) лежат в релизе `kernel-6-source`; прошивка — в
 [подготовке устройства](../docs/DEVICE-SETUP.md#2-ядро-bootimg).
 
 Что меняет патч:
@@ -103,6 +125,12 @@ D325f SDR работает на ядре LineageOS 14.1 для LG D325 с неб
   телефоне этот вызов недоступен, поэтому ничего не открывается.
 - **peripheral-loader.c** — принимает сегмент ELF модема, описывающий только
   этот диапазон. С текущим патчем модема не срабатывает.
+- **msm8610-w5n.dtsi** — выключает SDC1, слот eMMC (`sdhci@f9824900`,
+  `status = "disabled"`). eMMC моего телефона неисправна, он работает с microSD;
+  без SDC1 карта становится `mmcblk0`, и штатные номера разделов в fstab LineageOS
+  указывают на неё. `boot-emmc.img` — тот же образ, где эта строка возвращена в `"ok"`.
+- **msm8610-lge-reserve.dtsi** — добавляет `/memreserve/ 0x05000000 0x4700000`,
+  этот диапазон не достаётся Linux; относится к тому же опыту, что и pil-msa.c.
 - Остальное — правки для сборки современным GCC и Python 3.
 
 Части pil-msa.c и peripheral-loader.c остались от раннего опыта с кольцом в
@@ -116,8 +144,16 @@ boot.img (`mkbootimg`) — в таблице выше.
 строками этого патча; встроенный в ядро конфиг **побайтно совпадает** с
 `d325f-kernel.config`. Тестовый телефон работает на той же сборке: тот же
 `/proc/version`, строка `D325 IQ assign_mem unavailable: 0` в журнале ядра и
-SMEM 471 `allocated=1 size=131072` во время приёма. Пересборка из этой папки
-побайтно с образом не сравнивалась.
+SMEM 471 `allocated=1 size=131072` во время приёма. Две правки дерева устройств
+я добавил в патч 9 ноября 2026 года, когда нашёл их в опубликованном образе:
+деревья, собранные `dtc` ядра из исходника с патчем, побайтно совпадают с обоими
+деревьями в boot.img, кроме одного байта выравнивания. Само ядро, пересобранное
+из этой папки, побайтно с образом не сравнивалось.
+
+**boot-emmc.img** сделан из boot.img скриптом
+[`tools/make-emmc-bootimg.py`](../tools/make-emmc-bootimg.py): ядро и ramdisk
+побайтно те же, во всех деревьях устройств меняется только статус SDC1 с
+`"disabled"` на `"ok"`, как в LineageOS. На телефоне я этот образ пока не запускал.
 
 **Исходный код по GPL-2.0.** Полный исходник ядра из boot.img — базовый коммит с
 патчем `d325f-kernel.patch` и конфигом `d325f-kernel.config`; `prepare-source.sh`

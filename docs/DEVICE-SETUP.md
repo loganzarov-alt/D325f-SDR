@@ -3,7 +3,9 @@
 [Русский](#по-русски)
 
 My tested setup: one LG D325 (`w5ds`) with LineageOS 14.1, TWRP and root, stock
-baseband **M8610B-AAAANAZM-1.0.6047**. I confirmed on
+baseband **M8610B-AAAANAZM-1.0.6047**. Its internal eMMC has failed, so the
+phone runs entirely from a microSD card with the same partition layout; I
+flashed boot.img and the modem patch to the SD card's partitions. I confirmed on
 **24 October 2026** that D325f SDR 1.0.0 and Modem Patcher 1.1.0 work on it.
 I have not yet repeated the procedure on a second phone.
 
@@ -17,15 +19,25 @@ adapter wiring: [HARDWARE.md](HARDWARE.md).
 
 ## 2. Kernel (boot.img)
 
-The kernel must allocate SMEM item 471 for the modem's IQ ring.
-[Download boot.img](https://github.com/loganzarov-alt/D325f-SDR/releases/download/kernel-6-source/boot.img)
-(release `kernel-6-source`, 23,068,672 bytes):
+The kernel must allocate SMEM item 471 for the modem's IQ ring. Release
+`kernel-6-source` has two boot images of the same kernel build; pick the one for
+the storage your Android runs from:
+
+| Image | For | Status |
+| --- | --- | --- |
+| [boot.img](https://github.com/loganzarov-alt/D325f-SDR/releases/download/kernel-6-source/boot.img) | a phone that runs from a **microSD card**. The eMMC controller is switched off in the device tree, so the SD card becomes `mmcblk0` | runs on my phone |
+| [boot-emmc.img](https://github.com/loganzarov-alt/D325f-SDR/releases/download/kernel-6-source/boot-emmc.img) | a phone that runs from its **internal eMMC**. Same kernel and ramdisk; the eMMC controller is enabled as in LineageOS | not tested on a phone yet |
 
 ```text
 d0c827f232e613bff481fcc5405cb962aaca30effc50ba21277453ab1f35ced0  boot.img
+d3439492edbb9431b6ca282a954b9e1b806d6359fb04be0d1cb695395e7f5519  boot-emmc.img
 ```
 
-It is the complete boot image of my phone: kernel build #6
+**Do not flash boot.img on a phone that runs from eMMC.** The bootloader starts
+it, but Android does not see the eMMC and does not boot; restore the Boot backup.
+Both images are 23,068,672 bytes.
+
+boot.img is the complete boot image of my phone: kernel build #6
 (Linux 3.4.0+, GCC 16.1.0, 13 September 2026 12:36:46 UTC) with the
 LineageOS 14.1 ramdisk. The kernel contains the D325 IQ/SMEM 471 patch strings,
 and its embedded configuration is byte-identical to
@@ -36,7 +48,7 @@ other ROMs and devices are not supported.
 In TWRP:
 
 1. Back up **Boot** and copy the backup off the phone.
-2. **Install → Install Image → boot.img → Boot**.
+2. **Install → Install Image → boot.img** (or boot-emmc.img) **→ Boot**.
 3. Swipe to flash, then reboot System. Do not select Recovery or wipe Data.
 4. If the phone does not boot, return to TWRP and restore the Boot backup.
 
@@ -66,11 +78,11 @@ placed next to it.
 
 ## 4. App
 
-Install [D325f SDR 1.0.0](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/v1.0.0)
-(Android 7.1+, ARMv7) and grant root. Choose **LG D325 · SDR** as the signal source.
+Install [D325f SDR 2.0](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/v2.0)
+(Android 7.1+, ARMv7) and grant root. It installs as an update over 1.0.0. Choose **LG D325 · SDR** as the signal source.
 
-Below 800 MHz (configurable) the app keys a Bluetooth carrier in the 2.4 GHz band
-as the local oscillator; see [how it works](HOW-IT-WORKS.md#bluetooth-local-oscillator-below-800-mhz).
+Below 1000 MHz (the default since 2.0, configurable) the app keys a Bluetooth carrier in the 2.4 GHz band
+as the local oscillator; see [how it works](HOW-IT-WORKS.md#bluetooth-local-oscillator-below-1000-mhz).
 
 ## Validation
 
@@ -86,7 +98,9 @@ partition or flash TWRP; the device confirmation above is separate.
 ## По-русски
 
 Моя проверенная установка: один LG D325 (`w5ds`) с LineageOS 14.1, TWRP и root,
-стоковый baseband **M8610B-AAAANAZM-1.0.6047**. **24 октября 2026 года**
+стоковый baseband **M8610B-AAAANAZM-1.0.6047**. Внутренняя eMMC у него
+неисправна, и телефон целиком работает с microSD с той же разметкой разделов;
+boot.img и патч модема я ставил на разделы SD-карты. **24 октября 2026 года**
 я подтвердил работу D325f SDR 1.0.0 и Modem Patcher 1.1.0.
 На втором телефоне я процедуру пока не повторял.
 
@@ -99,11 +113,19 @@ partition or flash TWRP; the device confirmation above is separate.
 
 ### 2. Ядро (boot.img)
 
-Ядро должно выделять SMEM 471 под кольцо IQ модема.
-[Скачать boot.img](https://github.com/loganzarov-alt/D325f-SDR/releases/download/kernel-6-source/boot.img)
-(релиз `kernel-6-source`, 23 068 672 байта, SHA-256 выше).
+Ядро должно выделять SMEM 471 под кольцо IQ модема. В релизе `kernel-6-source`
+два boot-образа одной сборки ядра; выбирайте по тому, откуда работает Android:
 
-Это полный boot-образ моего телефона: ядро сборки #6 (Linux 3.4.0+,
+| Образ | Для какого телефона | Статус |
+| --- | --- | --- |
+| [boot.img](https://github.com/loganzarov-alt/D325f-SDR/releases/download/kernel-6-source/boot.img) | работает с **microSD**. Контроллер eMMC выключен в дереве устройств, поэтому SD-карта становится `mmcblk0` | работает на моём телефоне |
+| [boot-emmc.img](https://github.com/loganzarov-alt/D325f-SDR/releases/download/kernel-6-source/boot-emmc.img) | работает со **встроенной eMMC**. То же ядро и ramdisk, контроллер eMMC включён, как в LineageOS | на телефоне пока не проверен |
+
+**Не прошивайте boot.img на телефон, который работает с eMMC.** Загрузчик его
+запустит, но Android не увидит eMMC и не загрузится — восстановите копию Boot.
+Оба образа — 23 068 672 байта, SHA-256 выше.
+
+boot.img — полный boot-образ моего телефона: ядро сборки #6 (Linux 3.4.0+,
 GCC 16.1.0, 13.09.2026 12:36:46 UTC) и ramdisk LineageOS 14.1. В ядре есть строки
 патча D325 IQ/SMEM 471, а встроенный в него конфиг побайтно совпадает с
 [`kernel/d325f-kernel.config`](../kernel/d325f-kernel.config). Исходники —
@@ -113,7 +135,7 @@ LineageOS 14.1; другие прошивки и модели не поддер�
 В TWRP:
 
 1. Сохраните резервную копию **Boot** и скопируйте её с телефона.
-2. **Установка → Установка IMG → boot.img → Boot**.
+2. **Установка → Установка IMG → boot.img** (или boot-emmc.img) **→ Boot**.
 3. Подтвердите свайпом и перезагрузите систему. Не выбирайте Recovery и не очищайте Data.
 4. Если телефон не загружается, вернитесь в TWRP и восстановите копию Boot.
 
@@ -139,10 +161,10 @@ LineageOS 14.1; другие прошивки и модели не поддер�
 
 ### 4. Приложение
 
-Установите [D325f SDR 1.0.0](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/v1.0.0)
-(Android 7.1+, ARMv7) и разрешите root. Источник сигнала — **LG D325 · SDR**.
+Установите [D325f SDR 2.0](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/v2.0)
+(Android 7.1+, ARMv7) и разрешите root. Версия ставится обновлением поверх 1.0.0. Источник сигнала — **LG D325 · SDR**.
 
-Ниже 800 МГц (настраивается) приложение включает несущую Bluetooth в диапазоне
+Ниже 1000 МГц (по умолчанию с версии 2.0, настраивается) приложение включает несущую Bluetooth в диапазоне
 2,4 ГГц как гетеродин — см. [как это работает](HOW-IT-WORKS.md#по-русски).
 
 ### Проверки

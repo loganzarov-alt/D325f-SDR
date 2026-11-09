@@ -41,19 +41,20 @@ D325f SDR app (RF Analyzer DSP): FFT, waterfall, demodulation, recording
 | Tuning | arbitrary frequency in Hz; streaming starts only after the modem reports PLL lock |
 | PLL lock confirmed | 1700, 2120, 2140, 2160 and 2170.123456 MHz (B1 path); 5000 MHz did not lock and is refused |
 | Direct reception shown | 1875 MHz base-station downlink, 1800 MHz band ([demo](https://github.com/loganzarov-alt/D325f-SDR/raw/refs/heads/main/docs/media/d325f-sdr-demo.mp4)) |
-| Below 800 MHz | Bluetooth local oscillator, see below. Received this way: FM broadcast, analog TV at 551 MHz, shortwave 8–15 MHz ([recorded examples](#recorded-examples), [demo](https://github.com/loganzarov-alt/D325f-SDR/raw/refs/heads/main/docs/media/d325f-sdr-demo.mp4)) |
+| Below 1000 MHz (default) | Bluetooth local oscillator, see below. Received this way: FM broadcast, analog TV at 551 MHz, shortwave 8–15 MHz ([recorded examples](#recorded-examples), [demo](https://github.com/loganzarov-alt/D325f-SDR/raw/refs/heads/main/docs/media/d325f-sdr-demo.mp4)) |
 | Gain | fixed: LNA range 0 (maximum), DVGA offset 0 |
 | Ring buffer | 126,976 bytes, about 8.3 ms at 7.68 MS/s |
 | Longest documented run | 158 s, 1,186,008 blocks, no dropped blocks |
 
-### Bluetooth local oscillator (below 800 MHz)
+### Bluetooth local oscillator (below 1000 MHz)
 
-Below a configurable limit (default 800 MHz) the app keys a continuous
+Below a configurable limit (default 1000 MHz since version 2.0) the app keys a continuous
 **transmit** carrier from the phone's Bluetooth chip (WCN36x0) on
 2402 + channel MHz (channel 0–78, power level 0–9) and tunes the modem to
 (2402 + channel) − F, where F is the wanted frequency. Above the limit the modem
 receives directly. This mode transmits in the 2.4 GHz ISM band while it is
-active.
+active. How I choose the channel and the power level, the carrier level of each
+power level and the 10 mW limit: [field notes](FIELD-NOTES.md#3-bluetooth-local-oscillator).
 
 ## Recorded examples
 
@@ -115,10 +116,11 @@ M8610B-AAAANAZM-1.0.6047) с трансивером семейства WTR. Об
 
 Формат CI8, 7,68 MS/s (около 5 МГц полезной полосы), режимы 2,56 и 1,28 MS/s.
 Захват PLL подтверждён на 1700 и 2120–2170 МГц; 5000 МГц не захватывается и
-отклоняется. Прямой приём показан на 1875 МГц (сигнал базовых станций диапазона 1800 МГц, [демо](https://github.com/loganzarov-alt/D325f-SDR/raw/refs/heads/main/docs/media/d325f-sdr-demo.mp4)). Ниже 800 МГц (настраивается) используется Bluetooth-гетеродин:
+отклоняется. Прямой приём показан на 1875 МГц (сигнал базовых станций диапазона 1800 МГц, [демо](https://github.com/loganzarov-alt/D325f-SDR/raw/refs/heads/main/docs/media/d325f-sdr-demo.mp4)). Ниже 1000 МГц (граница по умолчанию с версии 2.0, настраивается) используется Bluetooth-гетеродин:
 приложение включает непрерывную **передачу** несущей Bluetooth на
 2402 + канал МГц, а модем настраивается на (2402 + канал) − F. Так приняты FM-вещание,
-аналоговое ТВ 551 МГц и КВ 8–15 МГц. Усиление фиксировано (LNA 0, DVGA 0). Кольцо —
+аналоговое ТВ 551 МГц и КВ 8–15 МГц. Выбор канала и уровня мощности, уровни несущей
+и предел 10 мВт — в [заметках](FIELD-NOTES.md#3-bluetooth-гетеродин). Усиление фиксировано (LNA 0, DVGA 0). Кольцо —
 около 8,3 мс; самый длинный задокументированный приём — 158 с без потерь.
 
 [Три исходные IQ-записи с описанием формата и SHA-256](https://github.com/loganzarov-alt/D325f-SDR/releases/tag/iq-samples-2026-10-23).
