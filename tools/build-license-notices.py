@@ -13,6 +13,7 @@ for m in modules:
  assert m['licenses'],m['coordinate']
  parts.append('<li>'+html.escape(m['coordinate']+' — '+', '.join(x['name'] for x in m['licenses']))+'</li>')
 parts.append('</ul>')
+parts.append('<h2>Look4Sat orbital prediction</h2><p>Copyright (C) 2019-2026 Arty Bishop and contributors. GPL-3.0-or-later. Integration: Logan Zarov, 2026-11-09. <a href="LOOK4SAT-GPL-3.0.txt">License</a> · <a href="LOOK4SAT-NOTICE.txt">Source and changes</a></p>')
 for p in [r/'LICENSE',*sorted((r/'LICENSES').rglob('*'))]:
  if p.is_file():parts.append('<h2>'+html.escape(str(p.relative_to(r)))+'</h2><pre>'+html.escape(p.read_text())+'</pre>')
 parts.append('</html>');(out/'NOTICE.html').write_text('\n'.join(parts)+'\n')
