@@ -63,6 +63,22 @@ with SHA-256 checksums.
   the manufacturer's specification, which is more than 10 mW. So at the top
   levels the carrier can exceed this limit. Other countries set their own limits.
 
+  **Estimate of absolute power.** I have measured only relative levels. If level 9
+  is taken as the WCN3620's typical maximum of 13.5 dBm, level 7 is about
+  +5.5 dBm (3.5 mW), level 6 about +1.2 dBm (1.3 mW) and level 5 about −2.4 dBm
+  (0.6 mW), plus or minus the antenna gain.
+
+  **Other countries.** In the EU, the UK and other countries that follow
+  ERC/REC 70-03, a plain carrier at 2.4 GHz falls under generic short-range
+  devices: 10 mW EIRP, as in Russia. The 100 mW limit there is for wideband data
+  transmission such as Wi-Fi and Bluetooth, not for an unmodulated carrier. In
+  the USA an unmodulated carrier does not qualify for FCC §15.247 (digital
+  modulation or frequency hopping, up to 1 W) and falls under §15.249: 50 mV/m at
+  3 m, about 0.75 mW EIRP (−1.2 dBm). By the estimate above only levels 0–5 stay
+  under it. Power is not the only question: the Bluetooth module is certified for
+  normal Bluetooth operation, not for a continuous carrier. Check the rules of
+  your own country.
+
   Carrier power by level (HackRF, same setup for every level, no clipping;
   relative values):
 
@@ -231,6 +247,22 @@ Bluetooth на каждом уровне мощности), — в релизе
   типично 13,5 дБм (около 22 мВт) по документации производителя, то есть больше
   10 мВт. Поэтому на верхних уровнях несущая может превысить этот предел. В
   других странах действуют свои ограничения.
+
+  **Оценка абсолютной мощности.** Я измерял только относительные уровни. Если
+  принять уровень 9 за типичный максимум WCN3620 — 13,5 дБм, то уровень 7 —
+  около +5,5 дБм (3,5 мВт), уровень 6 — около +1,2 дБм (1,3 мВт), уровень 5 —
+  около −2,4 дБм (0,6 мВт), с поправкой на усиление антенны.
+
+  **Другие страны.** В ЕС, Великобритании и других странах, где действует
+  рекомендация ERC/REC 70-03, одиночная несущая на 2,4 ГГц относится к
+  устройствам малого радиуса действия общего назначения: 10 мВт ЭИИМ, как в
+  России. Предел 100 мВт там — для широкополосной передачи данных (Wi-Fi,
+  Bluetooth), а не для немодулированной несущей. В США немодулированная несущая
+  не подпадает под FCC §15.247 (цифровая модуляция или скачки частоты, до 1 Вт)
+  и относится к §15.249: 50 мВ/м на 3 м, около 0,75 мВт ЭИИМ (−1,2 дБм). По
+  оценке выше под этот предел попадают только уровни 0–5. Дело не только в
+  мощности: модуль Bluetooth сертифицирован для обычной работы Bluetooth, а не
+  для непрерывной несущей. Проверяйте правила своей страны.
 
   Мощность несущей по уровням (HackRF, одинаковые условия для всех уровней, без
   перегрузки; относительные значения):
