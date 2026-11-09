@@ -31,29 +31,28 @@ import kotlin.math.*
 @Composable
 fun SatelliteWindow() {
     val context = LocalContext.current
-    val ru = context.resources.configuration.locales[0].language == "ru"
-    fun tr(r: String, e: String) = if (ru) r else e
+    fun tr(text: String) = com.mantz_it.rfanalyzer.automation.UiTranslations.text(context, text)
     var opened by remember { mutableStateOf(false) }
     Column {
-        Text(tr("Спутники · Look4Sat", "Satellites · Look4Sat"), style = MaterialTheme.typography.titleLarge)
-        Text(tr("Орбиты, пролёты и наведение антенны", "Orbits, passes and antenna pointing"))
-        Button(onClick = { opened = true }) { Text(tr("Открыть окно", "Open window")) }
+        Text(tr("Satellites · Look4Sat"), style = MaterialTheme.typography.titleLarge)
+        Text(tr("Orbits, passes and antenna pointing"))
+        Button(onClick = { opened = true }) { Text(tr("Open window")) }
     }
     if (!opened) return
     Dialog(onDismissRequest = { opened = false }, properties = DialogProperties(usePlatformDefaultWidth = false)) {
         Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-            SatelliteContent({ opened = false }, ru)
+            SatelliteContent({ opened = false })
         }
     }
 }
 
 @Composable
-private fun SatelliteContent(close: () -> Unit, ru: Boolean) {
+private fun SatelliteContent(close: () -> Unit) {
     val context = LocalContext.current
     val prefs = remember { context.getSharedPreferences("satellite_window", 0) }
     val file = remember { File(context.filesDir, "satellite_orbits.txt") }
     val scope = rememberCoroutineScope()
-    fun tr(r: String, e: String) = if (ru) r else e
+    fun tr(text: String) = com.mantz_it.rfanalyzer.automation.UiTranslations.text(context, text)
     var latitude by remember { mutableStateOf(prefs.getString("latitude", "") ?: "") }
     var longitude by remember { mutableStateOf(prefs.getString("longitude", "") ?: "") }
     var query by remember { mutableStateOf("") }
@@ -73,7 +72,7 @@ private fun SatelliteContent(close: () -> Unit, ru: Boolean) {
         val lat = latitude.replace(',', '.').toDoubleOrNull()
         val lon = longitude.replace(',', '.').toDoubleOrNull()
         require(lat != null && lat.isFinite() && lat in -90.0..90.0 && lon != null && lon.isFinite() && lon in -180.0..180.0) {
-            tr("Укажите широту −90…90 и долготу −180…180", "Enter latitude −90…90 and longitude −180…180")
+            tr("Enter latitude −90…90 and longitude −180…180")
         }
         return GeoPos(lat, lon)
     }
@@ -81,8 +80,8 @@ private fun SatelliteContent(close: () -> Unit, ru: Boolean) {
         val parser = DataParser(Dispatchers.Default)
         val data = if (text.lineSequence().firstOrNull()?.contains("NORAD_CAT_ID") == true)
             parser.parseCSVStream(text.byteInputStream()) else parser.parseTLEStream(text.byteInputStream())
-        require(data.isNotEmpty()) { tr("В файле нет распознанных орбит TLE/OMM CSV", "No valid TLE/OMM CSV orbits in file") }
-        return data.filter { it.meanmo.isFinite() && it.meanmo > 0 && it.eccn in 0.0..<1.0 }.distinctBy { it.catnum }.also { require(it.isNotEmpty()) { "No valid orbital elements" } }
+        require(data.isNotEmpty()) { tr("No valid TLE/OMM CSV orbits in file") }
+        return data.filter { it.meanmo.isFinite() && it.meanmo > 0 && it.eccn in 0.0..<1.0 }.distinctBy { it.catnum }.also { require(it.isNotEmpty()) { tr("No valid orbital elements") } }
     }
     fun select(data: OrbitalData) {
         calculation?.cancel(); selected = data; passes = emptyList(); track = emptyList()
@@ -97,7 +96,7 @@ private fun SatelliteContent(close: () -> Unit, ru: Boolean) {
                         val buffer = ByteArray(8192)
                         while (true) {
                             val n = stream.read(buffer); if (n < 0) break
-                            require(output.size() + n <= 4 * 1024 * 1024) { "Maximum file size: 4 MiB" }
+                            require(output.size() + n <= 4 * 1024 * 1024) { tr("Maximum file size: 4 MiB") }
                             output.write(buffer, 0, n)
                         }
                         output.toString("UTF-8").removePrefix("\uFEFF")
@@ -109,9 +108,9 @@ private fun SatelliteContent(close: () -> Unit, ru: Boolean) {
                     try { out.write(text.toByteArray()); atomic.finishWrite(out) }
                     catch (e: Exception) { atomic.failWrite(out); throw e }
                 } }
-                satellites = parsed; select(parsed.first()); message = tr("Орбиты загружены", "Orbits imported")
+                satellites = parsed; select(parsed.first()); message = tr("Orbits imported")
             } catch (e: CancellationException) { throw e }
-            catch (e: Exception) { message = e.message ?: "Import failed" }
+            catch (e: Exception) { message = e.message ?: tr("Import failed") }
             finally { busy = false }
         }
     }
@@ -120,7 +119,7 @@ private fun SatelliteContent(close: () -> Unit, ru: Boolean) {
             busy = true
             try { satellites = parse(withContext(Dispatchers.IO) { file.readText() }); satellites.firstOrNull()?.let { select(it) } }
             catch (e: CancellationException) { throw e }
-            catch (e: Exception) { message = e.message ?: "Import failed" }
+            catch (e: Exception) { message = e.message ?: tr("Import failed") }
             finally { busy = false }
         }
     }
@@ -133,10 +132,10 @@ private fun SatelliteContent(close: () -> Unit, ru: Boolean) {
         while (isActive) {
             try {
                 val position = withContext(Dispatchers.Default) { sat.getPosition(observer, System.currentTimeMillis()) }
-                check(position.azimuth.isFinite() && position.elevation.isFinite()) { "Invalid orbital position" }
+                check(position.azimuth.isFinite() && position.elevation.isFinite()) { tr("Invalid orbital position") }
                 live = position
             } catch (e: CancellationException) { throw e }
-            catch (e: Exception) { message = e.message ?: "Invalid orbital position"; break }
+            catch (e: Exception) { message = e.message ?: tr("Invalid orbital position"); break }
             delay(2000)
         }
     }
@@ -144,27 +143,26 @@ private fun SatelliteContent(close: () -> Unit, ru: Boolean) {
     LazyColumn(Modifier.fillMaxSize().padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         item {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text(tr("Спутники", "Satellites"), style = MaterialTheme.typography.headlineSmall)
-                TextButton(onClick = close) { Text(tr("Закрыть", "Close")) }
+                Text(tr("Satellites"), style = MaterialTheme.typography.headlineSmall)
+                TextButton(onClick = close) { Text(tr("Close")) }
             }
             Text("Look4Sat · SGP4/SDP4", style = MaterialTheme.typography.labelMedium)
-            Text(tr("Время: ${java.util.TimeZone.getDefault().id}. Орбиты рассчитываются офлайн.",
-                "Time: ${java.util.TimeZone.getDefault().id}. Offline orbit calculations."))
+            Text(context.getString(com.mantz_it.rfanalyzer.R.string.l10n_sat_time, java.util.TimeZone.getDefault().id))
         }
         item {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                OutlinedTextField(latitude, { latitude = it; calculation?.cancel(); passes = emptyList(); track = emptyList() }, label = { Text(tr("Широта", "Latitude")) }, modifier = Modifier.weight(1f), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal))
-                OutlinedTextField(longitude, { longitude = it; calculation?.cancel(); passes = emptyList(); track = emptyList() }, label = { Text(tr("Долгота", "Longitude")) }, modifier = Modifier.weight(1f), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal))
+                OutlinedTextField(latitude, { latitude = it; calculation?.cancel(); passes = emptyList(); track = emptyList() }, label = { Text(tr("Latitude")) }, modifier = Modifier.weight(1f), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal))
+                OutlinedTextField(longitude, { longitude = it; calculation?.cancel(); passes = emptyList(); track = emptyList() }, label = { Text(tr("Longitude")) }, modifier = Modifier.weight(1f), keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal))
             }
-            Button(onClick = { importer.launch(arrayOf("*/*")) }, enabled = !busy) { Text(tr("Импорт TLE / OMM CSV", "Import TLE / OMM CSV")) }
+            Button(onClick = { importer.launch(arrayOf("*/*")) }, enabled = !busy) { Text(tr("Import TLE / OMM CSV")) }
             if (busy) LinearProgressIndicator(Modifier.fillMaxWidth())
             if (message.isNotEmpty()) Text(message)
         }
         item {
-            TabRow(tab) { listOf(tr("Пролёты", "Passes"), tr("Небо", "Sky"), tr("Избранное", "Favourites")).forEachIndexed { i, label ->
+            TabRow(tab) { listOf(tr("Passes"), tr("Sky"), tr("Favourites")).forEachIndexed { i, label ->
                 Tab(selected = tab == i, onClick = { tab = i }, text = { Text(label) })
             } }
-            OutlinedTextField(query, { query = it }, label = { Text(tr("Название / NORAD", "Name / NORAD")) }, modifier = Modifier.fillMaxWidth())
+            OutlinedTextField(query, { query = it }, label = { Text(tr("Name / NORAD")) }, modifier = Modifier.fillMaxWidth())
         }
         items(satellites.filter { (tab != 2 || it.catnum.toString() in favourites) && (it.name.contains(query, true) || it.catnum.toString().contains(query)) }.take(if (query.isBlank()) 5 else 30), key = { it.catnum }) { data ->
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -176,20 +174,18 @@ private fun SatelliteContent(close: () -> Unit, ru: Boolean) {
             }
         }
         item {
-            if (satellites.isEmpty()) Text(tr("Импортируйте свежий файл орбит из Look4Sat или CelesTrak.", "Import a fresh orbit file from Look4Sat or CelesTrak."))
+            if (satellites.isEmpty()) Text(tr("Import a fresh orbit file from Look4Sat or CelesTrak."))
             selected?.let { data ->
                 Text(data.name, style = MaterialTheme.typography.titleLarge)
                 live?.let { pos ->
                     val azimuth = (Math.toDegrees(pos.azimuth) + 360) % 360
                     val elevation = Math.toDegrees(pos.elevation)
-                    Text(tr("Азимут %.1f° · Угол места %.1f°".format(azimuth, elevation),
-                        "Azimuth %.1f° · Elevation %.1f°".format(azimuth, elevation)), style = MaterialTheme.typography.titleMedium)
-                    Text(if (elevation >= 0) tr("Над горизонтом", "Above horizon") else tr("Под горизонтом", "Below horizon"))
-                    Text(tr("Азимут отсчитывается от истинного севера по часовой стрелке. GPS и компас телефона не используются.",
-                        "Azimuth is clockwise from true north. Phone GPS and compass are not used."))
-                } ?: Text(tr("Для наведения укажите координаты вручную", "Enter station coordinates manually for pointing"))
+                    Text(context.getString(com.mantz_it.rfanalyzer.R.string.l10n_sat_pointing, "%.1f".format(azimuth), "%.1f".format(elevation)), style = MaterialTheme.typography.titleMedium)
+                    Text(if (elevation >= 0) tr("Above horizon") else tr("Below horizon"))
+                    Text(tr("Azimuth is clockwise from true north. Phone GPS and compass are not used."))
+                } ?: Text(tr("Enter station coordinates manually for pointing"))
                 val age = abs(OrbitalData.timeToDaynum(System.currentTimeMillis()) - data.epochDaynum)
-                Text(tr("Возраст орбит: %.1f суток".format(age), "Orbit age: %.1f days".format(age)), color = if (age > 7) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface)
+                Text(context.getString(com.mantz_it.rfanalyzer.R.string.l10n_sat_age, "%.1f".format(age)), color = if (age > 7) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface)
                 Button(enabled = !busy, onClick = {
                     try {
                         val observer = station()
@@ -201,18 +197,18 @@ private fun SatelliteContent(close: () -> Unit, ru: Boolean) {
                                 val result = withContext(Dispatchers.Default) { SatellitePrediction.passes(data, observer, System.currentTimeMillis()) }
                                 val points = result.firstOrNull()?.let { withContext(Dispatchers.Default) { SatellitePrediction.track(data, observer, it) } } ?: emptyList()
                                 passes = result; track = points
-                                message = if (result.isEmpty()) tr("За 24 часа пролётов не найдено", "No passes found in 24 hours") else ""
+                                message = if (result.isEmpty()) tr("No passes found in 24 hours") else ""
                             } catch (e: CancellationException) { throw e }
-                            catch (e: Exception) { message = e.message ?: "Prediction failed" }
+                            catch (e: Exception) { message = e.message ?: tr("Prediction failed") }
                             finally { busy = false }
                         }
-                    } catch (e: Exception) { message = e.message ?: "Invalid station" }
-                }) { Text(tr("Рассчитать 24 часа", "Predict 24 hours")) }
+                    } catch (e: Exception) { message = e.message ?: tr("Invalid station") }
+                }) { Text(tr("Predict 24 hours")) }
 
             }
         }
         if (tab == 1) item {
-            Text(tr("Траектория первого пролёта: север сверху, восток справа", "First pass track: north up, east right"))
+            Text(tr("First pass track: north up, east right"))
             Canvas(Modifier.fillMaxWidth().height(250.dp)) {
                 val r = min(size.width, size.height) / 2 - 12f
                 val center = Offset(size.width / 2, size.height / 2)
@@ -228,8 +224,8 @@ private fun SatelliteContent(close: () -> Unit, ru: Boolean) {
         items(passes) { pass ->
             Card(Modifier.fillMaxWidth()) { Column(Modifier.padding(12.dp)) {
                 Text("${time(pass.start)} → ${time(pass.end)}")
-                Text(tr("Максимальная высота: %.1f°".format(pass.maximum), "Maximum elevation: %.1f°".format(pass.maximum)))
-                if (pass.partial) Text(tr("Неполный интервал: уже виден или не заходит за 24 часа", "Partial interval: already visible or no set within 24 hours"))
+                Text(context.getString(com.mantz_it.rfanalyzer.R.string.l10n_sat_maximum, "%.1f".format(pass.maximum)))
+                if (pass.partial) Text(tr("Partial interval: already visible or no set within 24 hours"))
             } }
         }
     }

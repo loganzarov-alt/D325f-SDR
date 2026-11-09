@@ -154,7 +154,7 @@ fun AnalyzerTabsComposable(
                     ),
                     text = {
                         Text(
-                            if (tab == AnalyzerTabs.SATELLITES && androidx.compose.ui.platform.LocalContext.current.resources.configuration.locales[0].language == "ru") "Спутники" else tab.displayName,
+                            tab.displayName,
                             fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal
                         )
                     }

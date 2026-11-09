@@ -25,3 +25,17 @@ probe.write_text(Path(__file__).with_name('sqlite_probe.py').read_text())
 p=root/'android/deps/build.sh'
 s=p.read_text().replace('build_sqlite armeabi-v7a', 'git -C sqlite fetch --depth 1 origin 0693caeea623ebfe21556e1035800687eeac7eaa\ngit -C sqlite checkout 0693caeea623ebfe21556e1035800687eeac7eaa\npython3 android7-sqlite.py\nbuild_sqlite armeabi-v7a')
 p.write_text(s)
+
+# The upstream unused AppCompat theme depended on the removed warning library.
+p=root/'android/app/src/main/res/values/styles.xml'
+s=p.read_text().replace('Theme.AppCompat.Light.DarkActionBar', 'android:style/Theme.Material.Light.DarkActionBar')
+for name in ('colorPrimary', 'colorPrimaryDark', 'colorAccent'):
+    s=s.replace('name="'+name+'"', 'name="android:'+name+'"')
+p.write_text(s)
+
+# Preserve corresponding dependency sources, including patched SQLite, before cleanup.
+p=root/'android/deps/build.sh'
+s=p.read_text().replace('# Build packages', 'mkdir -p dependency-sources\n# Build packages')
+s=re.sub(r'^rm -rf (wolfssl|curl|cpu_features|volk|zlib|libpng|fftw3|nng|sqlite|zstd|libtiff|hdf5)$',
+    lambda m: 'tar --exclude=.git -czf dependency-sources/'+m[1]+'.tar.gz '+m[1]+'\n'+m[0], s, flags=re.M)
+p.write_text(s)

@@ -37,8 +37,10 @@ jobs:
       - uses: actions/cache@v4
         id: deps
         with:
-          path: satdump-build/android/deps/output
-          key: satdump-api24-armv7-4b1f699-${{ hashFiles('tools/satdump/android7.py') }}
+          path: |
+            satdump-build/android/deps/output
+            satdump-build/android/deps/dependency-sources
+          key: satdump-api24-armv7-4b1f699-${{ hashFiles('tools/satdump/*.py') }}
       - name: Build native dependencies for API 24
         if: steps.deps.outputs.cache-hit != 'true'
         working-directory: satdump-build/android/deps

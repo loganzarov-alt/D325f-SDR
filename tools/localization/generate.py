@@ -6,11 +6,13 @@ from pathlib import Path
 import re,json,html,xml.etree.ElementTree as ET
 root=Path(__file__).resolve().parents[2]; base=Path(__file__).parent
 rows=[line.split('\t') for name in ['messages.tsv','help.tsv'] for line in (base/name).read_text().splitlines()]
+satellites=json.loads((base/'satellites.json').read_text())
+rows += [[r['key'],r['en'],r['ru']] for r in satellites]
 locales=['en','ru','es','pt','fr','de','it','zh-Hans','zh-Hant','ja','ko','ar','hi']
 folders={'en':['values'],'zh-Hans':['values-zh-rCN','values-b+zh+Hans'],'zh-Hant':['values-zh-rTW','values-b+zh+Hant']}
 all_values={}
 for lang in locales:
- values=[r[1 if lang=='en' else 2] for r in rows] if lang in ('en','ru') else (base/(lang+'.txt')).read_text().splitlines()+(base/('help-'+lang+'.txt')).read_text().splitlines()
+ values=[r[1 if lang=='en' else 2] for r in rows] if lang in ('en','ru') else (base/(lang+'.txt')).read_text().splitlines()+(base/('help-'+lang+'.txt')).read_text().splitlines()+[r[lang] for r in satellites]
  assert len(values)==len(rows),(lang,len(values),len(rows))
  for row,v in zip(rows,values):assert sorted(re.findall(r'%\d+\$s',row[1]))==sorted(re.findall(r'%\d+\$s',v)),(lang,row[0])
  xml='<?xml version="1.0" encoding="utf-8"?>\n<resources>\n'
