@@ -31,10 +31,11 @@
         android:largeHeap="true"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:label="@string/app_name"
+        android:label="${variantLabel}"
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.MainActivity"
+            android:enabled="${normalLauncher}"
             android:icon="@mipmap/ic_launcher"
             android:exported="true">
             <intent-filter>
@@ -43,8 +44,21 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".radar.RadarActivity"
+            android:label="D325f Radar"
+            android:enabled="${radarLauncher}"
+            android:exported="true"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@android:style/Theme.Material.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".ui.FileOpenActivity"
+            android:enabled="${normalLauncher}"
             android:exported="true"
             android:launchMode="standard"
             android:taskAffinity="${applicationId}"
@@ -62,12 +76,12 @@
 
         <service
             android:name=".analyzer.AnalyzerService"
-            android:enabled="true"
+            android:enabled="${normalLauncher}"
             android:foregroundServiceType="mediaPlayback"
             android:exported="false" />
 
-        <service android:name=".automation.CaptureService" android:exported="false" android:foregroundServiceType="mediaPlayback" />
-        <receiver android:name=".automation.TaskAlarm" android:exported="false">
+        <service android:name=".automation.CaptureService" android:enabled="${normalLauncher}" android:exported="false" android:foregroundServiceType="mediaPlayback" />
+        <receiver android:name=".automation.TaskAlarm" android:enabled="${normalLauncher}" android:exported="false">
             <intent-filter><action android:name="android.intent.action.BOOT_COMPLETED" /></intent-filter>
         </receiver>
         <provider

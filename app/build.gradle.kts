@@ -6,16 +6,22 @@ plugins {
     alias(libs.plugins.dagger.hilt)
 }
 
+// D325F_RADAR_VARIANT
+val radarApp = providers.gradleProperty("radarApp").orNull == "true"
+
 android {
     namespace = "com.mantz_it.rfanalyzer"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "io.github.loganzarov_alt.d325fsdr"
+        applicationId = if (radarApp) "io.github.loganzarov_alt.d325fradar" else "io.github.loganzarov_alt.d325fsdr"
+        manifestPlaceholders["normalLauncher"] = (!radarApp).toString()
+        manifestPlaceholders["radarLauncher"] = radarApp.toString()
+        manifestPlaceholders["variantLabel"] = if (radarApp) "D325f Radar" else "@string/app_name"
         minSdk = 25
         targetSdk = 34
-        versionCode = 20000
-        versionName = "2.0"
+        versionCode = if (radarApp) 10000 else 20000
+        versionName = if (radarApp) "0.1-alpha" else "2.0"
 
         ndk {
             abiFilters += listOf("armeabi-v7a")
